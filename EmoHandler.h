@@ -32,7 +32,7 @@
  public:
 		 explicit EmoHandler(QObject *parent = 0);
 		 void emoConnect();
-		 void logEmoState(unsigned int userID, EmoStateHandle eState, bool withHeader);
+		 void logEmoState(unsigned int userID, EmoStateHandle eState);
 		 inline void setHsTcpPollComm(HsTcpPollComm *hs){ hsTcpPollComm = hs; };
 		 void pegaEstadoEquipamentos();
 		 //void exibeEstadoEquipamentos() const;  //essa funcao nao altera nenhum valor das variaveis da classe EmoHandler

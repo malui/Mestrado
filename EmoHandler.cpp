@@ -98,11 +98,6 @@ void EmoHandler::run() {
 		
 		
 		std::cout << "Start receiving EEG Data! Press any key to stop logging...\n" << std::endl;
-		
-		DataHandle hData = EE_DataCreate();
-		EE_DataSetBufferSizeInSec(secs);
-
-		std::cout << "Buffer size in secs:" << secs << std::endl;
 
 		while (!_kbhit()) {
 			
@@ -123,11 +118,11 @@ void EmoHandler::run() {
 			
 
 		// LIGAR EQUIPOS HS
-
+			//logEmoState(userID, EmoStateHandle eState);
 		/////////////////////
 			
 			if (readytocollect) {
-				qDebug() << "Rodando logEmoState";
+				qDebug() << "readytocollect"; //codigo em looping aqui
 	 if ( hsTcpPollComm->resposta_pronta )
 		{
 			std::cout<<"Engagement level enviado: "<<ES_AffectivGetEngagementBoredomScore(eState)<<std::endl;
@@ -141,8 +136,8 @@ void EmoHandler::run() {
 					int* estado = ESTADOS[i];
 					int posicao_maior_engagement = 0;
 					const int tamanho_engagementLevel = TAMANHO_ESTADOS[i];
-					//float* engagementLevels = new float [tamanho_engagementLevel]; //cria vetor dinamicamente
-					float* engagementLevels = new float [2];
+					float* engagementLevels = new float [tamanho_engagementLevel]; //cria vetor dinamicamente
+					//float* engagementLevels = new float [2];
 					engagementLevels[0] = -1;
 					engagementLevels[1] = -1;
 					
@@ -161,8 +156,7 @@ void EmoHandler::run() {
 				
 						
 						engagementLevels[j] = ES_AffectivGetEngagementBoredomScore(eState);
-						//EmoDataCollect(hData, ofs);
-						
+												
 						std::cout<<"Engagement level com equipamento "<<i<<" e estado "<<j<<": "<<engagementLevels[j]<<std::endl;
 						
 						//verifica qual a posicao do maior estado de engagement do buffer
@@ -192,7 +186,6 @@ void EmoHandler::run() {
 		} //end while
 		
 		Sleep(100);
-		EE_DataFree(hData);
 		
 	}//try
 	catch (const std::exception& e) {
@@ -207,46 +200,7 @@ void EmoHandler::run() {
 }
 
 
-/*  TRATA POR EVENTO DO EMOTIV
-	//pega sinal emotiv
-	qDebug() << "Start receiving EmoState! Press any key to stop logging...\n";
-
-
-	bool writeHeader = true;
-		
-	if (!_kbhit()) {
-
-		state = EE_EngineGetNextEvent(eEvent);
-		
-		// New event needs to be handled
-		if (state == EDK_OK) {
-			
-			EE_Event_t eventType = EE_EmoEngineEventGetType(eEvent);
-			EE_EmoEngineEventGetUserId(eEvent, &userID);
-			
-		   // Log the EmoState if it has been updated
-			//if (eventType == EE_EmoStateUpdated) {
-
-
-				EE_EmoEngineEventGetEmoState(eEvent, eState);
-				//const float timestamp = ES_GetTimeFromStart(eState);
-
-			//	printf("\n%10.3fs : New EmoState from user %d ...\r", timestamp, userID);
-	
-				logEmoState(userID, eState, writeHeader);
-				writeHeader = false;
-	//	}
-
-		}
-		else if (state != EDK_NO_EVENT) {
-			std::cout << "Internal error in Emotiv Engine!" << std::endl;
-		}
-
-	}
-
-}*/
-
- void EmoHandler::logEmoState(unsigned int userID, EmoStateHandle eState, bool withHeader) 
+ void EmoHandler::logEmoState(unsigned int userID, EmoStateHandle eState) 
  {
 	 qDebug() << "Rodando logEmoState";
 	 if ( hsTcpPollComm->resposta_pronta )
