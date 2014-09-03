@@ -40,7 +40,6 @@ EmoHandler::EmoHandler(QObject *parent) :
 
 }
 
-//int EmoHandler::run(int argc, char** argv) {
 int EmoHandler::run(char** argv) {
 	
 	EmoEngineEventHandle eEvent			= EE_EmoEngineEventCreate();
@@ -57,9 +56,6 @@ int EmoHandler::run(char** argv) {
 	std::string input;
 	
 	try {
-		//if (argc != 2) {
-		//	throw std::exception("Please supply the log file name.\nUsage: EEGLogger [log_file_name].");
-		//}
 
 		std::cout << "===================================================================" << std::endl;
 		std::cout << "Example to show how to log EEG Data from EmoEngine/EmoComposer."	   << std::endl;
