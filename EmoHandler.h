@@ -24,33 +24,7 @@
 #include "DefinicoesGlobais.h"
 
 #pragma comment(lib, "./lib/edk.lib")
-/*
-struct Som {
-	int unit;
-	bool ligado;
-	float volume;
-	int musica_id;
-};
 
-struct Lampada {
-	int unit;
-	bool ligado;
-};
-
-struct ArCondicionado {
-	int unit;
-	bool ligado;
-	float temperatura;
-};
-
-struct Equipamentos {
-	Som som;
-	Lampada lampada1;
-	Lampada lampada2;
-	Lampada lampada3;
-	ArCondicionado ac;
-};
-*/
  class EmoHandler : public QObject
  {
      Q_OBJECT
@@ -64,10 +38,7 @@ struct Equipamentos {
 		 //void exibeEstadoEquipamentos() const;  //essa funcao nao altera nenhum valor das variaveis da classe EmoHandler
 
  public slots:
-	     //void run();
-		 //int run(int argc, char** argv);
-		 int run(char** argv);
-		 void EmoHandler::EmoDataCollect(DataHandle hData, std::ofstream ofs);
+	     void run();
 
  private:
 	    QTimer pollTimer;

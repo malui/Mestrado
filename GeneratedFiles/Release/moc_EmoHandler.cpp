@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_EmoHandler_t {
-    QByteArrayData data[5];
-    char stringdata[28];
+    QByteArrayData data[3];
+    char stringdata[16];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -31,11 +31,9 @@ static const qt_meta_stringdata_EmoHandler_t qt_meta_stringdata_EmoHandler = {
     {
 QT_MOC_LITERAL(0, 0, 10),
 QT_MOC_LITERAL(1, 11, 3),
-QT_MOC_LITERAL(2, 15, 0),
-QT_MOC_LITERAL(3, 16, 6),
-QT_MOC_LITERAL(4, 23, 4)
+QT_MOC_LITERAL(2, 15, 0)
     },
-    "EmoHandler\0run\0\0char**\0argv"
+    "EmoHandler\0run\0"
 };
 #undef QT_MOC_LITERAL
 
@@ -53,10 +51,10 @@ static const uint qt_meta_data_EmoHandler[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,   19,    2, 0x0a /* Public */,
+       1,    0,   19,    2, 0x0a /* Public */,
 
  // slots: parameters
-    QMetaType::Int, 0x80000000 | 3,    4,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -66,11 +64,11 @@ void EmoHandler::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
     if (_c == QMetaObject::InvokeMetaMethod) {
         EmoHandler *_t = static_cast<EmoHandler *>(_o);
         switch (_id) {
-        case 0: { int _r = _t->run((*reinterpret_cast< char**(*)>(_a[1])));
-            if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
+        case 0: _t->run(); break;
         default: ;
         }
     }
+    Q_UNUSED(_a);
 }
 
 const QMetaObject EmoHandler::staticMetaObject = {

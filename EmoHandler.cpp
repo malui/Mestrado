@@ -40,7 +40,7 @@ EmoHandler::EmoHandler(QObject *parent) :
 
 }
 
-int EmoHandler::run(char** argv) {
+void EmoHandler::run() {
 	
 	EmoEngineEventHandle eEvent			= EE_EmoEngineEventCreate();
 	EmoStateHandle eState				= EE_EmoStateCreate();
@@ -66,7 +66,8 @@ int EmoHandler::run(char** argv) {
 		
 		std::getline(std::cin, input, '\n');
 		option = atoi(input.c_str());
-
+		
+		// Conexao com Emotiv
 		switch (option) {
 			case 1:
 			{
@@ -97,8 +98,6 @@ int EmoHandler::run(char** argv) {
 		
 		
 		std::cout << "Start receiving EEG Data! Press any key to stop logging...\n" << std::endl;
-    	std::ofstream ofs(argv[1],std::ios::trunc);
-		ofs << header << std::endl;
 		
 		DataHandle hData = EE_DataCreate();
 		EE_DataSetBufferSizeInSec(secs);
@@ -192,9 +191,7 @@ int EmoHandler::run(char** argv) {
 			
 		} //end while
 		
-			Sleep(100);
-
-		ofs.close();
+		Sleep(100);
 		EE_DataFree(hData);
 		
 	}//try
@@ -207,31 +204,8 @@ int EmoHandler::run(char** argv) {
 	EE_EngineDisconnect();
 	EE_EmoStateFree(eState);
 	EE_EmoEngineEventFree(eEvent);
-	
-	return 0;
 }
-void EmoHandler::EmoDataCollect(DataHandle hData, std::ofstream ofs) {
-	EE_DataUpdateHandle(0, hData);
 
-	unsigned int nSamplesTaken=0;
-	EE_DataGetNumberOfSample(hData,&nSamplesTaken);
-		
-	std::cout << "Updated " << nSamplesTaken << std::endl;
-
-	if (nSamplesTaken != 0) {
-
-		double* data = new double[nSamplesTaken];
-		for (int sampleIdx=0 ; sampleIdx<(int)nSamplesTaken ; ++ sampleIdx) {
-			for (int i = 0 ; i<sizeof(targetChannelList)/sizeof(EE_DataChannel_t) ; i++) {
-
-				EE_DataGet(hData, targetChannelList[i], data, nSamplesTaken);
-				ofs << data[sampleIdx] << ",";
-			}	
-			ofs << std::endl;
-		}
-		delete[] data;
-	}
-}
 
 /*  TRATA POR EVENTO DO EMOTIV
 	//pega sinal emotiv
