@@ -1,0 +1,33 @@
+﻿Build started 9/2/2014 11:51:24 AM.
+     1>Project "C:\Users\Public\Documents\mestrado\Homesystem\miguel\HsSystembox\HsSystembox\HsSystembox\HsSystembox.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\HsSystembox.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       CustomBuild:
+         Moc'ing EmoHandler.h...
+     1>C:\Users\Public\Documents\mestrado\Homesystem\miguel\HsSystembox\HsSystembox\HsSystembox\EmoHandler.h(69): warning : Function declaration EmoHandler::EmoDataCollect contains extra qualification. Ignoring as signal or slot.
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I.\GeneratedFiles /I. /IC:\Qt\Qt5.3.1\5.3\msvc2010_opengl\include /I.\GeneratedFiles\Debug /IC:\Qt\Qt5.3.1\5.3\msvc2010_opengl\include\QtCore /IC:\Qt\Qt5.3.1\5.3\msvc2010_opengl\include\QtGui /IC:\Qt\Qt5.3.1\5.3\msvc2010_opengl\include\QtNetwork /IC:\Qt\Qt5.3.1\5.3\msvc2010_opengl\include\QtWidgets /Zi /nologo /W1 /WX- /Od /Oy- /D UNICODE /D WIN32 /D WIN64 /D QT_DLL /D QT_CORE_LIB /D QT_GUI_LIB /D QT_NETWORK_LIB /D QT_WIDGETS_LIB /Gm- /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt DefinicoesGlobais.cpp EmoHandler.cpp GeneratedFiles\Debug\moc_EmoHandler.cpp GeneratedFiles\Debug\moc_hstcppollcomm.cpp hstcppollcomm.cpp main.cpp
+         DefinicoesGlobais.cpp
+         EmoHandler.cpp
+         moc_EmoHandler.cpp
+         moc_hstcppollcomm.cpp
+         hstcppollcomm.cpp
+         main.cpp
+         Generating Code...
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I.\GeneratedFiles /I. /IC:\Qt\Qt5.3.1\5.3\msvc2010_opengl\include /I.\GeneratedFiles\Debug /IC:\Qt\Qt5.3.1\5.3\msvc2010_opengl\include\QtCore /IC:\Qt\Qt5.3.1\5.3\msvc2010_opengl\include\QtGui /IC:\Qt\Qt5.3.1\5.3\msvc2010_opengl\include\QtNetwork /IC:\Qt\Qt5.3.1\5.3\msvc2010_opengl\include\QtWidgets /Zi /nologo /W1 /WX- /Od /Oy- /D UNICODE /D WIN32 /D WIN64 /D QT_DLL /D QT_CORE_LIB /D QT_GUI_LIB /D QT_NETWORK_LIB /D QT_WIDGETS_LIB /Gm- /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt GeneratedFiles\qrc_hssystembox.cpp
+         qrc_hssystembox.cpp
+       Link:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Public\Documents\mestrado\Homesystem\miguel\HsSystembox\HsSystembox\HsSystembox\Win32\Debug\\HsSystembox.exe" /NOLOGO /LIBPATH:C:\Qt\Qt5.3.1\5.3\msvc2010_opengl\lib qtmaind.lib Qt5Cored.lib Qt5Guid.lib Qt5Networkd.lib Qt5Widgetsd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\HsSystembox.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Public\Documents\mestrado\Homesystem\miguel\HsSystembox\HsSystembox\HsSystembox\Win32\Debug\HsSystembox.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Public\Documents\mestrado\Homesystem\miguel\HsSystembox\HsSystembox\HsSystembox\Win32\Debug\HsSystembox.lib" /MACHINE:X86 Debug\DefinicoesGlobais.obj
+         Debug\EmoHandler.obj
+         Debug\moc_EmoHandler.obj
+         Debug\moc_hstcppollcomm.obj
+         Debug\qrc_hssystembox.obj
+         Debug\hstcppollcomm.obj
+         Debug\main.obj
+         LINK : C:\Users\Public\Documents\mestrado\Homesystem\miguel\HsSystembox\HsSystembox\HsSystembox\Win32\Debug\\HsSystembox.exe not found or not built by the last incremental link; performing full link
+     1>LINK : fatal error LNK1104: cannot open file '../lib/edk.lib'
+     1>Done Building Project "C:\Users\Public\Documents\mestrado\Homesystem\miguel\HsSystembox\HsSystembox\HsSystembox\HsSystembox.vcxproj" (build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:15.97
