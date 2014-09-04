@@ -9,19 +9,7 @@
 #include "edkErrorCode.h"
 
 #pragma comment(lib, "./lib/edk.lib")
-/*
-EE_DataChannel_t targetChannelList[] = {
-		ED_COUNTER,
-		ED_AF3, ED_F7, ED_F3, ED_FC5, ED_T7, 
-		ED_P7, ED_O1, ED_O2, ED_P8, ED_T8, 
-		ED_FC6, ED_F4, ED_F8, ED_AF4, ED_GYROX, ED_GYROY, ED_TIMESTAMP, 
-		ED_FUNC_ID, ED_FUNC_VALUE, ED_MARKER, ED_SYNC_SIGNAL
-	};
 
-const char header[] = "COUNTER,AF3,F7,F3, FC5, T7, P7, O1, O2,P8" 
-                      ", T8, FC6, F4,F8, AF4,GYROX, GYROY, TIMESTAMP, "   
-                      "FUNC_ID, FUNC_VALUE, MARKER, SYNC_SIGNAL,";
-*/
 EmoHandler::EmoHandler(QObject *parent) :
     QObject(parent)
 {
@@ -51,97 +39,69 @@ void EmoHandler::run() {
 	bool readytocollect					= false;
 	int option							= 0;
 	int state							= 0;
+/*	
+//case EmoEngine:
 
-/*
-	std::string input;
-	
-	try {
+	if (EE_EngineConnect() != EDK_OK) 
+	{
+		//throw std::exception("Emotiv Engine start up failed.");
+		std::cout<<"Emotiv Engine start up failed. "<<std::endl; //mudado para tirar exception
+	}
 
-		std::cout << "===================================================================" << std::endl;
-		std::cout << "Example to show how to log EEG Data from EmoEngine/EmoComposer."	   << std::endl;
-		std::cout << "===================================================================" << std::endl;
-		std::cout << "Press '1' to start and connect to the EmoEngine                    " << std::endl;
-		std::cout << "Press '2' to connect to the EmoComposer                            " << std::endl;
-		std::cout << ">> ";
-		
-		std::getline(std::cin, input, '\n');
-		option = atoi(input.c_str());
-		*/
-		// Conexao com Emotiv
-	/*	switch (option) {
-			EmoEngine:
-			{
-				if (EE_EngineConnect() != EDK_OK) {
-					throw std::exception("Emotiv Engine start up failed.");
-				}
-				break;
-			}
-			case 2:
-			{*/
-			//	std::cout << "Target IP of EmoComposer? [127.0.0.1] ";
-			//	std::getline(std::cin, input, '\n');
-
-			//	if (input.empty()) {
-			//		input = std::string("127.0.0.1");
-			//	}
-
-				//if (EE_EngineRemoteConnect(input.c_str(), composerPort) != EDK_OK)
-				if (EE_EngineRemoteConnect("127.0.0.1", composerPort) != EDK_OK)
-				{
-					//std::string errMsg = "Cannot connect to EmoComposer on [" + input + "]";
-					//throw std::exception(errMsg.c_str());
-					std::cout<<"Cannot connect to EmoComposer: "<<std::endl; //mudado para tirar exception
-				}
-			//	break;
-		//	} end case 2
-		//	default:
-		//		throw std::exception("Invalid option...");
-		//		break;
-		//}//switch
+*/
+//case EmoComposer:
+	if (EE_EngineRemoteConnect("127.0.0.1", composerPort) != EDK_OK)
+		{
+			std::cout<<"Cannot connect to EmoComposer."<<std::endl; //mudado para tirar exception
+			// bug: fazer algo para parar o codigo
+		}
 		
 		
-		std::cout << "Start receiving EEG Data! Press any key to stop logging...\n" << std::endl;
-
-		//while (!_kbhit()) {
-			
-			state = EE_EngineGetNextEvent(eEvent);
-
-			if (state == EDK_OK) {
-
-				EE_Event_t eventType = EE_EmoEngineEventGetType(eEvent);
-				EE_EmoEngineEventGetUserId(eEvent, &userID);
-
-				// Log the EmoState if it has been updated
-				if (eventType == EE_UserAdded) {
-					std::cout << "User added";
-					EE_DataAcquisitionEnable(userID,true);
-					readytocollect = true;
-				}//if user added
-			}//if edk ok
-
+	std::cout << "Ready to receive Emotiv signals" << std::endl;
 		// LIGAR EQUIPOS HS
 			//logEmoState(userID, EmoStateHandle eState);
 			
 		/////////////////////
-			
-			if (readytocollect) {
-				//qDebug() << "readytocollect"; //codigo em looping aqui
-				//std::cout << "resposta_pronta = " << hsTcpPollComm->resposta_pronta << std::endl;
-	 if ( hsTcpPollComm->resposta_pronta )
+
+	    if ( hsTcpPollComm->resposta_pronta )
 		{
-			std::cout<<"Engagement level enviado: "<<ES_AffectivGetEngagementBoredomScore(eState)<<std::endl;
+			std::cout << "resposta_pronta"<< std::endl;
+
+//////////////////////////// loop para pegar sinal de Engagement Level //////////////////////////////////////////////////////
+			/*
+			while (EE_EmoEngineEventGetType(eEvent) != EE_EmoStateUpdated)
+			{
+				state = EE_EngineGetNextEvent(eEvent);
+				if (state == EDK_OK) 
+				{
+					std::cout << "state == EDK_OK"<< std::endl;
+
+					EE_Event_t eventType = EE_EmoEngineEventGetType(eEvent);
+
+					// Log the EmoState if it has been updated
+					if (eventType == EE_EmoStateUpdated) 
+					{
+						std::cout << "eventType == EE_EmoStateUpdated"<< std::endl;
+						EE_EmoEngineEventGetEmoState(eEvent, eState);
+
+						std::cout<<"Engagement level enviado:" <<ES_AffectivGetEngagementBoredomScore(eState)<<std::endl;
+					}
+				}
+			} //while (1)
+			*/
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			
 			if (flag)
-				{
+			{
 				 flag = false;
 				 
 				for (int i = 0 ; i < EQUIPAMENTOS_TAMANHO ; ++i) //lista de equipamentos e lista de estados
 				{
 					int* estado = ESTADOS[i];
 					int posicao_maior_engagement = 0;
-					const int tamanho_engagementLevel = TAMANHO_ESTADOS[i];
-					float* engagementLevels = new float [tamanho_engagementLevel]; //cria vetor dinamicamente
-					//float* engagementLevels = new float [2];
+					const int tamanho_engagementLevel = TAMANHO_ESTADOS[i]; //=3
+					//float* engagementLevels = new float [tamanho_engagementLevel]; //cria vetor dinamicamente
+					float* engagementLevels = new float [2];
 					engagementLevels[0] = -1;
 					engagementLevels[1] = -1;
 					
@@ -151,15 +111,39 @@ void EmoHandler::run() {
 					{
 						//envia estado j para o equipamento i
 						hsTcpPollComm->setUnit(EQUIPAMENTO_UNITS[i], estado[j]);
+						hsTcpPollComm->setUnit(118, 1);
+							system("pause");
+						std::cout<<"Testando estado: "<<j<<std::endl;
 						Sleep(4000); // 1seg = 1.000
 						
-						std::cout<<"Testando estado: "<<j<<std::endl;
 
 						//otimizar para nao guardar tal buffer, so precisa dos dois ultimos valores:
 						//pega os estados de engagement para todos os estados do equipamento i e poe num buffer
 				
 						
+						
+//////////////////////////// loop para pegar sinal de Engagement Level //////////////////////////////////////////////////////
+			while (EE_EmoEngineEventGetType(eEvent) != EE_EmoStateUpdated)
+			{
+				state = EE_EngineGetNextEvent(eEvent);
+				if (state == EDK_OK) 
+				{
+					std::cout << "state == EDK_OK"<< std::endl;
+
+					EE_Event_t eventType = EE_EmoEngineEventGetType(eEvent);
+
+					// Log the EmoState if it has been updated
+					if (eventType == EE_EmoStateUpdated) 
+					{
+						std::cout << "eventType == EE_EmoStateUpdated"<< std::endl;
+						EE_EmoEngineEventGetEmoState(eEvent, eState);
+
 						engagementLevels[j] = ES_AffectivGetEngagementBoredomScore(eState);
+						std::cout<<"Engagement level:" <<engagementLevels[j]<<std::endl;
+					}
+				}
+			} //while (1)
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 												
 						std::cout<<"Engagement level com equipamento "<<i<<" e estado "<<j<<": "<<engagementLevels[j]<<std::endl;
 						
@@ -183,20 +167,11 @@ void EmoHandler::run() {
 		
 			}//if flag
 			
-	 } // if resposta pronta
+		} // if resposta pronta
 
-			}  //end if (readytocollect)
-			
-		//} //end while
+//	}  //end if (readytocollect)
 		
-		Sleep(100);
-		
-/*	}//try
-	catch (const std::exception& e) {
-		std::cerr << e.what() << std::endl;
-		std::cout << "Press any key to exit..." << std::endl;
-		getchar();
-	}*/
+	Sleep(100);
 
 	EE_EngineDisconnect();
 	EE_EmoStateFree(eState);
