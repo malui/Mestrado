@@ -52,7 +52,7 @@ void EmoHandler::run() {
 	int option							= 0;
 	int state							= 0;
 
-
+/*
 	std::string input;
 	
 	try {
@@ -66,10 +66,10 @@ void EmoHandler::run() {
 		
 		std::getline(std::cin, input, '\n');
 		option = atoi(input.c_str());
-		
+		*/
 		// Conexao com Emotiv
-		switch (option) {
-			case 1:
+	/*	switch (option) {
+			EmoEngine:
 			{
 				if (EE_EngineConnect() != EDK_OK) {
 					throw std::exception("Emotiv Engine start up failed.");
@@ -77,29 +77,32 @@ void EmoHandler::run() {
 				break;
 			}
 			case 2:
-			{
-				std::cout << "Target IP of EmoComposer? [127.0.0.1] ";
-				std::getline(std::cin, input, '\n');
+			{*/
+			//	std::cout << "Target IP of EmoComposer? [127.0.0.1] ";
+			//	std::getline(std::cin, input, '\n');
 
-				if (input.empty()) {
-					input = std::string("127.0.0.1");
-				}
+			//	if (input.empty()) {
+			//		input = std::string("127.0.0.1");
+			//	}
 
-				if (EE_EngineRemoteConnect(input.c_str(), composerPort) != EDK_OK) {
-					std::string errMsg = "Cannot connect to EmoComposer on [" + input + "]";
-					throw std::exception(errMsg.c_str());
+				//if (EE_EngineRemoteConnect(input.c_str(), composerPort) != EDK_OK)
+				if (EE_EngineRemoteConnect("127.0.0.1", composerPort) != EDK_OK)
+				{
+					//std::string errMsg = "Cannot connect to EmoComposer on [" + input + "]";
+					//throw std::exception(errMsg.c_str());
+					std::cout<<"Cannot connect to EmoComposer: "<<std::endl; //mudado para tirar exception
 				}
-				break;
-			}
-			default:
-				throw std::exception("Invalid option...");
-				break;
-		}//switch
+			//	break;
+		//	} end case 2
+		//	default:
+		//		throw std::exception("Invalid option...");
+		//		break;
+		//}//switch
 		
 		
 		std::cout << "Start receiving EEG Data! Press any key to stop logging...\n" << std::endl;
 
-		while (!_kbhit()) {
+		//while (!_kbhit()) {
 			
 			state = EE_EngineGetNextEvent(eEvent);
 
@@ -115,7 +118,6 @@ void EmoHandler::run() {
 					readytocollect = true;
 				}//if user added
 			}//if edk ok
-			
 
 		// LIGAR EQUIPOS HS
 			//logEmoState(userID, EmoStateHandle eState);
@@ -185,16 +187,16 @@ void EmoHandler::run() {
 
 			}  //end if (readytocollect)
 			
-		} //end while
+		//} //end while
 		
 		Sleep(100);
 		
-	}//try
+/*	}//try
 	catch (const std::exception& e) {
 		std::cerr << e.what() << std::endl;
 		std::cout << "Press any key to exit..." << std::endl;
 		getchar();
-	}
+	}*/
 
 	EE_EngineDisconnect();
 	EE_EmoStateFree(eState);
