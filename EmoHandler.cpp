@@ -9,7 +9,7 @@
 #include "edkErrorCode.h"
 
 #pragma comment(lib, "./lib/edk.lib")
-
+/*
 EE_DataChannel_t targetChannelList[] = {
 		ED_COUNTER,
 		ED_AF3, ED_F7, ED_F3, ED_FC5, ED_T7, 
@@ -21,7 +21,7 @@ EE_DataChannel_t targetChannelList[] = {
 const char header[] = "COUNTER,AF3,F7,F3, FC5, T7, P7, O1, O2,P8" 
                       ", T8, FC6, F4,F8, AF4,GYROX, GYROY, TIMESTAMP, "   
                       "FUNC_ID, FUNC_VALUE, MARKER, SYNC_SIGNAL,";
-
+*/
 EmoHandler::EmoHandler(QObject *parent) :
     QObject(parent)
 {
@@ -119,10 +119,12 @@ void EmoHandler::run() {
 
 		// LIGAR EQUIPOS HS
 			//logEmoState(userID, EmoStateHandle eState);
+			
 		/////////////////////
 			
 			if (readytocollect) {
-				qDebug() << "readytocollect"; //codigo em looping aqui
+				//qDebug() << "readytocollect"; //codigo em looping aqui
+				//std::cout << "resposta_pronta = " << hsTcpPollComm->resposta_pronta << std::endl;
 	 if ( hsTcpPollComm->resposta_pronta )
 		{
 			std::cout<<"Engagement level enviado: "<<ES_AffectivGetEngagementBoredomScore(eState)<<std::endl;

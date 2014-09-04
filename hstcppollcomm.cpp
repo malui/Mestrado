@@ -68,7 +68,6 @@ bool HsTcpPollComm::tcpConnect(QString host, int port)
 		qDebug() << "Conectado com sucesso aleluia amen!! Sarava!";
 	}
 	
-	//qDebug() << "Iniciando tentativa de conexão...";
     return true;
 }
 
@@ -76,7 +75,7 @@ void HsTcpPollComm::pollProcess(void)
 {
 	int unit = 1;
 	QString strGet = 0;
-
+	qDebug() << "HsTcpPollComm::pollProcess";
     // A maquina de estados deve ficar em um lugar soh. Para poll e para read.
 	qint64 result = 0;
 	

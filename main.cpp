@@ -2,9 +2,10 @@
 #include "hstcppollcomm.h"
 #include "EmoHandler.h"
 
-//int main(char *argv[])
-int main()
+int main(int argc, char *argv[])
 {
+	QCoreApplication app(argc, argv); //QObject::startTimer: Timers can only be used with threads started with QThread
+
     HsTcpPollComm hsTcpPollComm;
 	EmoHandler emoHandler;
 	emoHandler.setHsTcpPollComm(&hsTcpPollComm); //as duas threads Emo e Hs tem o mesmo valor da hsTcpPollComm
@@ -17,5 +18,5 @@ int main()
 	//  -inteligencia
 	emoHandler.run();
 
-	return 0;
+	return app.exec();
 }
