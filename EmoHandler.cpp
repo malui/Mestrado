@@ -13,25 +13,35 @@
 EmoHandler::EmoHandler(QObject *parent) :
     QObject(parent)
 {
-	connect(&pollTimer, SIGNAL(timeout()), this, SLOT(run()));
-	pollTimer.start(2000);
-
+	connect(&pollTimer, SIGNAL(timeout()), this, SLOT(emoAffectivEngagementBoredom()));
+	
 	eEvent			= EE_EmoEngineEventCreate();
 	eState			= EE_EmoStateCreate();
 	userID			= 0;
 	composerPort	= 1726;
 	option          = 0;
 	state           = 0;
-	hsTcpPollComm   = NULL;
+	//hsTcpPollComm   = NULL;
 	estadoHandler   = 0;
 	flag            = true;
+	affectivEngagementBoredom = -1.0f;
 
+	pollTimer.start(1000);
+}
+
+EmoHandler::~EmoHandler()
+{
+	EE_EngineDisconnect();
+	EE_EmoStateFree(eState);
+	EE_EmoEngineEventFree(eEvent);
 }
 
 void EmoHandler::run() {
 	
-	EmoEngineEventHandle eEvent			= EE_EmoEngineEventCreate();
-	EmoStateHandle eState				= EE_EmoStateCreate();
+//EmoEngineEventHandle eEvent								= EE_EmoEngineEventCreate();
+//	EmoStateHandle eState								= EE_EmoStateCreate();
+	eEvent								= EE_EmoEngineEventCreate();
+	eState								= EE_EmoStateCreate();
 	unsigned int userID					= 0;
 	const unsigned short composerPort	= 1726;
 	float secs							= 1;
@@ -50,21 +60,22 @@ void EmoHandler::run() {
 
 */
 //case EmoComposer:
-	if (EE_EngineRemoteConnect("127.0.0.1", composerPort) != EDK_OK)
+/*	if (EE_EngineRemoteConnect("127.0.0.1", composerPort) != EDK_OK)
 		{
 			std::cout<<"Cannot connect to EmoComposer."<<std::endl; //mudado para tirar exception
 			// bug: fazer algo para parar o codigo
+			return;
 		}
 		
 		
-	std::cout << "Ready to receive Emotiv signals" << std::endl;
+	std::cout << "Ready to receive Emotiv signals" << std::endl;*/
 		// LIGAR EQUIPOS HS
 			//logEmoState(userID, EmoStateHandle eState);
 			
 		/////////////////////
 
-	    if ( hsTcpPollComm->resposta_pronta )
-		{
+//	    if ( hsTcpPollComm->resposta_pronta )
+//		{
 			std::cout << "resposta_pronta"<< std::endl;
 
 //////////////////////////// loop para pegar sinal de Engagement Level //////////////////////////////////////////////////////
@@ -90,7 +101,7 @@ void EmoHandler::run() {
 			} //while (1)
 			*/
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			
+/*			
 			if (flag)
 			{
 				 flag = false;
@@ -120,32 +131,36 @@ void EmoHandler::run() {
 						//pega os estados de engagement para todos os estados do equipamento i e poe num buffer
 				
 						
-						
+	*/					
 //////////////////////////// loop para pegar sinal de Engagement Level ///////////////////////////////////////////////////////
 			//while (EE_EmoEngineEventGetType(eEvent) != EE_EmoStateUpdated)	
 			while (1)			//
+			//if (EE_EmoEngineEventGetType(eEvent) != EE_EmoStateUpdated)
 			{																												//
 				state = EE_EngineGetNextEvent(eEvent);																		//
 				if (state == EDK_OK)																						//	
 				{																											//
 					std::cout << "state == EDK_OK"<< std::endl;																//
 																															//
-					EE_Event_t eventType = EE_EmoEngineEventGetType(eEvent);												//
+					EE_Event_t eventType = EE_EmoEngineEventGetType(eEvent);
+					//EE_EmoEngineEventGetUserId(eEvent, &userID);//
 															
 					// Log the EmoState if it has been updated																//
-					if (eventType == EE_EmoStateUpdated) 																	//
+			//		if (eventType == EE_EmoStateUpdated) 																	//
 					{																										//
 						std::cout << "eventType == EE_EmoStateUpdated"<< std::endl;											//
 						EE_EmoEngineEventGetEmoState(eEvent, eState);														//
 																															//
-						engagementLevels[j] = ES_AffectivGetEngagementBoredomScore(eState);									//
-						std::cout<<"Engagement level:" <<engagementLevels[j]<<std::endl;	
-						break;//
+//						engagementLevels[j] = ES_AffectivGetEngagementBoredomScore(eState);									//
+//						std::cout<<"Engagement level:" <<engagementLevels[j]<<std::endl;
+						std::cout<<"Engagement level:" <<ES_AffectivGetEngagementBoredomScore(eState)<<std::endl;
+				//		break;//
 					}																										//
-				}																											//
+				}	
+				Sleep(1);//
 			} //while (1)																									//
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-												
+/*												
 						std::cout<<"Engagement level com equipamento "<<i<<" e estado "<<j<<": "<<engagementLevels[j]<<std::endl;
 						
 						//verifica qual a posicao do maior estado de engagement do buffer
@@ -172,13 +187,80 @@ void EmoHandler::run() {
 		} // if resposta pronta
 
 //	}  //end if (readytocollect)
-		
+		*/
 	Sleep(100);
 
-	EE_EngineDisconnect();
-	EE_EmoStateFree(eState);
-	EE_EmoEngineEventFree(eEvent);
+//	EE_EngineDisconnect();
+	//EE_EmoStateFree(eState);
+	//EE_EmoEngineEventFree(eEvent);
 }
+//}
+
+
+void EmoHandler::emoConnect() {
+
+	const unsigned short composerPort	= 1726;
+
+/*	
+//case EmoEngine:
+
+	if (EE_EngineConnect() != EDK_OK) 
+	{
+		//throw std::exception("Emotiv Engine start up failed.");
+		std::cout<<"Emotiv Engine start up failed. "<<std::endl; //mudado para tirar exception
+	}
+
+*/
+//case EmoComposer:
+	if (EE_EngineRemoteConnect("127.0.0.1", composerPort) != EDK_OK)
+		{
+			std::cout<<"Cannot connect to EmoComposer."<<std::endl; //mudado para tirar exception
+			// bug: fazer algo para parar o codigo
+		}
+		
+		
+	std::cout << "Ready to receive Emotiv signals" << std::endl;
+
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void EmoHandler::emoAffectivEngagementBoredom() {
+
+	eEvent								= EE_EmoEngineEventCreate();
+	eState								= EE_EmoStateCreate();
+	unsigned int datarate				= 0;
+	bool readytocollect					= false;
+	int option							= 0;
+	int state							= 0;
+	float result						= 0.0f;
+
+	Sleep(100);
+	
+	//while (1)			
+	{																												
+		state = EE_EngineGetNextEvent(eEvent);																		
+		if (state == EDK_OK)																							
+		{																											
+			std::cout << "state == EDK_OK"<< std::endl;																
+																													
+			EE_Event_t eventType = EE_EmoEngineEventGetType(eEvent);
+															
+			// Log the EmoState if it has been updated																
+			if (eventType == EE_EmoStateUpdated) 																	
+			{																										
+				std::cout << "eventType == EE_EmoStateUpdated"<< std::endl;											
+				EE_EmoEngineEventGetEmoState(eEvent, eState);														
+
+				std::cout<<"Engagement level:" <<ES_AffectivGetEngagementBoredomScore(eState)<<std::endl;
+
+				affectivEngagementBoredom = ES_AffectivGetEngagementBoredomScore(eState);
+				//break;
+			}																										
+		}	
+		Sleep(1);
+	} //while (1)
+}
+
+
 
 /*
  void EmoHandler::logEmoState(unsigned int userID, EmoStateHandle eState) 
@@ -248,6 +330,7 @@ void EmoHandler::run() {
 	 }
  }
 */
+/*
  void EmoHandler::pegaEstadoEquipamentos()
  {
 	 if (hsTcpPollComm != NULL)
@@ -270,6 +353,7 @@ void EmoHandler::run() {
 		// system("pause"); //comando windows: pause - pressione uma tecla pra continuar
 	 }
  }
+ */
 /*
   void EmoHandler::exibeEstadoEquipamentos() const //essa funcao nao altera nenhum valor das variaveis da classe EmoHandler
  {

@@ -6,6 +6,8 @@
 #include <QTimer>
 #include <QHostAddress>
 
+#include "EmoHandler.h"
+
 #include "DefinicoesGlobais.h"
 enum TSessionState{DISCONNECTED, SENT_AUTH, CHECK_AUTH, WAITING_CONN, SENT_REQUEST, WAITING_RESPONSE, DISCONNECTING};
 
@@ -20,6 +22,7 @@ public:
 	QString makeGetUnit( const int *buffUnit, int numUnit );
 	QString resposta;
 	bool resposta_pronta;
+	EmoHandler* emoHandler;
 
 
 signals:

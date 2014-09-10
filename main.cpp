@@ -8,15 +8,23 @@ int main(int argc, char *argv[])
 
     HsTcpPollComm hsTcpPollComm;
 	EmoHandler emoHandler;
-	emoHandler.setHsTcpPollComm(&hsTcpPollComm); //as duas threads Emo e Hs tem o mesmo valor da hsTcpPollComm
+	//emoHandler.setHsTcpPollComm(&hsTcpPollComm); //as duas threads Emo e Hs tem o mesmo valor da hsTcpPollComm
 	
+	hsTcpPollComm.emoHandler = &emoHandler;
     // Inicia tentativa de conexao com o systembox   
     hsTcpPollComm.tcpConnect("10.1.7.37");   //("192.168.0.210");
 
 	//Emotiv: 
 	//  -conexao com emotiv
+	emoHandler.emoConnect();
 	//  -inteligencia
 	//emoHandler.run();
+//	while (1)
+	{
+//		emoHandler.emoAffectivEngagementBoredom();
+//		std::cout << emoHandler.affectivEngagementBoredom << std::endl;
+//		Sleep(1000);
+	}
 
 	return app.exec();
 }

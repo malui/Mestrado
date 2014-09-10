@@ -44,6 +44,7 @@
 HsTcpPollComm::HsTcpPollComm(QObject *parent) :
     QObject(parent)
 {
+	emoHandler = NULL;
     sessionState = DISCONNECTED;
 	resposta_pronta = false;
     // tcp signals
@@ -78,7 +79,12 @@ void HsTcpPollComm::pollProcess(void)
 	qDebug() << "HsTcpPollComm::pollProcess";
     // A maquina de estados deve ficar em um lugar soh. Para poll e para read.
 	qint64 result = 0;
-	
+
+	if (emoHandler)
+	{
+		//emoHandler->emoAffectivEngagementBoredom;
+		std::cout << emoHandler->affectivEngagementBoredom << std::endl;
+	}
     switch(sessionState)
     {
         case DISCONNECTED: qDebug() << "Sessão HS inativa";

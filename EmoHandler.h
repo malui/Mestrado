@@ -20,7 +20,7 @@
 #include "edkErrorCode.h"
 
 //Emotiv enxerga HomeSystem
-#include "hstcppollcomm.h"
+//#include "hstcppollcomm.h"
 #include "DefinicoesGlobais.h"
 
 #pragma comment(lib, "./lib/edk.lib")
@@ -31,14 +31,18 @@
 
  public:
 		 explicit EmoHandler(QObject *parent = 0);
+		 ~EmoHandler();
 		 void emoConnect();
 		 void logEmoState(unsigned int userID, EmoStateHandle eState);
-		 inline void setHsTcpPollComm(HsTcpPollComm *hs){ hsTcpPollComm = hs; };
+		 //inline void setHsTcpPollComm(HsTcpPollComm *hs){ hsTcpPollComm = hs; };
 		 void pegaEstadoEquipamentos();
+		 //void emoAffectivEngagementBoredom();
+		 float affectivEngagementBoredom;
 		 //void exibeEstadoEquipamentos() const;  //essa funcao nao altera nenhum valor das variaveis da classe EmoHandler
 
  public slots:
 	     void run();
+		 void emoAffectivEngagementBoredom();
 
  private:
 	    QTimer pollTimer;
@@ -49,7 +53,7 @@
 		int option;
 		int state;
 		std::string input;
-		HsTcpPollComm *hsTcpPollComm;
+		//HsTcpPollComm *hsTcpPollComm;
 		//Equipamentos equipamentos;
 		int estadoHandler;
 		bool flag;
