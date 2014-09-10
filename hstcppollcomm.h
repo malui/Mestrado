@@ -23,6 +23,7 @@ public:
 	QString resposta;
 	bool resposta_pronta;
 	EmoHandler* emoHandler;
+	void controle();
 
 
 signals:

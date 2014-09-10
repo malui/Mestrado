@@ -80,11 +80,6 @@ void HsTcpPollComm::pollProcess(void)
     // A maquina de estados deve ficar em um lugar soh. Para poll e para read.
 	qint64 result = 0;
 
-	if (emoHandler)
-	{
-		//emoHandler->emoAffectivEngagementBoredom;
-		std::cout << emoHandler->affectivEngagementBoredom << std::endl;
-	}
     switch(sessionState)
     {
         case DISCONNECTED: qDebug() << "Sessão HS inativa";
@@ -113,7 +108,6 @@ void HsTcpPollComm::pollProcess(void)
                 break;
         case SENT_REQUEST: resposta_pronta = false;
 				tcpSocket.write(makeGetUnit(EQUIPAMENTO_UNITS,3).toLatin1());//toStdString().c_str());
-				//setUnit(118,1);
                 sessionState = WAITING_RESPONSE;
                 qDebug() << "Send get unit";
                 break;
@@ -197,8 +191,6 @@ void HsTcpPollComm::tcpOnRead(void)
 {
 
   QByteArray response = tcpSocket.readAll();
-//  qDebug() << "HsTcpPollComm::tcpOnRead: sessionState =  " << sessionState;
-//  qDebug() << "HsTcpPollComm::tcpOnRead: response =  " << response;
 
   switch(sessionState)
   {
@@ -207,7 +199,6 @@ void HsTcpPollComm::tcpOnRead(void)
       {
         qDebug() << "Connection ok";
         sessionState = SENT_REQUEST;
-		//sessionState = WAITING_RESPONSE;
       }
       else
       {
@@ -220,7 +211,6 @@ void HsTcpPollComm::tcpOnRead(void)
       {
         qDebug() << "Auth ok";
         sessionState = SENT_REQUEST;
-		//sessionState = WAITING_RESPONSE;
       }
       else
       {
@@ -237,7 +227,7 @@ void HsTcpPollComm::tcpOnRead(void)
       */
 		resposta = response.data();
 		resposta_pronta = true;
-		setUnit(118,1);
+		controle();
 
 		sessionState = SENT_REQUEST;
 		break;
@@ -279,29 +269,20 @@ QString HsTcpPollComm::CryptPass(char * szPassword)
 }
 
 /////////////////////////////////////
-/*
-void HsTcpPollComm::sendRequest(){
- 
-    // create custom temporary event loop on stack
-    QEventLoop eventLoop;
- 
-    // "quit()" the event-loop, when the network request "finished()"
-    QNetworkAccessManager mgr;
-    QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
- 
-    // the HTTP request
-    QNetworkRequest req( QUrl( QString("http://10.1.7.37//monitor/monitor.cgi?ref_page=cmd&unit=119&newvalue=1") ) );
-    QNetworkReply *reply = mgr.get(req);
-    eventLoop.exec(); // blocks stack until "finished()" has been called
- 
-    if (reply->error() == QNetworkReply::NoError) {
-        //success
-        qDebug() << "Success";// <<reply->readAll();
-        delete reply;
-    }
-    else {
-        //failure
-        qDebug() << "Failure" <<reply->errorString();
-        delete reply;
-    }
-}*/
+
+void HsTcpPollComm::controle(){
+
+	if (emoHandler)
+	{
+		//emoHandler->emoAffectivEngagementBoredom;
+		std::cout << emoHandler->affectivEngagementBoredom << std::endl;
+		if (emoHandler->affectivEngagementBoredom > 0.5f)
+		{
+			setUnit(118,1);
+		}
+		else
+		{
+			setUnit(118,0);
+		}
+	}
+}

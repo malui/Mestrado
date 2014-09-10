@@ -33,31 +33,15 @@
 		 explicit EmoHandler(QObject *parent = 0);
 		 ~EmoHandler();
 		 void emoConnect();
-		 void logEmoState(unsigned int userID, EmoStateHandle eState);
-		 //inline void setHsTcpPollComm(HsTcpPollComm *hs){ hsTcpPollComm = hs; };
-		 void pegaEstadoEquipamentos();
-		 //void emoAffectivEngagementBoredom();
 		 float affectivEngagementBoredom;
-		 //void exibeEstadoEquipamentos() const;  //essa funcao nao altera nenhum valor das variaveis da classe EmoHandler
 
  public slots:
-	     void run();
 		 void emoAffectivEngagementBoredom();
 
  private:
 	    QTimer pollTimer;
 		EmoEngineEventHandle eEvent;
 		EmoStateHandle eState;
-		unsigned int userID;
-		unsigned short composerPort;
-		int option;
-		int state;
-		std::string input;
-		//HsTcpPollComm *hsTcpPollComm;
-		//Equipamentos equipamentos;
-		int estadoHandler;
-		bool flag;
-
  };
 
 
