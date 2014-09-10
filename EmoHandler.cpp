@@ -102,19 +102,18 @@ void EmoHandler::run() {
 					const int tamanho_engagementLevel = TAMANHO_ESTADOS[i]; //=3
 					//float* engagementLevels = new float [tamanho_engagementLevel]; //cria vetor dinamicamente
 					float* engagementLevels = new float [2];
-					engagementLevels[0] = -1;
-					engagementLevels[1] = -1;
+					//engagementLevels[0] = -1;
+					//engagementLevels[1] = -1;
 					
-					std::cout<<"Testando equipamento: "<<i<<std::endl;
+					//std::cout<<"Testando equipamento: "<<i<<std::endl;
 
 					for (int j = 0 ; j < TAMANHO_ESTADOS[i] ; ++j) //lista de estados de cada equipamento ate o final, qual  ofinal?
 					{
 						//envia estado j para o equipamento i
 						hsTcpPollComm->setUnit(EQUIPAMENTO_UNITS[i], estado[j]);
-						hsTcpPollComm->setUnit(118, 1);
-							system("pause");
-						std::cout<<"Testando estado: "<<j<<std::endl;
-						Sleep(4000); // 1seg = 1.000
+						//hsTcpPollComm->setUnit(118, 1);
+						//std::cout<<"Testando estado: "<<j<<std::endl;
+						Sleep(1000); // 1seg = 1.000
 						
 
 						//otimizar para nao guardar tal buffer, so precisa dos dois ultimos valores:
@@ -122,28 +121,30 @@ void EmoHandler::run() {
 				
 						
 						
-//////////////////////////// loop para pegar sinal de Engagement Level //////////////////////////////////////////////////////
-			while (EE_EmoEngineEventGetType(eEvent) != EE_EmoStateUpdated)
-			{
-				state = EE_EngineGetNextEvent(eEvent);
-				if (state == EDK_OK) 
-				{
-					std::cout << "state == EDK_OK"<< std::endl;
-
-					EE_Event_t eventType = EE_EmoEngineEventGetType(eEvent);
-
-					// Log the EmoState if it has been updated
-					if (eventType == EE_EmoStateUpdated) 
-					{
-						std::cout << "eventType == EE_EmoStateUpdated"<< std::endl;
-						EE_EmoEngineEventGetEmoState(eEvent, eState);
-
-						engagementLevels[j] = ES_AffectivGetEngagementBoredomScore(eState);
-						std::cout<<"Engagement level:" <<engagementLevels[j]<<std::endl;
-					}
-				}
-			} //while (1)
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////// loop para pegar sinal de Engagement Level ///////////////////////////////////////////////////////
+			//while (EE_EmoEngineEventGetType(eEvent) != EE_EmoStateUpdated)	
+			while (1)			//
+			{																												//
+				state = EE_EngineGetNextEvent(eEvent);																		//
+				if (state == EDK_OK)																						//	
+				{																											//
+					std::cout << "state == EDK_OK"<< std::endl;																//
+																															//
+					EE_Event_t eventType = EE_EmoEngineEventGetType(eEvent);												//
+															
+					// Log the EmoState if it has been updated																//
+					if (eventType == EE_EmoStateUpdated) 																	//
+					{																										//
+						std::cout << "eventType == EE_EmoStateUpdated"<< std::endl;											//
+						EE_EmoEngineEventGetEmoState(eEvent, eState);														//
+																															//
+						engagementLevels[j] = ES_AffectivGetEngagementBoredomScore(eState);									//
+						std::cout<<"Engagement level:" <<engagementLevels[j]<<std::endl;	
+						break;//
+					}																										//
+				}																											//
+			} //while (1)																									//
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 												
 						std::cout<<"Engagement level com equipamento "<<i<<" e estado "<<j<<": "<<engagementLevels[j]<<std::endl;
 						
@@ -164,6 +165,7 @@ void EmoHandler::run() {
 					hsTcpPollComm->setUnit(EQUIPAMENTO_UNITS[i], estado[posicao_maior_engagement]);
 				
 				} //for equipamentos tamanho
+				//} //while(1) do loop emotiv
 		
 			}//if flag
 			
@@ -178,7 +180,7 @@ void EmoHandler::run() {
 	EE_EmoEngineEventFree(eEvent);
 }
 
-
+/*
  void EmoHandler::logEmoState(unsigned int userID, EmoStateHandle eState) 
  {
 	 qDebug() << "Rodando logEmoState";
@@ -193,11 +195,11 @@ void EmoHandler::run() {
 				{
 					int* estado = ESTADOS[i];
 					int posicao_maior_engagement = 0;
-					const int tamanho_engagementLevel = TAMANHO_ESTADOS[i];
+					//const int tamanho_engagementLevel = TAMANHO_ESTADOS[i];
 					//float* engagementLevels = new float [tamanho_engagementLevel]; //cria vetor dinamicamente
 					float* engagementLevels = new float [2];
-					engagementLevels[0] = -1;
-					engagementLevels[1] = -1;
+					//engagementLevels[0] = -1;
+					//engagementLevels[1] = -1;
 
 					std::cout<<"Testando equipamento: "<<i<<std::endl;
 
@@ -205,7 +207,7 @@ void EmoHandler::run() {
 					{
 						//envia estado j para o equipamento i
 						hsTcpPollComm->setUnit(EQUIPAMENTO_UNITS[i], estado[j]);
-						Sleep(4000); // 1seg = 1.000
+						Sleep(2000); // 1seg = 1.000
 
 						std::cout<<"Testando estado: "<<j<<std::endl;
 
@@ -242,10 +244,10 @@ void EmoHandler::run() {
 			else 
 			{
 				hsTcpPollComm->setUnit(EQUIPAMENTO_UNITS[0], 0);
-			}*/
+			}
 	 }
  }
-
+*/
  void EmoHandler::pegaEstadoEquipamentos()
  {
 	 if (hsTcpPollComm != NULL)

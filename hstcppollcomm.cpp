@@ -86,14 +86,6 @@ void HsTcpPollComm::pollProcess(void)
                 // ou seguir a partir do ponto de autenticacao.
                 break;
         case CHECK_AUTH: //sendRequest();
-			//setUnit(EQUIPAMENTO_UNITS[0], 1);
-			/*result = tcpSocket.write(makeGetUnit(EQUIPAMENTO_UNITS,1).toLatin1()); //toStdString().c_str());
-			qDebug() << "result tcpSocket.write: " << result;
-			if (tcpSocket.isReadable() )
-			{
-				qDebug() << "tcpSocket is readable";
-			}*/
-			// strGet = makeGetUnit(&unit,1).toLatin1();
               tcpSocket.write(makeGetUnit(&unit,1).toLatin1());
                 qDebug() << "Send check auth";
 			//	qDebug() << "makegetunit= " << strGet;
@@ -115,6 +107,7 @@ void HsTcpPollComm::pollProcess(void)
                 break;
         case SENT_REQUEST: resposta_pronta = false;
 				tcpSocket.write(makeGetUnit(EQUIPAMENTO_UNITS,3).toLatin1());//toStdString().c_str());
+				//setUnit(118,1);
                 sessionState = WAITING_RESPONSE;
                 qDebug() << "Send get unit";
                 break;
@@ -155,11 +148,18 @@ Seta e envia string pronta para mudar o valor da unit
 */
 void HsTcpPollComm::setUnit(int unit, int value)
 {
+	if ( sessionState == WAITING_RESPONSE )
+	{
     QString strSet;
     // Header
     strSet.append(QString("5S%1*%2*").arg(unit).arg(value));
     tcpSocket.write(strSet.toLatin1());
     qDebug() << strSet;
+	}
+	else
+	{
+		qDebug() << "sessionState = " << sessionState;
+	}
 }
 
 /*
@@ -191,8 +191,8 @@ void HsTcpPollComm::tcpOnRead(void)
 {
 
   QByteArray response = tcpSocket.readAll();
-  qDebug() << "HsTcpPollComm::tcpOnRead: sessionState =  " << sessionState;
-  qDebug() << "HsTcpPollComm::tcpOnRead: response =  " << response;
+//  qDebug() << "HsTcpPollComm::tcpOnRead: sessionState =  " << sessionState;
+//  qDebug() << "HsTcpPollComm::tcpOnRead: response =  " << response;
 
   switch(sessionState)
   {
@@ -201,6 +201,7 @@ void HsTcpPollComm::tcpOnRead(void)
       {
         qDebug() << "Connection ok";
         sessionState = SENT_REQUEST;
+		//sessionState = WAITING_RESPONSE;
       }
       else
       {
@@ -213,6 +214,7 @@ void HsTcpPollComm::tcpOnRead(void)
       {
         qDebug() << "Auth ok";
         sessionState = SENT_REQUEST;
+		//sessionState = WAITING_RESPONSE;
       }
       else
       {
@@ -229,7 +231,7 @@ void HsTcpPollComm::tcpOnRead(void)
       */
 		resposta = response.data();
 		resposta_pronta = true;
-		//setUnit(118,1);
+		setUnit(118,1);
 
 		sessionState = SENT_REQUEST;
 		break;

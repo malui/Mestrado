@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 	//Emotiv: 
 	//  -conexao com emotiv
 	//  -inteligencia
-	emoHandler.run();
+	//emoHandler.run();
 
 	return app.exec();
 }
