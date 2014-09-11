@@ -17,14 +17,6 @@ int main(int argc, char *argv[])
 	//Emotiv: 
 	//  -conexao com emotiv
 	emoHandler.emoConnect();
-	//  -inteligencia
-	//emoHandler.run();
-//	while (1)
-	{
-//		emoHandler.emoAffectivEngagementBoredom();
-//		std::cout << emoHandler.affectivEngagementBoredom << std::endl;
-//		Sleep(1000);
-	}
 
 	return app.exec();
 }

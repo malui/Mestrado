@@ -76,7 +76,7 @@ void HsTcpPollComm::pollProcess(void)
 {
 	int unit = 1;
 	QString strGet = 0;
-	qDebug() << "HsTcpPollComm::pollProcess";
+//	qDebug() << "HsTcpPollComm::pollProcess";
     // A maquina de estados deve ficar em um lugar soh. Para poll e para read.
 	qint64 result = 0;
 
@@ -89,7 +89,6 @@ void HsTcpPollComm::pollProcess(void)
         case CHECK_AUTH: //sendRequest();
               tcpSocket.write(makeGetUnit(&unit,1).toLatin1());
                 qDebug() << "Send check auth";
-			//	qDebug() << "makegetunit= " << strGet;
                 sessionState = WAITING_CONN; // Alterar sessionState em tcpOnRead
                 break;
         case WAITING_CONN: qDebug() << "Wait connection";
@@ -106,14 +105,22 @@ void HsTcpPollComm::pollProcess(void)
                     tcpSocket.write(myArray);
                 }
                 break;
-        case SENT_REQUEST: resposta_pronta = false;
-				tcpSocket.write(makeGetUnit(EQUIPAMENTO_UNITS,3).toLatin1());//toStdString().c_str());
+        case SENT_REQUEST: //resposta_pronta = false;
+				//tcpSocket.write(makeGetUnit(EQUIPAMENTO_UNITS,3).toLatin1());//toStdString().c_str());
+				//controle();
+				setUnit(118,1);
+				setUnit(119,1);
                 sessionState = WAITING_RESPONSE;
                 qDebug() << "Send get unit";
                 break;
         case WAITING_RESPONSE: qDebug() << "Wait get unit";
                 break;
-        default: qDebug() << "Sessão ativa";
+		/*case SESSAO_ATIVA: qDebug() << "Sessao HS ativa";
+				//resposta_pronta = true;
+				//setUnit(118,1);
+				controle();
+				break;*/
+		default: std::cout << "SessionState desconhecido: "<< sessionState << std::endl;
     }
 }
 
@@ -145,21 +152,23 @@ QString HsTcpPollComm::makeGetUnit( const int *buffUnit, int numUnit )
 HsTcpPollComm::setUnit(int unit, int value)
 Envia comando "value" para a "unit"
 Seta e envia string pronta para mudar o valor da unit 
+*5S*unit*valor*
 */
 void HsTcpPollComm::setUnit(int unit, int value)
 {
-	if ( sessionState == WAITING_RESPONSE )
-	{
+//	if ( sessionState == WAITING_RESPONSE )
+//	{
     QString strSet;
     // Header
     strSet.append(QString("5S%1*%2*").arg(unit).arg(value));
     tcpSocket.write(strSet.toLatin1());
-    qDebug() << strSet;
-	}
-	else
-	{
-		qDebug() << "sessionState = " << sessionState;
-	}
+    qDebug() << "setUnit: "<< strSet;
+	//std::cout << "setUnit: " << strSet.toLatin1() <<std::endl;
+//	}
+//	else
+//	{
+//		qDebug() << "sessionState = " << sessionState;
+//	}
 }
 
 /*
@@ -198,7 +207,8 @@ void HsTcpPollComm::tcpOnRead(void)
       if((response[0] == '\0') && (response[1] == '*') && (response[2] == '1'))
       {
         qDebug() << "Connection ok";
-        sessionState = SENT_REQUEST;
+		sessionState = SENT_REQUEST;
+		//sessionState = SESSAO_ATIVA;
       }
       else
       {
@@ -210,7 +220,9 @@ void HsTcpPollComm::tcpOnRead(void)
       if((response[0] == 'p') && (response[1] == 'T') && (response[2] == '1'))
       {
         qDebug() << "Auth ok";
+		resposta_pronta = true;
         sessionState = SENT_REQUEST;
+		//sessionState = SESSAO_ATIVA;
       }
       else
       {
@@ -226,12 +238,18 @@ void HsTcpPollComm::tcpOnRead(void)
 
       */
 		resposta = response.data();
-		resposta_pronta = true;
-		controle();
+		std::cout << "WAITING_RESPONSE resposta = " << response.data() <<std::endl; 
+		//resposta_pronta = true;
+		//controle();
 
 		sessionState = SENT_REQUEST;
+		//sessionState = SESSAO_ATIVA;
 		break;
+
+	case SENT_REQUEST:
+		qDebug() << "teste";
     }
+
     response[0] = '@';
     qDebug() << "Tcp read " << response.data();
 }
@@ -270,19 +288,62 @@ QString HsTcpPollComm::CryptPass(char * szPassword)
 
 /////////////////////////////////////
 
-void HsTcpPollComm::controle(){
-
+void HsTcpPollComm::controle()
+{
 	if (emoHandler)
 	{
-		//emoHandler->emoAffectivEngagementBoredom;
-		std::cout << emoHandler->affectivEngagementBoredom << std::endl;
-		if (emoHandler->affectivEngagementBoredom > 0.5f)
+		if (resposta_pronta)
 		{
-			setUnit(118,1);
-		}
-		else
-		{
-			setUnit(118,0);
+
+			for (int i = 0 ; i < EQUIPAMENTOS_TAMANHO ; ++i) //lista de equipamentos e lista de estados
+				{
+					int* estado = ESTADOS[i];
+					int posicao_maior_engagement = 0;
+					const int tamanho_engagementLevel = TAMANHO_ESTADOS[i]; //=3
+					//float* engagementLevels = new float [tamanho_engagementLevel]; //cria vetor dinamicamente
+					float* engagementLevels = new float [2];
+
+
+					//std::cout<<"Testando equipamento: "<<i<<std::endl;
+					for (int j = 0 ; j < TAMANHO_ESTADOS[i] ; ++j) //lista de estados de cada equipamento ate o final, qual  ofinal?
+					{
+
+						//envia estado j para o equipamento i
+						std::cout<<"sessionState antes = "<<sessionState<<std::endl;
+						setUnit(EQUIPAMENTO_UNITS[i], estado[j]); //////// BUG!!!!!!!!!! SO RODA 1x
+						std::cout<<"sessionState depois = "<<sessionState<<std::endl;
+
+						//setUnit(EQUIPAMENTO_UNITS[i], LAMPADA_ESTADOS[j]);
+
+						//std::cout<<"setUnit: Equipamento "<< EQUIPAMENTO_UNITS[i] << "estado: " << estado[j] << std::endl;
+						//setUnit(118,1);
+					
+						//std::cout<<"Testando estado: "<<j<<std::endl;
+						Sleep(100); // 1seg = 1.000
+						
+						//otimizar para nao guardar tal buffer, so precisa dos dois ultimos valores:
+						//pega os estados de engagement para todos os estados do equipamento i e poe num buffer
+
+						engagementLevels[j] = emoHandler->affectivEngagementBoredom;
+						std::cout<<"Engagement level com equipamento "<<i<<" e estado "<<j<<": "<<engagementLevels[j]<<std::endl;
+						
+						//verifica qual a posicao do maior estado de engagement do buffer
+						if (j > 0)
+						{
+							if (engagementLevels[j] > engagementLevels[j-1])
+							{
+								posicao_maior_engagement = j;
+							} //if maior engagement
+						}// if j>0  
+					
+					}// for tamanho dos estados 
+					std::cout<<"Maior Engagement Level para o Equipamento "<<i<<" foi com o estado "<<posicao_maior_engagement<<": "<<engagementLevels[posicao_maior_engagement]<<std::endl;
+					delete[] engagementLevels;
+					std::cout<<"Setando Equipamento "<<i<<" com o estado "<<posicao_maior_engagement<<std::endl;
+					//seta o estado do equipamento i conforme o maior estado de engagement equivalente
+					//setUnit(EQUIPAMENTO_UNITS[i], estado[posicao_maior_engagement]);
+				
+				} //for equipamentos tamanho
 		}
 	}
 }

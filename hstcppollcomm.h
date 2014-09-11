@@ -9,7 +9,7 @@
 #include "EmoHandler.h"
 
 #include "DefinicoesGlobais.h"
-enum TSessionState{DISCONNECTED, SENT_AUTH, CHECK_AUTH, WAITING_CONN, SENT_REQUEST, WAITING_RESPONSE, DISCONNECTING};
+enum TSessionState{DISCONNECTED, SENT_AUTH, CHECK_AUTH, WAITING_CONN, SENT_REQUEST, WAITING_RESPONSE, DISCONNECTING};//, SESSAO_ATIVA};
 
 
 class HsTcpPollComm : public QObject
@@ -22,6 +22,7 @@ public:
 	QString makeGetUnit( const int *buffUnit, int numUnit );
 	QString resposta;
 	bool resposta_pronta;
+	TSessionState sessionState;
 	EmoHandler* emoHandler;
 	void controle();
 
@@ -38,7 +39,7 @@ public slots:
 //	void sendRequest(void);
 
 private:
-    TSessionState sessionState;
+    //TSessionState sessionState;
 	QString CryptPass(char * szPassword);
     QTcpSocket tcpSocket;
     QTimer pollTimer;
