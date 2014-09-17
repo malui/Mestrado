@@ -269,29 +269,27 @@ QString HsTcpPollComm::CryptPass(char * szPassword)
 
 void HsTcpPollComm::controle()
 {
+
 	static int i = 0;
 	static int j = 0;
 	//float* engagementLevels = new float [tamanho_engagementLevel]; //cria vetor dinamicamente
 	static float* engagementLevels = new float [2];
+	static int posicao_maior_engagement = 0;
 
 	if (emoHandler)
 	{
 		if (resposta_pronta)
 		{
 			int* estado = ESTADOS[i];
-			int posicao_maior_engagement = 0;
 			const int tamanho_engagementLevel = TAMANHO_ESTADOS[i]; //=3
 			
 			if ( i < EQUIPAMENTOS_TAMANHO ) //lista de equipamentos e lista de estados
 			{
-				//std::cout<<"Testando equipamento: "<<i<<std::endl;
 				if ( j < TAMANHO_ESTADOS[i] ) //lista de estados de cada equipamento ate o final, qual  ofinal?
 				{
 
 					//envia estado j para o equipamento i
-					std::cout<<"sessionState antes = "<<sessionState<<std::endl;
-					setUnit(EQUIPAMENTO_UNITS[i], estado[j]); //////// BUG!!!!!!!!!! SO RODA 1x
-					std::cout<<"sessionState depois = "<<sessionState<<std::endl;
+					setUnit(EQUIPAMENTO_UNITS[i], estado[j]);
 
 					//otimizar para nao guardar tal buffer, so precisa dos dois ultimos valores:
 					//pega os estados de engagement para todos os estados do equipamento i e poe num buffer
@@ -299,29 +297,30 @@ void HsTcpPollComm::controle()
 					std::cout<<"Engagement level com equipamento "<<i<<" e estado "<<j<<": "<<engagementLevels[j]<<std::endl;
 
 					//verifica qual a posicao do maior estado de engagement do buffer
-					if (j >= 0)
+					if (j > 0)
 					{
-						if (engagementLevels[j] > engagementLevels[j-1])
+						if (engagementLevels[j] > engagementLevels[posicao_maior_engagement])
 						{
 							posicao_maior_engagement = j;
 						} //if maior engagement
-					}// if j>=0  
+					}// if j>=0 
 
 					++j;
 
 				}// if tamanho dos estados 
-			} //if i < equipamentos tamanho
+				else if ( j >= TAMANHO_ESTADOS[i] )
+				{
+					std::cout<<"Maior Engagement Level para o Equipamento "<<i<<" foi com o estado "<<posicao_maior_engagement<<": "<<engagementLevels[posicao_maior_engagement]<<std::endl;
+					//delete[] engagementLevels;
+					std::cout<<"Setando Equipamento "<<i<<" com o estado "<<posicao_maior_engagement<<std::endl;
+					//seta o estado do equipamento i conforme o maior estado de engagement equivalente
+					setUnit(EQUIPAMENTO_UNITS[i], estado[posicao_maior_engagement]);
+					std::cout<<"i: "<<i<<" j: "<<j<<std::endl;
+					i++;
+					j = 0;
+				}
 
-			if ( j >= TAMANHO_ESTADOS[i] )
-			{
-				std::cout<<"Maior Engagement Level para o Equipamento "<<i<<" foi com o estado "<<posicao_maior_engagement<<": "<<engagementLevels[posicao_maior_engagement]<<std::endl;
-				//delete[] engagementLevels;
-				std::cout<<"Setando Equipamento "<<i<<" com o estado "<<posicao_maior_engagement<<std::endl;
-				//seta o estado do equipamento i conforme o maior estado de engagement equivalente
-				setUnit(EQUIPAMENTO_UNITS[i], estado[posicao_maior_engagement]);
-				++i;
-				j = 0;
-			}
+			} //if i < equipamentos tamanho
 		}
 	}
 }
