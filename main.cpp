@@ -12,11 +12,22 @@ int main(int argc, char *argv[])
 	
 	hsTcpPollComm.emoHandler = &emoHandler;
 
-	//Inicia tentativa de conexao com emotiv
-	emoHandler.emoConnect(argc);
+	try {
+		//Inicia tentativa de conexao com emotiv
+		if (emoHandler.emoConnect() != 1){
+		throw std::exception("Emotiv Connection failed.");
+		}
 
-    // Inicia tentativa de conexao com o systembox   
-    hsTcpPollComm.tcpConnect("10.1.7.37");   //("192.168.0.210");
+		// Inicia tentativa de conexao com o systembox   
+		hsTcpPollComm.tcpConnect("10.1.7.37");
+	}//end try
+	catch (const std::exception& e) {
+		std::cerr << e.what() << std::endl;
+		std::cout << "Press any key to exit..." << std::endl;
+		if (getchar()){
+			exit(0);
+		}
+	}
 
 	return app.exec();
 }
