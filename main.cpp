@@ -11,12 +11,12 @@ int main(int argc, char *argv[])
 	//emoHandler.setHsTcpPollComm(&hsTcpPollComm); //as duas threads Emo e Hs tem o mesmo valor da hsTcpPollComm
 	
 	hsTcpPollComm.emoHandler = &emoHandler;
+
+	//Inicia tentativa de conexao com emotiv
+	emoHandler.emoConnect(argc);
+
     // Inicia tentativa de conexao com o systembox   
     hsTcpPollComm.tcpConnect("10.1.7.37");   //("192.168.0.210");
-
-	//Emotiv: 
-	//  -conexao com emotiv
-	emoHandler.emoConnect();
 
 	return app.exec();
 }

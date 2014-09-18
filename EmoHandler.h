@@ -32,7 +32,7 @@
  public:
 		 explicit EmoHandler(QObject *parent = 0);
 		 ~EmoHandler();
-		 void emoConnect();
+		 void emoConnect(int argc);
 		 float affectivEngagementBoredom;
 
  public slots:
