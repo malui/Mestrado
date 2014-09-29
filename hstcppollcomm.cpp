@@ -106,7 +106,6 @@ void HsTcpPollComm::pollProcess(void)
                 }
                 break;
         case SENT_REQUEST: //resposta_pronta = false;
-				//tcpSocket.write(makeGetUnit(EQUIPAMENTO_UNITS,3).toLatin1());//toStdString().c_str());
 				controle();
                 sessionState = WAITING_RESPONSE;
                 qDebug() << "Send get unit";
@@ -276,6 +275,8 @@ void HsTcpPollComm::controle()
 	static float* engagementLevels = new float [2];
 	static int posicao_maior_engagement = 0;
 
+	//std::ofstream ofs(emoHandler->logFileName);
+
 	if (emoHandler)
 	{
 		if (resposta_pronta)
@@ -294,8 +295,9 @@ void HsTcpPollComm::controle()
 					//otimizar para nao guardar tal buffer, so precisa dos dois ultimos valores:
 					//pega os estados de engagement para todos os estados do equipamento i e poe num buffer
 					engagementLevels[j] = emoHandler->affectivEngagementBoredom;
+					emoHandler->ofs <<"Engagement level com equipamento "<<i<<" e estado "<<j<<": "<<engagementLevels[j]<<std::endl;
 					std::cout<<"Engagement level com equipamento "<<i<<" e estado "<<j<<": "<<engagementLevels[j]<<std::endl;
-
+					
 					//verifica qual a posicao do maior estado de engagement do buffer
 					if (j > 0)
 					{
@@ -310,17 +312,85 @@ void HsTcpPollComm::controle()
 				}// if tamanho dos estados 
 				else if ( j >= TAMANHO_ESTADOS[i] )
 				{
+					emoHandler->ofs<<"Maior Engagement Level para o Equipamento "<<i<<" foi com o estado "<<posicao_maior_engagement<<": "<<engagementLevels[posicao_maior_engagement]<<std::endl;
 					std::cout<<"Maior Engagement Level para o Equipamento "<<i<<" foi com o estado "<<posicao_maior_engagement<<": "<<engagementLevels[posicao_maior_engagement]<<std::endl;
 					//delete[] engagementLevels;
+					emoHandler->ofs<<"Setando Equipamento "<<i<<" com o estado "<<posicao_maior_engagement<<std::endl;
 					std::cout<<"Setando Equipamento "<<i<<" com o estado "<<posicao_maior_engagement<<std::endl;
 					//seta o estado do equipamento i conforme o maior estado de engagement equivalente
 					setUnit(EQUIPAMENTO_UNITS[i], estado[posicao_maior_engagement]);
-					std::cout<<"i: "<<i<<" j: "<<j<<std::endl;
+					//std::cout<<"i: "<<i<<" j: "<<j<<std::endl;
 					i++;
 					j = 0;
 				}
-
+				
+				
 			} //if i < equipamentos tamanho
+			if (i >= EQUIPAMENTOS_TAMANHO)
+			{
+				emoHandler->ofs.close();
+			}
+			
 		}
 	}
+	
+}
+
+void logControle(std::ostream& os, unsigned int userID, EmoStateHandle eState, bool withHeader) {
+
+	// Create the top header
+	if (withHeader) {
+		os << "Time,";
+		os << "UserID,";
+		os << "Wireless Signal Status,";
+
+		os << "Equipamento,";
+		os << "Estado";
+
+		os << "Short Term Excitement,";
+		os << "Long Term Excitement,";
+		os << "Engagement/Boredom,";
+		os << std::endl;
+	}
+
+	// Log the time stamp and user ID
+	os << ES_GetTimeFromStart(eState) << ",";
+	os << userID << ",";
+	os << static_cast<int>(ES_GetWirelessSignalStatus(eState)) << ",";
+
+	// Affectiv Suite results
+	os << ES_AffectivGetExcitementShortTermScore(eState) << ",";
+	os << ES_AffectivGetExcitementLongTermScore(eState) << ",";
+
+	os << ES_AffectivGetEngagementBoredomScore(eState) << ",";
+
+	os << std::endl;
+}
+
+void logAffectiveSuiteState(std::ostream& os, unsigned int userID, EmoStateHandle eState, bool withHeader) {
+
+	// Create the top header
+	if (withHeader) {
+		os << "Time,";
+		os << "UserID,";
+		os << "Wireless Signal Status,";
+
+		os << "Short Term Excitement,";
+		os << "Long Term Excitement,";
+		os << "Engagement/Boredom,";
+		os << std::endl;
+	}
+
+	// Log the time stamp and user ID
+	os << ES_GetTimeFromStart(eState) << ",";
+	os << userID << ",";
+	os << static_cast<int>(ES_GetWirelessSignalStatus(eState)) << ",";
+
+	// Affectiv Suite results
+	os << ES_AffectivGetExcitementShortTermScore(eState) << ",";
+	os << ES_AffectivGetExcitementLongTermScore(eState) << ",";
+
+	os << ES_AffectivGetEngagementBoredomScore(eState) << ",";
+
+	os << std::endl;
 }

@@ -1,0 +1,12 @@
+Emotiv Composer start up successed. Ready to receive Emotiv signals.Engagement level com equipamento 0 e estado 0: 0.5
+Engagement level com equipamento 0 e estado 1: 0.5
+Maior Engagement Level para o Equipamento 0 foi com o estado 0: 0.5
+Setando Equipamento 0 com o estado 0
+Engagement level com equipamento 1 e estado 0: 0.4
+Engagement level com equipamento 1 e estado 1: 0.1
+Maior Engagement Level para o Equipamento 1 foi com o estado 0: 0.4
+Setando Equipamento 1 com o estado 0
+Engagement level com equipamento 2 e estado 0: 0.2
+Engagement level com equipamento 2 e estado 1: 0.3
+Maior Engagement Level para o Equipamento 2 foi com o estado 1: 0.3
+Setando Equipamento 2 com o estado 1

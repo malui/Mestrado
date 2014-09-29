@@ -1,0 +1,1 @@
+Emotiv Engine start up succeed. Ready to receive Emotiv signals.Engagement level com equipamento 0 e estado 0: 0.636988

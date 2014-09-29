@@ -25,6 +25,7 @@ public:
 	TSessionState sessionState;
 	EmoHandler* emoHandler;
 	void controle();
+	void logAffectiveSuiteState(std::ostream& os, unsigned int userID, EmoStateHandle eState, bool withHeader);
 
 
 signals:

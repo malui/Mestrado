@@ -34,6 +34,8 @@
 		 ~EmoHandler();
 		 int emoConnect();
 		 float affectivEngagementBoredom;
+		 //std::string logFileName;
+		 std::ofstream ofs;
 
  public slots:
 		 void emoAffectivEngagementBoredom();

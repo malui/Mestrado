@@ -36,6 +36,7 @@ int EmoHandler::emoConnect() {
 	std::string input;
 	int option = 0;
 	int result = 0;
+	std::string logfilename;
 
 	const unsigned short composerPort	= 1726;
 
@@ -52,13 +53,25 @@ int EmoHandler::emoConnect() {
 		std::cout << "SISTEMA DE CONTROLE BASEADO EM EMOÇÕES ATRAVÉS DE INTERFACE CÉREBRO COMPUTADOR" << std::endl;
 		std::cout << "Eng. Maria Luiza Recena Menezes		   		         PPGEE - UFRGS" << std::endl;
 		std::cout << "==============================================================================" << std::endl;
+
+		std::cout << "Please supply the log file name:                                   " << std::endl;
+		std::cout << ">> ";
+		std::getline(std::cin, logfilename, '\n');
+
+		while ( logfilename == "" )
+		{
+			std::cout << "Please supply a valid log file name:                                   " << std::endl;
+			std::cout << ">> ";
+			std::getline(std::cin, logfilename, '\n');
+		}
+
 		std::cout << "Press '1' to start and connect to the EmoEngine                    " << std::endl;
 		std::cout << "Press '2' to connect to the EmoComposer                            " << std::endl;
 		std::cout << ">> ";
-
 		std::getline(std::cin, input, '\n');
 		option = atoi(input.c_str());
 
+		
 		int emoConnectionStatus = -1;
 
 		switch (option) 
@@ -74,6 +87,8 @@ int EmoHandler::emoConnect() {
 				else if (emoConnectionStatus == EDK_OK)
 				{
 					result = 1;
+					ofs.open(logfilename);
+					ofs << "Emotiv Engine start up succeed. Ready to receive Emotiv signals.";
 					throw std::exception("Emotiv Engine start up successed. Ready to receive Emotiv signals.");
 				}
 				break;
@@ -90,7 +105,9 @@ int EmoHandler::emoConnect() {
 				else if (emoConnectionStatus == EDK_OK)
 				{
 					result = 1;
-					throw std::exception("Emotiv Composer start up successed. Ready to receive Emotiv signals.");
+					ofs.open(logfilename);
+					ofs << "Emotiv Composer start up successed. Ready to receive Emotiv signals.";
+					throw std::exception("Emotiv Composer start up succeed. Ready to receive Emotiv signals.");
 				}
 				break;
 			}
