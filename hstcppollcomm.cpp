@@ -54,7 +54,7 @@ HsTcpPollComm::HsTcpPollComm(QObject *parent) :
     connect(&tcpSocket, SIGNAL(readyRead()), this, SLOT(tcpOnRead()));
     // timer signals
     connect(&pollTimer, SIGNAL(timeout()), this, SLOT(pollProcess()));
-    pollTimer.start(2000);
+    pollTimer.start(4000);
 }
 
 bool HsTcpPollComm::tcpConnect(QString host, int port)
@@ -64,7 +64,7 @@ bool HsTcpPollComm::tcpConnect(QString host, int port)
     else
         tcpSocket.connectToHost(host, port );
 
-    if (tcpSocket.waitForConnected(3000))
+    if (tcpSocket.waitForConnected(2000)) //3000
 	{
 		qDebug() << "Conectado com sucesso aleluia amen!! Sarava!";
 	}
@@ -106,6 +106,7 @@ void HsTcpPollComm::pollProcess(void)
                 }
                 break;
         case SENT_REQUEST: //resposta_pronta = false;
+				resposta_pronta = true;
 				controle();
                 sessionState = WAITING_RESPONSE;
                 qDebug() << "Send get unit";

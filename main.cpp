@@ -19,7 +19,8 @@ int main(int argc, char *argv[])
 		}
 
 		// Inicia tentativa de conexao com o systembox   
-		hsTcpPollComm.tcpConnect("10.1.7.37");
+		//hsTcpPollComm.tcpConnect("10.1.7.37");
+		hsTcpPollComm.tcpConnect("192.168.0.209");
 	}//end try
 	catch (const std::exception& e) {
 		std::cerr << e.what() << std::endl;
