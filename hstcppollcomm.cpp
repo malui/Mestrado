@@ -112,8 +112,8 @@ void HsTcpPollComm::pollProcess(void)
                     tcpSocket.write(myArray);
                 }
                 break;
-        case SENT_REQUEST: //resposta_pronta = false;
-				resposta_pronta = true;
+        case SENT_REQUEST: resposta_pronta = false;
+				//resposta_pronta = true;
 				controle();
                 sessionState = WAITING_RESPONSE;
                 qDebug() << "Send get unit";
