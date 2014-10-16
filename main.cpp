@@ -10,6 +10,8 @@ int main(int argc, char *argv[])
 	EmoHandler emoHandler;
 	//emoHandler.setHsTcpPollComm(&hsTcpPollComm); //as duas threads Emo e Hs tem o mesmo valor da hsTcpPollComm
 
+	hsTcpPollComm.emoHandler = &emoHandler;
+
 	try {
 		//Inicia tentativa de conexao com emotiv
 		if (emoHandler.emoConnect() != 1){
