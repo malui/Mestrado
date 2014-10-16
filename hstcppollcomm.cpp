@@ -267,8 +267,114 @@ QString HsTcpPollComm::CryptPass(char * szPassword)
 
 /////////////////////////////////////
 
+/////////GUILHERME BEGIN//////////////////
+
+void HsTcpPollComm::printSenario (const vector<int>& v)
+{
+
+    for( std::vector<int>::const_iterator i = v.begin(); i != v.end(); ++i)
+        std::cout << *i << ' ';
+}
+
+void HsTcpPollComm::printPopulacao ( Populacao population)
+{
+    for(int i=0; i<population.size(); i++)
+    {
+        printSenario(std::get<0>(population[i]));
+        cout <<  std::get<1>(population[i]) << endl;
+
+    }
+}
+
+float HsTcpPollComm::avaliacaoAptidaoSenario(Senario senarioAAvaliar){
+    return 0.96;
+}
+
+HsTcpPollComm::crossoverSenarios HsTcpPollComm::crossover(Senario senario1,Senario senario2)
+{
+    std::size_t const half_size = senario1.size() / 2;
+    std::vector<int> split_first_senario1(senario1.begin(), senario1.begin() + half_size);
+    std::vector<int> split_last_senario1(senario1.begin() + half_size, senario1.end());
+
+    std::vector<int> split_first_senario2(senario1.begin(), senario1.begin() + half_size);
+    std::vector<int> split_last_senario2(senario1.begin() + half_size, senario1.end());
+
+    split_first_senario1.insert(split_first_senario1.end(), split_last_senario2.begin(), split_last_senario2.end());
+    split_first_senario2.insert(split_first_senario2.end(), split_last_senario1.begin(), split_last_senario1.end());
+    crossoverSenarios crossoverTupla= make_tuple(split_first_senario1,split_first_senario2);
+    return crossoverTupla;
+}
+
+////////GUILHERME END////////////////////
+
 void HsTcpPollComm::controle()
 {
+
+	//GUILHERME BEGIN
+	int senarioInicial1[] = {1,0,0,0};
+    int senarioInicial2[] = {1,1,0,0};
+    int senarioInicial3[] = {1,1,1,0};
+    int senarioInicial4[] = {1,1,1,1};
+
+    Senario senario1(senarioInicial1,&senarioInicial1[sizeof(senarioInicial1)/sizeof(senarioInicial1[0])]);
+    Senario senario2(senarioInicial2,&senarioInicial2[sizeof(senarioInicial2)/sizeof(senarioInicial2[0])]);
+    Senario senario3(senarioInicial3,&senarioInicial3[sizeof(senarioInicial3)/sizeof(senarioInicial3[0])]);
+    Senario senario4(senarioInicial4,&senarioInicial4[sizeof(senarioInicial4)/sizeof(senarioInicial4[0])]);
+
+
+	TuplaSenario tuplaSenario1= make_tuple(senario1,0.9);
+    TuplaSenario tuplaSenario2= make_tuple(senario2,0.4);
+    TuplaSenario tuplaSenario3= make_tuple(senario3,0.7);
+    TuplaSenario tuplaSenario4= make_tuple(senario4,0.6);
+	
+	Populacao primeiraGeracao;
+    primeiraGeracao.push_back(tuplaSenario1);
+    primeiraGeracao.push_back(tuplaSenario2);
+    primeiraGeracao.push_back(tuplaSenario3);
+    primeiraGeracao.push_back(tuplaSenario4);
+
+	 // Ordenação dos senarios de acordo com a aptidáo
+    sort(primeiraGeracao.begin(),primeiraGeracao.end(),
+         [](const TuplaSenario& a,
+            const TuplaSenario& b) -> bool
+    {
+        return std::get<1>(a) > std::get<1>(b);
+    });
+	printPopulacao(primeiraGeracao);
+
+	 // Criação da próxima geração
+    Populacao proximaGeracao;
+    // Copia Elite da geração passada para a geração atual
+    proximaGeracao.push_back(primeiraGeracao[0]);
+
+    //cria dois novos estados através de crossover, a partir de elite e do segundo mais apto
+    crossoverSenarios newSenariosTupla1;
+    newSenariosTupla1 = crossover(std::get<0>(primeiraGeracao[0]),std::get<0>(primeiraGeracao[1]));
+    Senario stateToBeEvaluated1 = std::get<0>(newSenariosTupla1);
+    Senario stateToBeEvaluated2 = std::get<1>(newSenariosTupla1);
+
+    //cria dois novos estados através de crossover, a partir de elite e do terceiro mais apto
+    crossoverSenarios newSenariosTupla2;
+    newSenariosTupla2 =crossover(std::get<0>(primeiraGeracao[0]),std::get<0>(primeiraGeracao[2]));
+    Senario stateToBeEvaluated3 = std::get<0>(newSenariosTupla2);
+    Senario stateToBeEvaluated4 = std::get<1>(newSenariosTupla2);
+
+    // evaluateSenario é a função que irá retornar o grau de aptdão do estado
+    float senario1Classification = avaliacaoAptidaoSenario(stateToBeEvaluated1);
+    TuplaSenario newTuplaSenario1= make_tuple(stateToBeEvaluated1,senario1Classification);
+
+    //Adicionamos o novo estado na geração atual, e ordenamos para que a elite fique no topo
+    proximaGeracao.push_back(newTuplaSenario1);
+    sort(proximaGeracao.begin(),proximaGeracao.end(),
+         [](const TuplaSenario& a,
+            const TuplaSenario& b) -> bool
+    {
+        return std::get<1>(a) > std::get<1>(b);
+    });
+
+    printPopulacao(proximaGeracao);
+
+	//GUILHERME END
 
 	static int i = 0;
 	static int j = 0;
