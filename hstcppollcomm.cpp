@@ -63,11 +63,18 @@ bool HsTcpPollComm::tcpConnect(QString host, int port)
         tcpSocket.connectToHost(QHostAddress::LocalHost, port );
     else
         tcpSocket.connectToHost(host, port );
-
+#ifdef HS
     if (tcpSocket.waitForConnected(2000)) //3000
 	{
 		qDebug() << "Conectado com sucesso aleluia amen!! Sarava!";
 	}
+#endif
+#ifdef KIT
+    if (tcpSocket.waitForConnected(3000))
+	{
+		qDebug() << "Conectado com sucesso aleluia amen!! Sarava!";
+	}
+#endif
 	
     return true;
 }
@@ -76,7 +83,7 @@ void HsTcpPollComm::pollProcess(void)
 {
 	int unit = 1;
 	QString strGet = 0;
-//	qDebug() << "HsTcpPollComm::pollProcess";
+
     // A maquina de estados deve ficar em um lugar soh. Para poll e para read.
 	qint64 result = 0;
 
@@ -158,12 +165,19 @@ void HsTcpPollComm::setUnit(int unit, int value)
 }
 
 /*
-Nao funciona no KIT
+Nao funciona no KIT, so na HS
 HsTcpPollComm::setCenario(std::vector<int> units, std::vector<int> values)
 Retorna 1 se sucesso e 0 se erro
 Envia comandos "values" para as "units"
 Seta e envia string pronta para mudar o cenario 
 HS: 5S*unit1*valor1*5S*unit2*valor2*5S*unit_n*valor_n*
+
+ int unitsInicializador[] = {118,119};
+ int valuesInicializador[] = {1,1};
+
+ std::vector<int> units(unitsInicializador,&unitsInicializador[sizeof(unitsInicializador)/sizeof(unitsInicializador[0])]);
+ std::vector<int> values(valuesInicializador,&valuesInicializador[sizeof(valuesInicializador)/sizeof(valuesInicializador[0])]);
+ hsTcpPollComm.setCenario(units, values);
 */
 int HsTcpPollComm::setCenario(std::vector<int> units, std::vector<int> values)
 {
@@ -339,7 +353,7 @@ HsTcpPollComm::crossoverSenarios HsTcpPollComm::crossover(Senario senario1,Senar
 }
 
 ////////GUILHERME END////////////////////
-
+/*
 void HsTcpPollComm::controle()
 {
 
@@ -408,7 +422,10 @@ void HsTcpPollComm::controle()
     printPopulacao(proximaGeracao);
 
 	//GUILHERME END
+}*/
 
+void HsTcpPollComm::controle()
+{
 	static int i = 0;
 	static int j = 0;
 	//float* engagementLevels = new float [tamanho_engagementLevel]; //cria vetor dinamicamente
@@ -430,6 +447,14 @@ void HsTcpPollComm::controle()
 				{
 
 					//envia estado j para o equipamento i
+
+					/*
+					 int unitsInicializador[] = {118,119};
+ int valuesInicializador[] = {1,1};
+
+ std::vector<int> units(unitsInicializador,&unitsInicializador[sizeof(unitsInicializador)/sizeof(unitsInicializador[0])]);
+ std::vector<int> values(valuesInicializador,&valuesInicializador[sizeof(valuesInicializador)/sizeof(valuesInicializador[0])]);
+ setCenario(units, values);*/
 					setUnit(EQUIPAMENTO_UNITS[i], estado[j]);
 
 					//otimizar para nao guardar tal buffer, so precisa dos dois ultimos valores:

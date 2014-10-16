@@ -9,8 +9,6 @@ int main(int argc, char *argv[])
     HsTcpPollComm hsTcpPollComm;
 	EmoHandler emoHandler;
 	//emoHandler.setHsTcpPollComm(&hsTcpPollComm); //as duas threads Emo e Hs tem o mesmo valor da hsTcpPollComm
-	
-	hsTcpPollComm.emoHandler = &emoHandler;
 
 	try {
 		//Inicia tentativa de conexao com emotiv
@@ -18,9 +16,13 @@ int main(int argc, char *argv[])
 		throw std::exception("Emotiv Connection failed.");
 		}
 
-		// Inicia tentativa de conexao com o systembox   
-		//hsTcpPollComm.tcpConnect("10.1.7.37");
+		// Inicia tentativa de conexao com o systembox  
+#ifdef KIT
+		hsTcpPollComm.tcpConnect("10.1.7.37");
+#endif
+#ifdef HS
 		hsTcpPollComm.tcpConnect("192.168.0.209");
+#endif
 	}//end try
 	catch (const std::exception& e) {
 		std::cerr << e.what() << std::endl;
