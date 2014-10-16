@@ -28,6 +28,7 @@ public:
     explicit HsTcpPollComm(QObject *parent = 0);
     bool tcpConnect(QString host = "localhost", int port = 2000);
     void setUnit(int unit, int value);
+	int setCenario(std::vector<int> units, std::vector<int> values);
 	QString makeGetUnit( const int *buffUnit, int numUnit );
 	QString resposta;
 	bool resposta_pronta;

@@ -145,7 +145,8 @@ QString HsTcpPollComm::makeGetUnit( const int *buffUnit, int numUnit )
 HsTcpPollComm::setUnit(int unit, int value)
 Envia comando "value" para a "unit"
 Seta e envia string pronta para mudar o valor da unit 
-*5S*unit*valor*
+kit: *5S*unit*valor*
+HS: 5S*unit1*valor1*5S*unit2*valor2*5S*unit_n*valor_n*
 */
 void HsTcpPollComm::setUnit(int unit, int value)
 {
@@ -154,6 +155,38 @@ void HsTcpPollComm::setUnit(int unit, int value)
     strSet.append(QString("5S%1*%2*").arg(unit).arg(value));
     tcpSocket.write(strSet.toLatin1());
     qDebug() << "setUnit: "<< strSet;
+}
+
+/*
+Nao funciona no KIT
+HsTcpPollComm::setCenario(std::vector<int> units, std::vector<int> values)
+Retorna 1 se sucesso e 0 se erro
+Envia comandos "values" para as "units"
+Seta e envia string pronta para mudar o cenario 
+HS: 5S*unit1*valor1*5S*unit2*valor2*5S*unit_n*valor_n*
+*/
+int HsTcpPollComm::setCenario(std::vector<int> units, std::vector<int> values)
+{
+    QString strSet;
+    // Header
+	strSet.append(QString("5S%1*%2*").arg(units[0]).arg(values[0]));
+	if ( units.size() != values.size() )
+	{
+		//erro!
+		return 0;
+	}
+	else
+	{
+		for (int i=1; i<units.size(); i++)
+		{
+			strSet.append(QString("%1*%2*").arg(units[i]).arg(values[i]));
+		}
+
+		tcpSocket.write(strSet.toLatin1());
+		qDebug() << "setCenario: "<< strSet;
+
+		return 1; //sucesso!
+	}
 }
 
 /*
