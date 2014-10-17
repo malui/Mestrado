@@ -1,3 +1,4 @@
+  
 #include "hstcppollcomm.h"
 #include <iostream>
 
@@ -47,6 +48,7 @@ HsTcpPollComm::HsTcpPollComm(QObject *parent) :
 	emoHandler = NULL;
     sessionState = DISCONNECTED;
 	resposta_pronta = false;
+	crossFlag =false;
     // tcp signals
     connect(&tcpSocket, SIGNAL(connected()),this,SLOT(tcpOnConnect()));
     connect(&tcpSocket, SIGNAL(disconnected()), this, SLOT(tcpOnDisconnect()));
@@ -314,9 +316,10 @@ QString HsTcpPollComm::CryptPass(char * szPassword)
 
 /////////////////////////////////////
 
+
 /////////GUILHERME BEGIN//////////////////
 
-void HsTcpPollComm::printSenario (const vector<int>& v)
+void HsTcpPollComm::printCenario (const vector<int>& v)
 {
 
     for( std::vector<int>::const_iterator i = v.begin(); i != v.end(); ++i)
@@ -327,177 +330,112 @@ void HsTcpPollComm::printPopulacao ( Populacao population)
 {
     for(int i=0; i<population.size(); i++)
     {
-        printSenario(std::get<0>(population[i]));
+        printCenario(std::get<0>(population[i]));
         cout <<  std::get<1>(population[i]) << endl;
 
     }
 }
 
-float HsTcpPollComm::avaliacaoAptidaoSenario(Senario senarioAAvaliar){
+float HsTcpPollComm::avaliacaoAptidaoCenario(Cenario cenarioAAvaliar){
     return 0.96;
 }
 
-HsTcpPollComm::crossoverSenarios HsTcpPollComm::crossover(Senario senario1,Senario senario2)
+HsTcpPollComm::crossoverCenarios HsTcpPollComm::crossover(Cenario cenario1,Cenario cenario2)
 {
-    std::size_t const half_size = senario1.size() / 2;
-    std::vector<int> split_first_senario1(senario1.begin(), senario1.begin() + half_size);
-    std::vector<int> split_last_senario1(senario1.begin() + half_size, senario1.end());
+    std::size_t const half_size = cenario1.size() / 2;
+    std::vector<int> split_first_cenario1(cenario1.begin(), cenario1.begin() + half_size);
+    std::vector<int> split_last_cenario1(cenario1.begin() + half_size, cenario1.end());
 
-    std::vector<int> split_first_senario2(senario1.begin(), senario1.begin() + half_size);
-    std::vector<int> split_last_senario2(senario1.begin() + half_size, senario1.end());
+    std::vector<int> split_first_cenario2(cenario1.begin(), cenario1.begin() + half_size);
+    std::vector<int> split_last_cenario2(cenario1.begin() + half_size, cenario1.end());
 
-    split_first_senario1.insert(split_first_senario1.end(), split_last_senario2.begin(), split_last_senario2.end());
-    split_first_senario2.insert(split_first_senario2.end(), split_last_senario1.begin(), split_last_senario1.end());
-    crossoverSenarios crossoverTupla= make_tuple(split_first_senario1,split_first_senario2);
+    split_first_cenario1.insert(split_first_cenario1.end(), split_last_cenario2.begin(), split_last_cenario2.end());
+    split_first_cenario2.insert(split_first_cenario2.end(), split_last_cenario1.begin(), split_last_cenario1.end());
+    crossoverCenarios crossoverTupla= make_tuple(split_first_cenario1,split_first_cenario2);
     return crossoverTupla;
 }
 
-////////GUILHERME END////////////////////
-/*
-void HsTcpPollComm::controle()
-{
-
-	//GUILHERME BEGIN
-	int senarioInicial1[] = {1,0,0,0};
-    int senarioInicial2[] = {1,1,0,0};
-    int senarioInicial3[] = {1,1,1,0};
-    int senarioInicial4[] = {1,1,1,1};
-
-    Senario senario1(senarioInicial1,&senarioInicial1[sizeof(senarioInicial1)/sizeof(senarioInicial1[0])]);
-    Senario senario2(senarioInicial2,&senarioInicial2[sizeof(senarioInicial2)/sizeof(senarioInicial2[0])]);
-    Senario senario3(senarioInicial3,&senarioInicial3[sizeof(senarioInicial3)/sizeof(senarioInicial3[0])]);
-    Senario senario4(senarioInicial4,&senarioInicial4[sizeof(senarioInicial4)/sizeof(senarioInicial4[0])]);
-
-
-	TuplaSenario tuplaSenario1= make_tuple(senario1,0.9);
-    TuplaSenario tuplaSenario2= make_tuple(senario2,0.4);
-    TuplaSenario tuplaSenario3= make_tuple(senario3,0.7);
-    TuplaSenario tuplaSenario4= make_tuple(senario4,0.6);
+void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada antes da chamada da função controle
+{									// controleFluxo= PRIMEIRA_EXECUÇAO_RESPOSTA_SET_CENARIO;
+	TuplaCenario tuplaCenario;      //controleFluxo = ENESIMA_EXECUÇAO;
+	int unitsInicializador[] = {118,119};
+    int valuesInicializador[] = {0,0};
+	std::vector<int> units(unitsInicializador,&unitsInicializador[sizeof(unitsInicializador)/sizeof(unitsInicializador[0])]);
+    std::vector<int> values(valuesInicializador,&valuesInicializador[sizeof(valuesInicializador)/sizeof(valuesInicializador[0])]);
+	crossoverCenarios tuplaCrossoverCenarios;
+	Cenario cenarioFilho1;
+	Cenario cenarioFilho2;
 	
-	Populacao primeiraGeracao;
-    primeiraGeracao.push_back(tuplaSenario1);
-    primeiraGeracao.push_back(tuplaSenario2);
-    primeiraGeracao.push_back(tuplaSenario3);
-    primeiraGeracao.push_back(tuplaSenario4);
+	switch(controleFluxo)           //controleFluxo = ENESIMA_EXECUÇAO_RESPOSTA_SET_CENARIO;
+	{									//controleFluxo = ENESIMA_EXECUÇAO;	
+    case PRIMEIRA_EXECUCAO:
+		
 
-	 // Ordenação dos senarios de acordo com a aptidáo
-    sort(primeiraGeracao.begin(),primeiraGeracao.end(),
-         [](const TuplaSenario& a,
-            const TuplaSenario& b) -> bool
-    {
-        return std::get<1>(a) > std::get<1>(b);
-    });
-	printPopulacao(primeiraGeracao);
+		valuesInicializador[0] = 1; 
+		valuesInicializador[1] = 1;
+		
+		values.pop_back();
+		values.pop_back();
+		values.push_back(valuesInicializador[0]);
+		values.push_back(valuesInicializador[1]);
 
-	 // Criação da próxima geração
-    Populacao proximaGeracao;
-    // Copia Elite da geração passada para a geração atual
-    proximaGeracao.push_back(primeiraGeracao[0]);
+        if (crossFlag)
+			setCenario(units, cenarioFilho1); 
 
-    //cria dois novos estados através de crossover, a partir de elite e do segundo mais apto
-    crossoverSenarios newSenariosTupla1;
-    newSenariosTupla1 = crossover(std::get<0>(primeiraGeracao[0]),std::get<0>(primeiraGeracao[1]));
-    Senario stateToBeEvaluated1 = std::get<0>(newSenariosTupla1);
-    Senario stateToBeEvaluated2 = std::get<1>(newSenariosTupla1);
+		else 
+			setCenario(units, values);  
+		
+        tuplaCenario= make_tuple(values,-1);
 
-    //cria dois novos estados através de crossover, a partir de elite e do terceiro mais apto
-    crossoverSenarios newSenariosTupla2;
-    newSenariosTupla2 =crossover(std::get<0>(primeiraGeracao[0]),std::get<0>(primeiraGeracao[2]));
-    Senario stateToBeEvaluated3 = std::get<0>(newSenariosTupla2);
-    Senario stateToBeEvaluated4 = std::get<1>(newSenariosTupla2);
+        geracaoAtual.push_back(tuplaCenario);
+		controleFluxo = SEGUNDA_EXECUCAO;
+		break;
+	case SEGUNDA_EXECUCAO:
+		tuplaCenario = geracaoAtual.back();
+        std::get<1>(tuplaCenario) =  emoHandler->affectivEngagementBoredom;	  
 
-    // evaluateSenario é a função que irá retornar o grau de aptdão do estado
-    float senario1Classification = avaliacaoAptidaoSenario(stateToBeEvaluated1);
-    TuplaSenario newTuplaSenario1= make_tuple(stateToBeEvaluated1,senario1Classification);
+		valuesInicializador[0] = 1; 
+		valuesInicializador[1] = 0;
 
-    //Adicionamos o novo estado na geração atual, e ordenamos para que a elite fique no topo
-    proximaGeracao.push_back(newTuplaSenario1);
-    sort(proximaGeracao.begin(),proximaGeracao.end(),
-         [](const TuplaSenario& a,
-            const TuplaSenario& b) -> bool
-    {
-        return std::get<1>(a) > std::get<1>(b);
-    });
+		values.pop_back();
+		values.pop_back();
+		values.push_back(valuesInicializador[0]);
+		values.push_back(valuesInicializador[1]);
 
-    printPopulacao(proximaGeracao);
+        if (crossFlag)
+			setCenario(units, cenarioFilho2); 
+		else 
+			setCenario(units, values); 
 
-	//GUILHERME END
-}*/
 
-void HsTcpPollComm::controle()
-{
-	static int i = 0;
-	static int j = 0;
-	//float* engagementLevels = new float [tamanho_engagementLevel]; //cria vetor dinamicamente
-	static float* engagementLevels = new float [2];
-	static int posicao_maior_engagement = 0;
+        tuplaCenario= make_tuple(values,-1);
+		
+        geracaoAtual.push_back(tuplaCenario);
+		controleFluxo= ENESIMA_EXECUCAO;
+		break;
+	case ENESIMA_EXECUCAO:
+		tuplaCenario = geracaoAtual.back();
+        std::get<1>(tuplaCenario) =  emoHandler->affectivEngagementBoredom;
+        
+		sort(geracaoAtual.begin(),geracaoAtual.end(),
+             [](const TuplaCenario& a,
+                const TuplaCenario& b) -> bool
+        {
+            return std::get<1>(a) > std::get<1>(b);
+        });
+		
+		
+		tuplaCrossoverCenarios = crossover(std::get<0>(geracaoAtual[0]) ,std::get<0>(geracaoAtual[1])); // std::get<0>geracaoAtual[0] retorna o cenario da primeira tupla contida no vetor geracaoAtual,
+																										// std::get<0>geracaoAtual[1] retorna o cenario da segunda tupla contida no vetor geracaoAtual,
+		cenarioFilho1 = std::get<0>(tuplaCrossoverCenarios);
+		cenarioFilho2 = std::get<1>(tuplaCrossoverCenarios);
+		crossFlag = true;
+		controleFluxo = PRIMEIRA_EXECUCAO;
+		break;
+	default: std::cout << "SessionState desconhecido: "<< sessionState << std::endl;
 
-	//std::ofstream ofs(emoHandler->logFileName);
-
-	if (emoHandler)
-	{
-		if (resposta_pronta)
-		{
-			int* estado = ESTADOS[i];
-			const int tamanho_engagementLevel = TAMANHO_ESTADOS[i]; //=3
-			
-			if ( i < EQUIPAMENTOS_TAMANHO ) //lista de equipamentos e lista de estados
-			{
-				if ( j < TAMANHO_ESTADOS[i] ) //lista de estados de cada equipamento ate o final, qual  ofinal?
-				{
-
-					//envia estado j para o equipamento i
-
-					
-					 int unitsInicializador[] = {118,119};
- int valuesInicializador[] = {1,1};
-
- std::vector<int> units(unitsInicializador,&unitsInicializador[sizeof(unitsInicializador)/sizeof(unitsInicializador[0])]);
- std::vector<int> values(valuesInicializador,&valuesInicializador[sizeof(valuesInicializador)/sizeof(valuesInicializador[0])]);
- setCenario(units, values);
-					//setUnit(EQUIPAMENTO_UNITS[i], estado[j]);
-
-					//otimizar para nao guardar tal buffer, so precisa dos dois ultimos valores:
-					//pega os estados de engagement para todos os estados do equipamento i e poe num buffer
-					engagementLevels[j] = emoHandler->affectivEngagementBoredom;
-					emoHandler->ofs <<"Engagement level com equipamento "<<i<<" e estado "<<j<<": "<<engagementLevels[j]<<std::endl;
-					std::cout<<"Engagement level com equipamento "<<i<<" e estado "<<j<<": "<<engagementLevels[j]<<std::endl;
-					
-					//verifica qual a posicao do maior estado de engagement do buffer
-					if (j > 0)
-					{
-						if (engagementLevels[j] > engagementLevels[posicao_maior_engagement])
-						{
-							posicao_maior_engagement = j;
-						} //if maior engagement
-					}// if j>=0 
-
-					++j;
-
-				}// if tamanho dos estados 
-				else if ( j >= TAMANHO_ESTADOS[i] )
-				{
-					emoHandler->ofs<<"Maior Engagement Level para o Equipamento "<<i<<" foi com o estado "<<posicao_maior_engagement<<": "<<engagementLevels[posicao_maior_engagement]<<std::endl;
-					std::cout<<"Maior Engagement Level para o Equipamento "<<i<<" foi com o estado "<<posicao_maior_engagement<<": "<<engagementLevels[posicao_maior_engagement]<<std::endl;
-					//delete[] engagementLevels;
-					emoHandler->ofs<<"Setando Equipamento "<<i<<" com o estado "<<posicao_maior_engagement<<std::endl;
-					std::cout<<"Setando Equipamento "<<i<<" com o estado "<<posicao_maior_engagement<<std::endl;
-					//seta o estado do equipamento i conforme o maior estado de engagement equivalente
-					setUnit(EQUIPAMENTO_UNITS[i], estado[posicao_maior_engagement]);
-					//std::cout<<"i: "<<i<<" j: "<<j<<std::endl;
-					i++;
-					j = 0;
-				}
-				
-				
-			} //if i < equipamentos tamanho
-			if (i >= EQUIPAMENTOS_TAMANHO)
-			{
-				emoHandler->ofs.close();
-			}
-			
-		}
 	}
+		
 	
 }
 
