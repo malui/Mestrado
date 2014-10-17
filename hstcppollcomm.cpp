@@ -448,14 +448,14 @@ void HsTcpPollComm::controle()
 
 					//envia estado j para o equipamento i
 
-					/*
+					
 					 int unitsInicializador[] = {118,119};
  int valuesInicializador[] = {1,1};
 
  std::vector<int> units(unitsInicializador,&unitsInicializador[sizeof(unitsInicializador)/sizeof(unitsInicializador[0])]);
  std::vector<int> values(valuesInicializador,&valuesInicializador[sizeof(valuesInicializador)/sizeof(valuesInicializador[0])]);
- setCenario(units, values);*/
-					setUnit(EQUIPAMENTO_UNITS[i], estado[j]);
+ setCenario(units, values);
+					//setUnit(EQUIPAMENTO_UNITS[i], estado[j]);
 
 					//otimizar para nao guardar tal buffer, so precisa dos dois ultimos valores:
 					//pega os estados de engagement para todos os estados do equipamento i e poe num buffer
