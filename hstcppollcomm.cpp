@@ -48,6 +48,7 @@ HsTcpPollComm::HsTcpPollComm(QObject *parent) :
 	emoHandler = NULL;
     sessionState = DISCONNECTED;
 	resposta_pronta = false;
+	controleFluxo = PRIMEIRA_EXECUCAO;
 	crossFlag =false;
     // tcp signals
     connect(&tcpSocket, SIGNAL(connected()),this,SLOT(tcpOnConnect()));
@@ -56,7 +57,7 @@ HsTcpPollComm::HsTcpPollComm(QObject *parent) :
     connect(&tcpSocket, SIGNAL(readyRead()), this, SLOT(tcpOnRead()));
     // timer signals
     connect(&pollTimer, SIGNAL(timeout()), this, SLOT(pollProcess()));
-    pollTimer.start(4000);
+    pollTimer.start(2000);
 }
 
 bool HsTcpPollComm::tcpConnect(QString host, int port)
@@ -116,6 +117,7 @@ void HsTcpPollComm::pollProcess(void)
                 break;
         case SENT_REQUEST: //resposta_pronta = false;
 				//resposta_pronta = true;
+			qDebug() << "SENT_REQUEST";
 				controle();
                 sessionState = WAITING_RESPONSE;
                 qDebug() << "Send get unit";
@@ -186,9 +188,11 @@ int HsTcpPollComm::setCenario(std::vector<int> units, std::vector<int> values)
     QString strSet;
     // Header
 	strSet.append(QString("5S%1*%2*").arg(units[0]).arg(values[0]));
+	qDebug() << "setCenario inicio";
 	if ( units.size() != values.size() )
 	{
 		//erro!
+		qDebug() << "setCenario erro: ";
 		return 0;
 	}
 	else
@@ -323,7 +327,7 @@ void HsTcpPollComm::printCenario (const vector<int>& v)
 {
 
     for( std::vector<int>::const_iterator i = v.begin(); i != v.end(); ++i)
-        std::cout << *i << ' ';
+        emoHandler->ofs << *i << ' ';
 }
 
 void HsTcpPollComm::printPopulacao ( Populacao population)
@@ -331,13 +335,9 @@ void HsTcpPollComm::printPopulacao ( Populacao population)
     for(int i=0; i<population.size(); i++)
     {
         printCenario(std::get<0>(population[i]));
-        cout <<  std::get<1>(population[i]) << endl;
+        emoHandler->ofs <<  std::get<1>(population[i]) << endl;
 
     }
-}
-
-float HsTcpPollComm::avaliacaoAptidaoCenario(Cenario cenarioAAvaliar){
-    return 0.96;
 }
 
 HsTcpPollComm::crossoverCenarios HsTcpPollComm::crossover(Cenario cenario1,Cenario cenario2)
@@ -346,8 +346,8 @@ HsTcpPollComm::crossoverCenarios HsTcpPollComm::crossover(Cenario cenario1,Cenar
     std::vector<int> split_first_cenario1(cenario1.begin(), cenario1.begin() + half_size);
     std::vector<int> split_last_cenario1(cenario1.begin() + half_size, cenario1.end());
 
-    std::vector<int> split_first_cenario2(cenario1.begin(), cenario1.begin() + half_size);
-    std::vector<int> split_last_cenario2(cenario1.begin() + half_size, cenario1.end());
+    std::vector<int> split_first_cenario2(cenario2.begin(), cenario2.begin() + half_size);
+    std::vector<int> split_last_cenario2(cenario2.begin() + half_size, cenario2.end());
 
     split_first_cenario1.insert(split_first_cenario1.end(), split_last_cenario2.begin(), split_last_cenario2.end());
     split_first_cenario2.insert(split_first_cenario2.end(), split_last_cenario1.begin(), split_last_cenario1.end());
@@ -355,57 +355,111 @@ HsTcpPollComm::crossoverCenarios HsTcpPollComm::crossover(Cenario cenario1,Cenar
     return crossoverTupla;
 }
 
+
+/*
+o cenario de maior engagement vai estar na primeira posicao do vecto geracaoAtual[0]
+ pra pegar o cenario faz std::get<0>(geracaoAtual[0])
+pra pegar o engagement faz std::get<1>(geracaoAtual[0])
+
+*/
 void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada antes da chamada da função controle
 {									// controleFluxo= PRIMEIRA_EXECUÇAO_RESPOSTA_SET_CENARIO;
 	TuplaCenario tuplaCenario;      //controleFluxo = ENESIMA_EXECUÇAO;
-	int unitsInicializador[] = {118,119};
-    int valuesInicializador[] = {0,0};
+	int unitsInicializador[] = {1187, 1188, 1191, 2058, 2061, 2062, 1415};
+    int valuesInicializador[] = {0,0, 0,0,0,0,0};
 	std::vector<int> units(unitsInicializador,&unitsInicializador[sizeof(unitsInicializador)/sizeof(unitsInicializador[0])]);
     std::vector<int> values(valuesInicializador,&valuesInicializador[sizeof(valuesInicializador)/sizeof(valuesInicializador[0])]);
 	crossoverCenarios tuplaCrossoverCenarios;
 	Cenario cenarioFilho1;
-	Cenario cenarioFilho2;
 	
 	switch(controleFluxo)           //controleFluxo = ENESIMA_EXECUÇAO_RESPOSTA_SET_CENARIO;
 	{									//controleFluxo = ENESIMA_EXECUÇAO;	
     case PRIMEIRA_EXECUCAO:
-		
 
 		valuesInicializador[0] = 1; 
-		valuesInicializador[1] = 1;
+		valuesInicializador[1] = 0;
+		valuesInicializador[2] = 1; 
+		valuesInicializador[3] = 0;
+		valuesInicializador[4] = 1; 
+		valuesInicializador[5] = 0;
+		valuesInicializador[6] = 1; 
+
 		
+		values.pop_back();
+		values.pop_back();
+		values.pop_back();
+		values.pop_back();
+		values.pop_back();
 		values.pop_back();
 		values.pop_back();
 		values.push_back(valuesInicializador[0]);
 		values.push_back(valuesInicializador[1]);
-
-        if (crossFlag)
-			setCenario(units, cenarioFilho1); 
-
-		else 
-			setCenario(units, values);  
+		values.push_back(valuesInicializador[2]);
+		values.push_back(valuesInicializador[3]);
+		values.push_back(valuesInicializador[4]);
+		values.push_back(valuesInicializador[5]);
+		values.push_back(valuesInicializador[6]);
 		
+		setCenario(units, values);
+
+		emoHandler->ofs <<"Cenario: ";
+		printCenario(values);
+		emoHandler->ofs << std::endl;
+
         tuplaCenario= make_tuple(values,-1);
 
         geracaoAtual.push_back(tuplaCenario);
 		controleFluxo = SEGUNDA_EXECUCAO;
 		break;
 	case SEGUNDA_EXECUCAO:
+
 		tuplaCenario = geracaoAtual.back();
-        std::get<1>(tuplaCenario) =  emoHandler->affectivEngagementBoredom;	  
+        std::get<1>(tuplaCenario) =  emoHandler->affectivEngagementBoredom;	
+		emoHandler->ofs <<"Engagement_level:  " << std::get<1>(tuplaCenario) << std::endl;
 
-		valuesInicializador[0] = 1; 
-		valuesInicializador[1] = 0;
+		if (std::get<1>(tuplaCenario) >= 0.95)
+		{
+			emoHandler->ofs <<"Engagement Level alvo atingido" << std::endl;
+			exit(0);
+		}
 
+		valuesInicializador[0] = 0; 
+		valuesInicializador[1] = 1;
+		valuesInicializador[2] = 0; 
+		valuesInicializador[3] = 0;
+		valuesInicializador[4] = 1; 
+		valuesInicializador[5] = 0;
+		valuesInicializador[6] = 1; 
+
+		values.pop_back();
+		values.pop_back();
+		values.pop_back();
+		values.pop_back();
+		values.pop_back();
 		values.pop_back();
 		values.pop_back();
 		values.push_back(valuesInicializador[0]);
 		values.push_back(valuesInicializador[1]);
+		values.push_back(valuesInicializador[2]);
+		values.push_back(valuesInicializador[3]);
+		values.push_back(valuesInicializador[4]);
+		values.push_back(valuesInicializador[5]);
+		values.push_back(valuesInicializador[6]);
 
         if (crossFlag)
-			setCenario(units, cenarioFilho2); 
+		{
+			setCenario(units, cenarioFilho2);
+			emoHandler->ofs <<"Cenario: ";
+			printCenario(cenarioFilho2);
+			emoHandler->ofs << std::endl;
+		}
 		else 
+		{
 			setCenario(units, values); 
+			emoHandler->ofs <<"Cenario: ";
+			printCenario(values);
+			emoHandler->ofs << std::endl;
+		}
 
 
         tuplaCenario= make_tuple(values,-1);
@@ -414,8 +468,16 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 		controleFluxo= ENESIMA_EXECUCAO;
 		break;
 	case ENESIMA_EXECUCAO:
+
 		tuplaCenario = geracaoAtual.back();
         std::get<1>(tuplaCenario) =  emoHandler->affectivEngagementBoredom;
+		emoHandler->ofs <<"Engagement_level:  " << std::get<1>(tuplaCenario) << std::endl;
+
+		if (std::get<1>(tuplaCenario) >= 0.95)
+		{
+			emoHandler->ofs <<"Engagement Level alvo atingido" << std::endl;
+			exit(0);
+		}
         
 		sort(geracaoAtual.begin(),geracaoAtual.end(),
              [](const TuplaCenario& a,
@@ -429,10 +491,16 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 																										// std::get<0>geracaoAtual[1] retorna o cenario da segunda tupla contida no vetor geracaoAtual,
 		cenarioFilho1 = std::get<0>(tuplaCrossoverCenarios);
 		cenarioFilho2 = std::get<1>(tuplaCrossoverCenarios);
+
+		setCenario(units, cenarioFilho1);
+		emoHandler->ofs <<"Cenario: ";
+		printCenario(cenarioFilho1);
+		emoHandler->ofs << std::endl;
 		crossFlag = true;
-		controleFluxo = PRIMEIRA_EXECUCAO;
+		controleFluxo = SEGUNDA_EXECUCAO;
 		break;
-	default: std::cout << "SessionState desconhecido: "<< sessionState << std::endl;
+
+	default: std::cout << "controleFluxo desconhecido: "<< controleFluxo << std::endl;
 
 	}
 		
