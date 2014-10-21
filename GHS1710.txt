@@ -1,0 +1,21 @@
+Emotiv Engine start up succeed. Ready to receive Emotiv signals.Cenario: 1 0 1 0 1 0 1 
+Engagement_level:  0.72128
+Cenario: 0 1 0 1 1 1 1 
+Engagement_level:  0.748363
+Cenario: 1 0 1 1 1 1 1 
+Engagement_level:  0.728311
+Cenario: 0 1 0 0 1 0 1 
+Engagement_level:  0.710315
+Cenario: 1 0 1 1 1 1 1 
+Engagement_level:  0.710315
+Cenario: 0 1 0 0 1 0 1 
+Engagement_level:  0.694134
+Cenario: 1 0 1 1 1 1 1 
+Engagement_level:  0.666593
+Cenario: 0 1 0 0 1 0 1 
+Engagement_level:  0.666593
+Cenario: 1 0 1 1 1 1 1 
+Engagement_level:  0.655104
+Cenario: 0 1 0 0 1 0 1 
+Engagement_level:  0.655104
+Cenario: 1 0 1 1 1 1 1 

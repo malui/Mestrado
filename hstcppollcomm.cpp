@@ -57,7 +57,7 @@ HsTcpPollComm::HsTcpPollComm(QObject *parent) :
     connect(&tcpSocket, SIGNAL(readyRead()), this, SLOT(tcpOnRead()));
     // timer signals
     connect(&pollTimer, SIGNAL(timeout()), this, SLOT(pollProcess()));
-    pollTimer.start(2000);
+    pollTimer.start(9000);
 }
 
 bool HsTcpPollComm::tcpConnect(QString host, int port)
@@ -187,7 +187,7 @@ int HsTcpPollComm::setCenario(std::vector<int> units, std::vector<int> values)
 {
     QString strSet;
     // Header
-	strSet.append(QString("5S%1*%2*").arg(units[0]).arg(values[0]));
+	//strSet.append(QString("5S%1*%2*").arg(units[0]).arg(values[0]));
 	qDebug() << "setCenario inicio";
 	if ( units.size() != values.size() )
 	{
@@ -197,9 +197,9 @@ int HsTcpPollComm::setCenario(std::vector<int> units, std::vector<int> values)
 	}
 	else
 	{
-		for (int i=1; i<units.size(); i++)
+		for (int i=0; i<units.size(); i++)
 		{
-			strSet.append(QString("%1*%2*").arg(units[i]).arg(values[i]));
+			strSet.append(QString("5S%1*%2*").arg(units[i]).arg(values[i]));
 		}
 
 		tcpSocket.write(strSet.toLatin1());
@@ -366,7 +366,7 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 {									// controleFluxo= PRIMEIRA_EXECUÇAO_RESPOSTA_SET_CENARIO;
 	TuplaCenario tuplaCenario;      //controleFluxo = ENESIMA_EXECUÇAO;
 	int unitsInicializador[] = {1187, 1188, 1191, 2058, 2061, 2062, 1415};
-    int valuesInicializador[] = {0,0, 0,0,0,0,0};
+    int valuesInicializador[] = {0,0,0,0,0,0,0};
 	std::vector<int> units(unitsInicializador,&unitsInicializador[sizeof(unitsInicializador)/sizeof(unitsInicializador[0])]);
     std::vector<int> values(valuesInicializador,&valuesInicializador[sizeof(valuesInicializador)/sizeof(valuesInicializador[0])]);
 	crossoverCenarios tuplaCrossoverCenarios;
@@ -376,13 +376,13 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 	{									//controleFluxo = ENESIMA_EXECUÇAO;	
     case PRIMEIRA_EXECUCAO:
 
-		valuesInicializador[0] = 1; 
+		valuesInicializador[0] = 0; 
 		valuesInicializador[1] = 0;
-		valuesInicializador[2] = 1; 
+		valuesInicializador[2] = 0; 
 		valuesInicializador[3] = 0;
-		valuesInicializador[4] = 1; 
+		valuesInicializador[4] = 0; 
 		valuesInicializador[5] = 0;
-		valuesInicializador[6] = 1; 
+		valuesInicializador[6] = 0;
 
 		
 		values.pop_back();
@@ -426,9 +426,9 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 		valuesInicializador[0] = 0; 
 		valuesInicializador[1] = 1;
 		valuesInicializador[2] = 0; 
-		valuesInicializador[3] = 0;
+		valuesInicializador[3] = 1;
 		valuesInicializador[4] = 1; 
-		valuesInicializador[5] = 0;
+		valuesInicializador[5] = 1;
 		valuesInicializador[6] = 1; 
 
 		values.pop_back();
@@ -491,12 +491,17 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 																										// std::get<0>geracaoAtual[1] retorna o cenario da segunda tupla contida no vetor geracaoAtual,
 		cenarioFilho1 = std::get<0>(tuplaCrossoverCenarios);
 		cenarioFilho2 = std::get<1>(tuplaCrossoverCenarios);
+		
+		tuplaCenario= make_tuple(cenarioFilho1,-1);
+        geracaoAtual.push_back(tuplaCenario);
+		
+
 
 		setCenario(units, cenarioFilho1);
 		emoHandler->ofs <<"Cenario: ";
 		printCenario(cenarioFilho1);
 		emoHandler->ofs << std::endl;
-		crossFlag = true;
+		//crossFlag = true;
 		controleFluxo = SEGUNDA_EXECUCAO;
 		break;
 

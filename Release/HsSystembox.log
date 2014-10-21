@@ -1,4 +1,4 @@
-﻿Build started 10/17/2014 2:42:03 AM.
+﻿Build started 10/17/2014 11:40:59 AM.
      1>Project "C:\Users\Public\Documents\mestrado\dissertacao\Implementacao C\HsSystembox\HsSystembox.vcxproj" on node 2 (rebuild target(s)).
      1>_PrepareForClean:
          Deleting file "Release\HsSystembox.lastbuildstate".
@@ -40,4 +40,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:17.58
+Time Elapsed 00:00:19.57
