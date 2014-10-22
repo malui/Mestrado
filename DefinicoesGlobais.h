@@ -1,7 +1,7 @@
 #pragma once
 
-//#define KIT
-#define HS
+#define KIT
+//#define HS
 
 #ifndef DEFINICOESGLOBAIS_H_INCLUDED
 #define DEFINICOESGLOBAIS_H_INCLUDED

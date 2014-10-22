@@ -58,7 +58,7 @@ QObject(parent)
 	connect(&tcpSocket, SIGNAL(readyRead()), this, SLOT(tcpOnRead()));
 	// timer signals
 	connect(&pollTimer, SIGNAL(timeout()), this, SLOT(pollProcess()));
-	pollTimer.start(9000);
+	pollTimer.start(2000);
 }
 
 bool HsTcpPollComm::tcpConnect(QString host, int port)
@@ -193,7 +193,8 @@ int HsTcpPollComm::setCenario(std::vector<int> units, std::vector<int> values)
 	if ( units.size() != values.size() )
 	{
 		//erro!
-		qDebug() << "setCenario erro: ";
+		qDebug() << "setCenario erro: tamanho units = , " << units.size(); 
+		qDebug() << "tamanho values = " << values.size();
 		return 0;
 	}
 	else
@@ -474,7 +475,7 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 {							
 	// todas variaveis utilizadas em mais de um dos CASES devem ser definidas antes do switch
 	     
-	int unitsInicializador[] = {1187, 1188, 1191, 2058, 2061, 2062, 1415};
+	int unitsInicializador[] = {118,119,120};//{1187, 1188, 1191, 2058, 2061, 2062, 1415};
 	std::vector<int> units(unitsInicializador,&unitsInicializador[sizeof(unitsInicializador)/sizeof(unitsInicializador[0])]);
 	crossoverCenarios tuplaCrossoverCenarios;
 	Cenario cenarioFilho1;
@@ -484,7 +485,9 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 	{								
 	case SET_CENARIOS_INICIAIS:
 		//	Cria n cenarios iniciais com valores aleatórios
-		inicializaCenariosPrimeiraGeracao(sizeof(unitsInicializador));
+		//inicializaCenariosPrimeiraGeracao(sizeof(unitsInicializador));
+		inicializaCenariosPrimeiraGeracao(units.size());
+		qDebug() << "units.size():" << units.size();
 
 		//contadorPrimeiraGeracao Armazena tamanho da população inicial para que se possa fazer o controle de uso posteriormente
 		contadorPrimeiraGeracao = geracaoAtual.size(); 
@@ -493,6 +496,9 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 		
 
 		tuplaCenario = geracaoAtual[contadorPrimeiraGeracao-1];	// retorna uma tupla que contem um dos cenarios inicias 
+		//std::cout <<"std::get<0>(tuplaCenario):" 
+		//	std::cout <<"std::get<0>(tuplaCenario):" << std::get<0>(tuplaCenario)  << std::endl;<< std::get<0>(tuplaCenario).size()  << std::endl;
+		
 		setCenario(units, std::get<0>(tuplaCenario));			// seta um dos cenarios iniciais
 		controleFluxo = AVALIA_CENARIOS_INICIAIS;
 		break;
