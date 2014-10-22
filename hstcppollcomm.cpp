@@ -570,3 +570,4 @@ void logAffectiveSuiteState(std::ostream& os, unsigned int userID, EmoStateHandl
 
 	os << std::endl;
 }
+//TESTE DE COMMIT GITHUB
