@@ -481,6 +481,29 @@ void HsTcpPollComm::criaNovaGeracao(int qtdElementosReplicados){
 	geracaoAtual.push_back(tuplaCenario);  // Insere crossover na geração atual
 
 }
+void HsTcpPollComm::verificaCondicoesDeParada(){
+	if (std::get<1>(geracaoAtual.front()) >= 0.95) 
+	{
+		// geracaoAtual.front() retorna o prieiro elemento do vector geração atual, ou seja, verifica se o mais apto satisfaz a condição de parada
+		emoHandler->ofs <<"Engagement Level alvo atingido, Maior engagement:" << std::get<1>(geracaoAtual.front())  << std::endl;
+		exit(0);
+	}
+	// O  mais apto não satisfaz a condição de parada
+	if(contadorNumeroDeGeracoes>=4){ // TRANSFORMAR EM CONSTANTE
+	// Programa para pois alcançou o numero de gerações Limite
+		emoHandler->ofs <<"Engagement Level alvo não atingindo atingido após 4 gerações, Maior engagement:" << std::get<1>(geracaoAtual.front()) << std::endl;				
+		exit(0);
+	}
+}
+
+void HsTcpPollComm::condicaoParadaEngagement(float engagement){
+	if (engagement >= 0.95) 
+	{
+		// geracaoAtual.front() retorna o prieiro elemento do vector geração atual, ou seja, verifica se o mais apto satisfaz a condição de parada
+		emoHandler->ofs <<"Engagement Level alvo atingido, Maior engagement:" << engagement  << std::endl;
+		exit(0);
+	}
+}
 
 /*
 o cenario de maior engagement vai estar na primeira posicao do vecto geracaoAtual[0]
@@ -529,7 +552,7 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 		std::get<1>(tuplaCenario) =  emoHandler->affectivEngagementBoredom;	
 		std::cout <<"Engagement_level:  " << std::get<1>(tuplaCenario) << std::endl;
 		emoHandler->ofs <<"Engagement_level:  " << std::get<1>(tuplaCenario) << std::endl;
-
+		condicaoParadaEngagement(std::get<1>(tuplaCenario));
 		contadorPrimeiraGeracao--;		// decrementamos contadorPrimeiraGeracao para na proxima iteração pegarmos o próximo cenario inicial que ainda não foi avaliado
 		if(contadorPrimeiraGeracao>0){
 			//Ainda há cenarios iniciais a serem avaliados
@@ -545,10 +568,18 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 		else{
 			//Não há mais cenarios iniciais a serem avaliados
 			sort(geracaoAtual.begin(),geracaoAtual.end(),[](const TuplaCenario& a,const TuplaCenario& b) -> bool{return std::get<1>(a) > std::get<1>(b);});
+			
+			emoHandler->ofs <<"Todos Cenarios Iniciais Avaliados"<<std::endl;
+			emoHandler->ofs <<"Cenarios Elite:";
+			printCenario(std::get<0>(geracaoAtual.front()));
+			emoHandler->ofs <<  std::endl;
+			emoHandler->ofs <<" Elite possui Engagement_level:  " << std::get<1>(geracaoAtual.front()) << std::endl;
+
 
 			//Para otimizar o tempo de execução, e não experar até a próxima chamada da função controle() já executamos o código abaixo para setar um cenario
 			//Alem de criar uma nova geração, cria 3 elementos utilizando os dois tipos de crossover,e mutação
 			 // o 4 representa o número de elementos que será replicado da geração atual, para a proxima geração, TRANSFORMAR EM CONSTANTE!!
+			std::cout <<"Criando geração de numero:  " << contadorNumeroDeGeracoes << std::endl;
 			criaNovaGeracao(4);
 			
 			// retorna uma tupla que contem um cenario crossover não avaliado
@@ -568,29 +599,26 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 		std::get<1>(tuplaCenario) =  emoHandler->affectivEngagementBoredom;
 		std::cout <<"Engagement_level:  " << std::get<1>(tuplaCenario) << std::endl;
 		emoHandler->ofs <<"Engagement_level:  " << std::get<1>(tuplaCenario) << std::endl;
-
+		condicaoParadaEngagement(std::get<1>(tuplaCenario));
 		// decrementamos contadorCrossoversNaoAvaliados para na proxima iteração pegarmos o próximo cenario do crossover que ainda não foi avaliado
 		contadorCrossoversNaoAvaliados--;		
 		if (contadorCrossoversNaoAvaliados == 0){
 			//Toda Geração avaliada
-			sort(geracaoAtual.begin(),geracaoAtual.end(),[](const TuplaCenario& a,const TuplaCenario& b) -> bool{return std::get<1>(a) > std::get<1>(b);});		
-			if (std::get<1>(geracaoAtual.front()) >= 0.95) 
-			{
-				// geracaoAtual.front() retorna o prieiro elemento do vector geração atual, ou seja, verifica se o mais apto satisfaz a condição de parada
-				emoHandler->ofs <<"Engagement Level alvo atingido, Maior engagement:" << std::get<1>(geracaoAtual.front())  << std::endl;
-				exit(0);
-			}
-			// O  mais apto não satisfaz a condição de parada
-			if(contadorNumeroDeGeracoes>=4){ // TRANSFORMAR EM CONSTANTE
-				// Programa para pois alcançou o numero de gerações Limite
-				emoHandler->ofs <<"Engagement Level alvo não atingindo atingido após 4 gerações, Maior engagement:" << std::get<1>(geracaoAtual.front()) << std::endl;				
-				exit(0);
-			}
+			sort(geracaoAtual.begin(),geracaoAtual.end(),[](const TuplaCenario& a,const TuplaCenario& b) -> bool{return std::get<1>(a) > std::get<1>(b);});	
+			
+			emoHandler->ofs <<"Todos Cenarios do Crossover Avaliados"<<std::endl;
+			emoHandler->ofs <<"Cenarios Elite:";
+			printCenario(std::get<0>(geracaoAtual.front()));
+			emoHandler->ofs <<  std::endl;
+			emoHandler->ofs <<" Elite possui Engagement_level:  " << std::get<1>(geracaoAtual.front()) << std::endl;
+
+			verificaCondicoesDeParada();
 			 
 			// cria nova geração
 			//Cria elementos Para Crossover, Utiliza a função crossoverDeUmPonto com os dois primeiros elementos, e crossoverMascaraAleatoria com o primeiro e com o terceiro, desse modo criamos mais 3 filhos
 			// Insere crossover na geração atual
 			// o 4 representa o número de elementos que será replicado da geração atual, para a proxima geração
+			std::cout <<"Criando geração de numero:  " << contadorNumeroDeGeracoes << std::endl;
 			criaNovaGeracao(4); 
 				
 			// retorna uma tupla que contem um cenario crossover não avaliado

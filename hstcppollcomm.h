@@ -66,10 +66,15 @@ public:
 	Populacao geracaoAtual;
 	Populacao geracaoPassada;
 
+	void verificaCondicoesDeParada();				// verifica condições de parada ao fim de uma geração
+	void condicaoParadaEngagement(float engagement); // verifica condições de parada a cada chamada de Engagement
+	
 	int contadorPrimeiraGeracao;		// armazena o numero de cenario na primeira geração, é usado para controlar a avaliação dos cenarios
 	int contadorCrossoversNaoAvaliados; // armazena o numero de cenarios que sairam do crossover e ainda não foram avaliados
 	int contadorNumeroDeGeracoes;		// Controla o numero de gerações
 	
+
+
 signals:
     void tcpClosed();
 
