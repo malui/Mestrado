@@ -59,7 +59,7 @@ QObject(parent)
 	connect(&tcpSocket, SIGNAL(readyRead()), this, SLOT(tcpOnRead()));
 	// timer signals
 	connect(&pollTimer, SIGNAL(timeout()), this, SLOT(pollProcess()));
-	pollTimer.start(9000);
+	pollTimer.start(1000);
 }
 
 bool HsTcpPollComm::tcpConnect(QString host, int port)
@@ -342,116 +342,169 @@ QString HsTcpPollComm::CryptPass(char * szPassword)
 
 
 /////////GUILHERME BEGIN//////////////////
+/*
+printCenario (const vector<int>& v)
+Imprimie vetor v em emoHandler->ofs
+OBS: mudar para printEstados
+*/
+/*void HsTcpPollComm::printCenario (const vector<int>& v)
+{
 
-void HsTcpPollComm::printCenario (const vector<int>& v)
+	for( std::vector<int>::const_iterator i = v.begin(); i != v.end(); ++i)
+		emoHandler->ofs << *i << ' ';
+}*/
+void HsTcpPollComm::printCenario (const vector<int> v)
 {
 
 	for( std::vector<int>::const_iterator i = v.begin(); i != v.end(); ++i)
 		emoHandler->ofs << *i << ' ';
 }
 
-void HsTcpPollComm::printPopulacao ( Populacao population)
+/*
+void printPopulacao(const VectorCenarios populacao);
+
+*/
+void HsTcpPollComm::printPopulacao ( VectorCenarios populacao)
 {
-	for(int i=0; i<population.size(); i++)
+	for(int i=0; i<populacao.size(); i++)
 	{
-		printCenario(std::get<0>(population[i]));
-		emoHandler->ofs <<  std::get<1>(population[i]) << endl;
+		printCenario(populacao[i].estados);
+		emoHandler->ofs <<  populacao[i].engagement << endl;
 
 	}
 }
 
-HsTcpPollComm::crossoverCenarios HsTcpPollComm::crossoverDeUmPonto(Cenario cenario1,Cenario cenario2) 
-{
-	// Função crossover de um ponto aleatório, faz um crossover dividindo o vetor em duas partes. O tamanho do corte é definido aleatóriamente
+/*
+crossoverEstados crossoverDeUmPonto(Estados estado1,Estados estado2)
 
+Função crossover de um ponto aleatório.
+Faz um crossover dividindo o vetor em duas partes. 
+O tamanho do corte é definido aleatóriamente
+
+retorna uma tupla com dois Estados
+*/
+HsTcpPollComm::crossoverEstados HsTcpPollComm::crossoverDeUmPonto(Estados estado1,Estados estado2) 
+{
 	//	inicializa semente aleatória 
 	srand (time(NULL));				
-	int tamanhoCenario = cenario1.size();
+	int tamanhoEstados = estado1.size();
 
 	// cria aleatóriamente um pondo de corte onde cada vetor será separado
-	int tamanhoCorteCrossover = rand() % tamanhoCenario;	
+	int tamanhoCorteCrossover = rand() % tamanhoEstados;	
 
-	std::vector<int> primeira_parte_cenario1(cenario1.begin(), cenario1.begin() + tamanhoCorteCrossover);	
-	std::vector<int> primeira_parte_cenario2(cenario1.begin() + tamanhoCorteCrossover, cenario1.end());
+	std::vector<int> primeira_parte_estado1(estado1.begin(), estado1.begin() + tamanhoCorteCrossover);	
+	std::vector<int> primeira_parte_estado2(estado1.begin() + tamanhoCorteCrossover, estado1.end());
 
-	std::vector<int> ultima_parte_cenario1(cenario2.begin(), cenario2.begin() + tamanhoCorteCrossover);
-	std::vector<int> ultima_parte_cenario2(cenario2.begin() + tamanhoCorteCrossover, cenario2.end());
+	std::vector<int> ultima_parte_estado1(estado2.begin(), estado2.begin() + tamanhoCorteCrossover);
+	std::vector<int> ultima_parte_estado2(estado2.begin() + tamanhoCorteCrossover, estado2.end());
 
-	//em primeira_parte_cenario1 temos o primeiro filho, sua primeira parteé composta por parte do seu primeiro pai,e sua segunda parte é composta por parte do seu segundo pai
-	primeira_parte_cenario1.insert(primeira_parte_cenario1.end(), ultima_parte_cenario2.begin(), ultima_parte_cenario2.end()); 
+	//em primeira_parte_cenario1 temos o primeiro filho, sua primeira parte é composta por parte do seu primeiro pai,e sua segunda parte é composta por parte do seu segundo pai
+	primeira_parte_estado1.insert(primeira_parte_estado1.end(), ultima_parte_estado2.begin(), ultima_parte_estado2.end()); 
 
 
 	//em primeira_parte_cenario2 temos o segundo filho, sua primeira parte composta por parte do seu segundo pai,e sua segunda parte é composta por parte do seu primeiro pai
-	primeira_parte_cenario2.insert(primeira_parte_cenario2.end(), ultima_parte_cenario1.begin(), ultima_parte_cenario1.end());
+	primeira_parte_estado2.insert(primeira_parte_estado2.end(), ultima_parte_estado1.begin(), ultima_parte_estado1.end());
 
 	//cria uma tupla que é a recombinação 
-	crossoverCenarios crossoverTupla= make_tuple(primeira_parte_cenario1,primeira_parte_cenario2);
+	crossoverEstados crossoverTupla= make_tuple(primeira_parte_estado1,primeira_parte_estado2);
 	return crossoverTupla;
 }
 
-HsTcpPollComm::Cenario HsTcpPollComm::crossoverMascaraAleatoria(Cenario cenario1,Cenario cenario2) 
+/*
+crossoverMascaraAleatoria(Estados estados1,Estados estados2)
+Retorna um estado filho com taxa de mutacao de 5%
+
+cria uma mascara de zeros e uns do tamanho de cenario.estados, 
+se a posição da mascara tem valor um, o valor do primeiro pai é replicado para o filho na mesma posição,
+caso tenha o valor 0, o valor do segundo pai é replicado para o filho
+*/
+HsTcpPollComm::Estados HsTcpPollComm::crossoverMascaraAleatoria(Estados estados1,Estados estados2) 
 {
-	// Função crossover Mascara aleatória, cria uma mascara de zeros e uns do tamanho do cenario, se a posição da mascara tem valor um, o valor do primeiro pai é replicado para o filho na mesma posição
-	//caso tenha o valor 0, o valor do segundo pai é replicado para o filho
 	srand (time(NULL));		//	inicializa semente aleatória 
-	Cenario cenarioFilho;
-	for(int i=0; i<cenario1.size(); i++)
-	{
+	Estados estadosFilho;
+
+	for(int i=0; i < estados1.size(); i++)
+	{ 
 		// cria aleatóriamente um número que será 0 ou 1, caso for 0, o valor do primeiro pai é replicado para o filho
 		//, caso for 1 o valor do segundo pai é replicado para o filho  
 		if ((rand() % 2) == 0)	 
-			cenarioFilho.push_back(cenario1[i]);
+			estadosFilho.push_back(estados1[i]);
 		else 
-			cenarioFilho.push_back(cenario2[i]);
+			estadosFilho.push_back(estados2[i]);
 	}
-	// rand() % 20 retorna números entre 0 e 19, quando o valor retornado for 0, ou seja 5% das vezes, teremos uma taxa de mutação de mutação 5%
+	// rand() % 20 retorna números entre 0 e 19, quando o valor retornado for 0, ou seja 5% das vezes, teremos uma taxa de mutação 5%
 	if ((rand() % 20) == 0) 
-		return mutacao(cenarioFilho);
+		return mutacao(estadosFilho);
 	else
-		return cenarioFilho;
+		return estadosFilho;
 }
 
-HsTcpPollComm::Cenario HsTcpPollComm::mutacao(Cenario cenario) 
+/*
+Estados HsTcpPollComm::mutacao(Estados estados)
+retorna estado mutado
+
+aleatoriamente escolhe bit que sofrerá mutação:
+- caso tenha valor 1, passará a ser 0, 
+- caso tenha valor 0, passará a ter valor 1.
+*/
+HsTcpPollComm::Estados HsTcpPollComm::mutacao(Estados estados) 
 {
 	 // aleatoriamente escolhe bit que sofrerá mutação, ou seja, caso tenha valor 1, passará a ser 0, caso tenha valor 0, passará a ter valor 1
-	int bitQueSofreraMutacao = (rand() % cenario.size());
+	int bitQueSofreraMutacao = (rand() % estados.size());
 
 	//  transforma 0 em 1, e 1 em 0 . //A função abs retorna o valor absoludo de um número
-	cenario[bitQueSofreraMutacao]=abs(cenario[bitQueSofreraMutacao] - 1); 
-	return cenario;
+	estados[bitQueSofreraMutacao]=abs(estados[bitQueSofreraMutacao] - 1); 
+	return estados;
 }
-
-HsTcpPollComm::Cenario HsTcpPollComm::criaCenarioAleatorio(int tamanhoCenario)  // cria cenario aleatorio
+/*
+criaEstadosAleatorio(int tamanhoEstados)
+retorna vector<int> estados do tamanho de tamanhoEstados
+*/
+std::vector<int> HsTcpPollComm::criaEstadosAleatorio(int tamanhoEstados)  // cria estados aleatorio
 {
-	Cenario cenario;
-	for(int i=0; i<tamanhoCenario; i++)
+	std::vector<int> estados;
+	for(int i=0; i<tamanhoEstados; i++)
 		// rand() % 2 retorna aleatoriamente 0 ou 1, cenario é preenchido com 0 e 1
-		cenario.push_back(rand() % 2);	
-	return cenario;
+		estados.push_back(rand() % 2);	
+	return estados;
 }
 
-void HsTcpPollComm::inicializaCenariosPrimeiraGeracao(int tamanhoCenario){ 
-	// Cria a primeira geração de cenarios de forma aleatória, como nenhum cenario foi avaliado, recebem valor -1
-	TuplaCenario tuplaCenario; 
+/*
+void HsTcpPollComm::inicializaCenariosPrimeiraGeracao(int tamanhoCenario)
+Inicializa a primeira geração de cenarios
+com cenario.estados = aleatorio 0 ou 1
+cenario.engagement = -1 pois ainda nao foram avaliados
+*/
+void HsTcpPollComm::inicializaCenariosPrimeiraGeracao(int tamanhoCenario)
+{ 
+	struct CENARIO cen;
+	int tamanho_geracao = 3;
 
-	tuplaCenario= make_tuple(criaCenarioAleatorio(tamanhoCenario),-1);
-	geracaoAtual.push_back(tuplaCenario);					//1
-	tuplaCenario= make_tuple(criaCenarioAleatorio(tamanhoCenario),-1);
-	geracaoAtual.push_back(tuplaCenario);					//2
-	tuplaCenario= make_tuple(criaCenarioAleatorio(tamanhoCenario),-1);
-	geracaoAtual.push_back(tuplaCenario);					//3
-	tuplaCenario= make_tuple(criaCenarioAleatorio(tamanhoCenario),-1);
-	geracaoAtual.push_back(tuplaCenario);					//4
-	tuplaCenario= make_tuple(criaCenarioAleatorio(tamanhoCenario),-1);
-	geracaoAtual.push_back(tuplaCenario);					//5
-	tuplaCenario= make_tuple(criaCenarioAleatorio(tamanhoCenario),-1);	
-	geracaoAtual.push_back(tuplaCenario);					//6 cenarios adicionados na geração inicial
+	for(int i=0; i<tamanho_geracao; i++)
+	{
+		cen.estados = criaEstadosAleatorio(tamanhoCenario);//seta aleatoriamente os estados do cenario
+		cen.engagement = -1; //inicializa engagement com -1 pois ainda nao foi avaliado
+		geracaoAtual.push_back(cen);
+	}
 }
 
-void HsTcpPollComm::criaNovaGeracao(int qtdElementosReplicados){ 
-	// cria nova geração onde qtdElementosReplicados é o número de elementos na geração inicial que serão replicados para a próxima geração
+/*
+criaNovaGeracao(int qtdElementosReplicados)
+
+cria nova geração com os 'qtdElementosReplicados' melhores elementos da geração inicial
+Cria elementos Para Crossover e criar mais 3 filhos:
+   - Utiliza a função crossoverDeUmPonto com os dois primeiros elementos, 
+   - e crossoverMascaraAleatoria com o primeiro e com o terceiro, 
+*/
+void HsTcpPollComm::criaNovaGeracao(int qtdElementosReplicados)
+{ 
+	struct CENARIO cen;
+	cen.engagement = -1;
 	geracaoPassada.swap(geracaoAtual);			// geração passada passa a ser a geração atual
 	geracaoAtual.clear();						// geração atual é limpa
+
+	// inicializa geracaoAtual com 'qtdElementosReplicados' número de elementos da geração inicial 
+	//(que serão replicados para a próxima geração)
 	for(int i=0; i<qtdElementosReplicados; i++)
 	{
 		geracaoAtual.push_back(geracaoPassada[i]); // melhores elementos da geração passada passam a ser elementos da geração atual
@@ -459,40 +512,53 @@ void HsTcpPollComm::criaNovaGeracao(int qtdElementosReplicados){
 	contadorNumeroDeGeracoes++; // contador do número de gerações é incrementado
 
 	//variáveis utilizadas na manipulação de elementos do crossover
-	TuplaCenario tuplaCenario; 
-	crossoverCenarios tuplaCrossoverCenarios;
-	Cenario cenarioFilho1;
+	//TuplaCenario tuplaCenario; 
+	crossoverEstados tuplaCrossoverEstados;
+	//Estados estadosFilho1;
 	
 	//Cria elementos Para Crossover, Utiliza a função crossoverDeUmPonto com os dois primeiros elementos, e crossoverMascaraAleatoria com o primeiro e com o terceiro, desse modo criamos mais 3 filhos
-	// cria um cenario com crossoverMascaraAleatoria
-	cenarioFilho1 = crossoverMascaraAleatoria(std::get<0>(geracaoAtual[0]) ,std::get<0>(geracaoAtual[2])); 
-	tuplaCenario= make_tuple(cenarioFilho1,-1);
+	
+	// cria estadosFilho1 com crossoverMascaraAleatoria
+	cen.estados = crossoverMascaraAleatoria(geracaoAtual[0].estados ,geracaoAtual[2].estados);
+	//cen.estados = estadosFilho1;
+	geracaoAtual.push_back(cen); //insere novo cenario (estadosFilho1 , -1) na geracaoAtual
 	contadorCrossoversNaoAvaliados++;		//incrementa o numeor de cenarios criados com crossover que ainda devem ser avaliados
-	geracaoAtual.push_back(tuplaCenario);  // Insere crossover na geração atual
 
-	//faz crossover com crossoverDeUmPonto e retorna dois filhos
-	tuplaCrossoverCenarios = crossoverDeUmPonto(std::get<0>(geracaoAtual[0]) ,std::get<0>(geracaoAtual[1])); 																								
 
-	tuplaCenario= make_tuple(std::get<0>(tuplaCrossoverCenarios),-1);
+	//faz crossover com crossoverDeUmPonto e retorna dois filhos em tuplaCrossoverEstados
+	tuplaCrossoverEstados = crossoverDeUmPonto(geracaoAtual[0].estados ,geracaoAtual[1].estados); 
+
+	cen.estados = std::get<0>(tuplaCrossoverEstados);
+	geracaoAtual.push_back(cen);  // Insere crossover na geração atual
 	contadorCrossoversNaoAvaliados++;		//incrementa o numeor de cenarios criados com crossover que ainda devem ser avaliados
-	geracaoAtual.push_back(tuplaCenario);  // Insere crossover na geração atual
 
-	tuplaCenario= make_tuple(std::get<1>(tuplaCrossoverCenarios),-1);
+	cen.estados = std::get<1>(tuplaCrossoverEstados);
+	geracaoAtual.push_back(cen);  // Insere crossover na geração atual
 	contadorCrossoversNaoAvaliados++;		//incrementa o numeor de cenarios criados com crossover que ainda devem ser avaliados
-	geracaoAtual.push_back(tuplaCenario);  // Insere crossover na geração atual
 
 }
-void HsTcpPollComm::verificaCondicoesDeParada(){
-	if (std::get<1>(geracaoAtual.back()) >= 0.95) 
+
+/*
+void HsTcpPollComm::verificaCondicoesDeParada()
+Criterios de parada:
+engagement >= 0.95
+OU
+Numero de Geracoes >= 4
+*/
+void HsTcpPollComm::verificaCondicoesDeParada()
+{
+	if (((geracaoAtual.front()).engagement) >= 0.95) 
 	{
-		// geracaoAtual.back() retorna o prieiro elemento do vector geração atual, ou seja, verifica se o mais apto satisfaz a condição de parada
-		emoHandler->ofs <<"Engagement Level alvo atingido, Maior engagement:" << std::get<1>(geracaoAtual.back())  << std::endl;
+		// geracaoAtual.front() retorna o prieiro elemento do vector geração atual, ou seja, verifica se o mais apto satisfaz a condição de parada
+		emoHandler->ofs <<"Criterio de parada atingido: Engagement Level >= 0.95:" << std::endl;
+		emoHandler->ofs <<"Engagement Level Maximo = " << (geracaoAtual.front()).engagement  << std::endl;
 		exit(0);
 	}
 	// O  mais apto não satisfaz a condição de parada
 	if(contadorNumeroDeGeracoes>=4){ // TRANSFORMAR EM CONSTANTE
 	// Programa para pois alcançou o numero de gerações Limite
-		emoHandler->ofs <<"Engagement Level alvo não atingindo atingido após 4 gerações, Maior engagement:" << std::get<1>(geracaoAtual.back()) << std::endl;				
+		emoHandler->ofs <<"Engagement Level alvo não atingindo atingido após 4 gerações: abortar" << std::endl;
+		emoHandler->ofs <<"Engagement Level Maximo = " << (geracaoAtual.front()).engagement  << std::endl;
 		exit(0);
 	}
 }
@@ -500,7 +566,7 @@ void HsTcpPollComm::verificaCondicoesDeParada(){
 void HsTcpPollComm::condicaoParadaEngagement(float engagement){
 	if (engagement >= 0.95) 
 	{
-		// geracaoAtual.back() retorna o prieiro elemento do vector geração atual, ou seja, verifica se o mais apto satisfaz a condição de parada
+		// geracaoAtual.front() retorna o prieiro elemento do vector geração atual, ou seja, verifica se o mais apto satisfaz a condição de parada
 		emoHandler->ofs <<"Engagement Level alvo atingido, Maior engagement:" << engagement  << std::endl;
 		exit(0);
 	}
@@ -518,9 +584,8 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 	     
 	int unitsInicializador[] = {118,119,120};//{1187, 1188, 1191, 2058, 2061, 2062, 1415};
 	std::vector<int> units(unitsInicializador,&unitsInicializador[sizeof(unitsInicializador)/sizeof(unitsInicializador[0])]);
-	crossoverCenarios tuplaCrossoverCenarios;
-	Cenario cenarioFilho1;
-	TuplaCenario tuplaCenario; 
+//	crossoverCenarios tuplaCrossoverCenarios;
+//	Cenario cenarioFilho1;
 
 	switch(controleFluxo)           
 	{								
@@ -528,53 +593,52 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 		//	Cria n cenarios iniciais com valores aleatórios
 		//inicializaCenariosPrimeiraGeracao(sizeof(unitsInicializador));
 		inicializaCenariosPrimeiraGeracao(units.size());
-		qDebug() << "units.size():" << units.size();
+
+		printPopulacao(geracaoAtual);
 
 		//contadorPrimeiraGeracao Armazena tamanho da população inicial para que se possa fazer o controle de uso posteriormente
-		contadorPrimeiraGeracao = geracaoAtual.size(); 
+		contadorPrimeiraGeracao = geracaoAtual.size() - 1; //pois vector inicia em 0
 		contadorCrossoversNaoAvaliados=0;
 		contadorNumeroDeGeracoes=1;
-		
 
-		tuplaCenario = geracaoAtual[contadorPrimeiraGeracao-1];	// retorna uma tupla que contem um dos cenarios inicias 
-		//std::cout <<"std::get<0>(tuplaCenario):" 
-		//	std::cout <<"std::get<0>(tuplaCenario):" << std::get<0>(tuplaCenario)  << std::endl;<< std::get<0>(tuplaCenario).size()  << std::endl;
-		
-		setCenario(units, std::get<0>(tuplaCenario));			// seta um dos cenarios iniciais
+		setCenario(units, geracaoAtual[contadorPrimeiraGeracao].estados);			// seta um dos cenarios iniciais
 		emoHandler->ofs <<"Cenario: ";
-		printCenario(std::get<0>(tuplaCenario));
+		printCenario(geracaoAtual[contadorPrimeiraGeracao].estados);
 		emoHandler->ofs << std::endl;
 
 		controleFluxo = AVALIA_CENARIOS_INICIAIS;
 		break;
 	case AVALIA_CENARIOS_INICIAIS:
 		// retorna ultima tupla que foi usada na setCenario para avalia-la
-		tuplaCenario = geracaoAtual[contadorPrimeiraGeracao-1];
-		std::get<1>(tuplaCenario) =  emoHandler->affectivEngagementBoredom;	
-		std::cout <<"Engagement_level:  " << std::get<1>(tuplaCenario) << std::endl;
-		emoHandler->ofs <<"Engagement_level:  " << std::get<1>(tuplaCenario) << std::endl;
-		condicaoParadaEngagement(std::get<1>(tuplaCenario));
+		//tuplaCenario = geracaoAtual[contadorPrimeiraGeracao];
+		geracaoAtual[contadorPrimeiraGeracao].engagement =  emoHandler->affectivEngagementBoredom;	
+		std::cout <<"Engagement_level:  " << geracaoAtual[contadorPrimeiraGeracao].engagement << std::endl;
+		emoHandler->ofs <<"Engagement_level:  " << geracaoAtual[contadorPrimeiraGeracao].engagement << std::endl;
+
+		condicaoParadaEngagement(geracaoAtual[contadorPrimeiraGeracao].engagement);
 		contadorPrimeiraGeracao--;		// decrementamos contadorPrimeiraGeracao para na proxima iteração pegarmos o próximo cenario inicial que ainda não foi avaliado
-		if(contadorPrimeiraGeracao>=0){
+		
+		if(contadorPrimeiraGeracao>0){
 			//Ainda há cenarios iniciais a serem avaliados
 			//Setamos o próximo cenario a ser avaliado para não perder tempo esperando a proxima chamada da controle()
-			tuplaCenario = geracaoAtual[contadorPrimeiraGeracao-1];	// retorna uma tupla que concem um dos cenarios inicias 
-			setCenario(units, std::get<0>(tuplaCenario));			// seta um dos cenarios iniciais
+			//tuplaCenario = geracaoAtual[contadorPrimeiraGeracao];	// retorna uma tupla que concem um dos cenarios inicias 
+			setCenario(units, geracaoAtual[contadorPrimeiraGeracao].estados);			// seta um dos cenarios iniciais
 			emoHandler->ofs <<"Cenario: ";
-			printCenario(std::get<0>(tuplaCenario));
+			printCenario(geracaoAtual[contadorPrimeiraGeracao].estados);
 			emoHandler->ofs << std::endl;
 
 			controleFluxo = AVALIA_CENARIOS_INICIAIS;
 		}
 		else{
 			//Não há mais cenarios iniciais a serem avaliados
-			sort(geracaoAtual.begin(),geracaoAtual.end(),[](const TuplaCenario& a,const TuplaCenario& b) -> bool{return std::get<1>(a) > std::get<1>(b);});
-			
+			sort(geracaoAtual.begin(),geracaoAtual.end(),[](const CENARIO& a,const CENARIO& b) -> bool{return a.engagement > b.engagement;});
+			//sort(geracaoAtual.begin(),geracaoAtual.end());
+
 			emoHandler->ofs <<"Todos Cenarios Iniciais Avaliados"<<std::endl;
 			emoHandler->ofs <<"Cenarios Elite:";
-			printCenario(std::get<0>(geracaoAtual.back()));
+			printCenario((geracaoAtual.front()).estados);
 			emoHandler->ofs <<  std::endl;
-			emoHandler->ofs <<" Elite possui Engagement_level:  " << std::get<1>(geracaoAtual.back()) << std::endl;
+			emoHandler->ofs <<" Elite possui Engagement_level:  " << (geracaoAtual.front()).engagement << std::endl;
 
 
 			//Para otimizar o tempo de execução, e não experar até a próxima chamada da função controle() já executamos o código abaixo para setar um cenario
@@ -584,10 +648,10 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 			criaNovaGeracao(4);
 			
 			// retorna uma tupla que contem um cenario crossover não avaliado
-			tuplaCenario = geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados];	
-			setCenario(units, std::get<0>(tuplaCenario));			// seta um dos cenarios do crossover
+			//tuplaCenario = geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados];	
+			setCenario(units, geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados].estados);			// seta um dos cenarios do crossover
 			emoHandler->ofs <<"Cenario: ";
-			printCenario(std::get<0>(tuplaCenario));
+			printCenario(geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados].estados);
 			emoHandler->ofs << std::endl;
 
 			controleFluxo = AVALIA_CENARIOS;
@@ -596,22 +660,26 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 
 	case AVALIA_CENARIOS:
 		// retorna ultima tupla que foi usada na setCenario para avalia-la
-		tuplaCenario = geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados];
-		std::get<1>(tuplaCenario) =  emoHandler->affectivEngagementBoredom;
-		std::cout <<"Engagement_level:  " << std::get<1>(tuplaCenario) << std::endl;
-		emoHandler->ofs <<"Engagement_level:  " << std::get<1>(tuplaCenario) << std::endl;
-		condicaoParadaEngagement(std::get<1>(tuplaCenario));
+		//tuplaCenario = geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados];
+		geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados].engagement =  emoHandler->affectivEngagementBoredom;
+		std::cout <<"Engagement_level:  " << geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados].engagement << std::endl;
+		emoHandler->ofs <<"Engagement_level:  " << geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados].engagement << std::endl;
+		condicaoParadaEngagement(geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados].engagement);
+
 		// decrementamos contadorCrossoversNaoAvaliados para na proxima iteração pegarmos o próximo cenario do crossover que ainda não foi avaliado
-		contadorCrossoversNaoAvaliados--;		
+		contadorCrossoversNaoAvaliados--;	
+
 		if (contadorCrossoversNaoAvaliados == 0){
 			//Toda Geração avaliada
-			sort(geracaoAtual.begin(),geracaoAtual.end(),[](const TuplaCenario& a,const TuplaCenario& b) -> bool{return std::get<1>(a) > std::get<1>(b);});	
-			
+			//sort(geracaoAtual.begin(),geracaoAtual.end(),[](const TuplaCenario& a,const TuplaCenario& b) -> bool{return std::get<1>(a) > std::get<1>(b);});	
+			//sort(geracaoAtual.begin(),geracaoAtual.end());
+			sort(geracaoAtual.begin(),geracaoAtual.end(),[](const CENARIO& a,const CENARIO& b) -> bool{return a.engagement > b.engagement;});
+
 			emoHandler->ofs <<"Todos Cenarios do Crossover Avaliados"<<std::endl;
 			emoHandler->ofs <<"Cenarios Elite:";
-			printCenario(std::get<0>(geracaoAtual.back()));
+			printCenario(geracaoAtual.front().estados);
 			emoHandler->ofs <<  std::endl;
-			emoHandler->ofs <<" Elite possui Engagement_level:  " << std::get<1>(geracaoAtual.back()) << std::endl;
+			emoHandler->ofs <<" Elite possui Engagement_level:  " << geracaoAtual.front().engagement << std::endl;
 
 			verificaCondicoesDeParada();
 			 
@@ -623,10 +691,10 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 			criaNovaGeracao(4); 
 				
 			// retorna uma tupla que contem um cenario crossover não avaliado
-			tuplaCenario = geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados];	
-			setCenario(units, std::get<0>(tuplaCenario));			// seta um dos cenarios do crossover
+			//tuplaCenario = geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados];	
+			setCenario(units, geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados].estados);			// seta um dos cenarios do crossover
 			emoHandler->ofs <<"Cenario: ";
-			printCenario(std::get<0>(tuplaCenario));
+			printCenario(geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados].estados);
 			emoHandler->ofs << std::endl;
 
 			controleFluxo = AVALIA_CENARIOS;
@@ -635,10 +703,10 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 		else{
 			//Ainda temos elementos da geração atual a avaliar
 			//Setamos o próximo cenario a ser avaliado para não perder tempo esperando a proxima chamada da controle()
-			tuplaCenario = geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados];	// retorna uma tupla que concem um dos cenarios do crossover ainda não avaliado
-			setCenario(units, std::get<0>(tuplaCenario));			// seta um dos cenarios do crossover
+			//tuplaCenario = geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados];	// retorna uma tupla que concem um dos cenarios do crossover ainda não avaliado
+			setCenario(units, geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados].estados);			// seta um dos cenarios do crossover
 			emoHandler->ofs <<"Cenario: ";
-			printCenario(std::get<0>(tuplaCenario));
+			printCenario(geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados].estados);
 			emoHandler->ofs << std::endl;
 
 			controleFluxo = AVALIA_CENARIOS;

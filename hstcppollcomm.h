@@ -42,29 +42,38 @@ public:
 	void write_vec(const vector<int>& vec);
 	void logAffectiveSuiteState(std::ostream& os, unsigned int userID, EmoStateHandle eState, bool withHeader);
 	
-	typedef std::vector<int> Cenario;                             // Vetor de zeros e uns que representam um estado
-	typedef std::tuple< Cenario,float> TuplaCenario;             // Tupla que liga o estado ao valor de seu stress/parametro
-	typedef std::vector<TuplaCenario> Populacao;                // Vetor que contem todos individuos de uma geração
-	typedef std::tuple<Cenario,Cenario> crossoverCenarios;     // Resultado do cross over de dois vetores
+	struct CENARIO {   // Declare CENARIO struct type
+    std::vector<int> estados;   // Declare member types
+    float            engagement;
+    } cenario;   // Define object of type CENARIO
+
+	//typedef std::vector<int> Cenario;                             // Vetor de zeros e uns que representam um estado
+	typedef std::vector<int> Estados;
+	typedef std::vector<CENARIO> VectorCenarios;
+	//typedef std::tuple< Estados,float> TuplaCenario;             // Tupla que liga o estado ao valor de seu stress/parametro
+	//typedef std::vector<TuplaCenario> Populacao;                // Vetor que contem todos individuos de uma geração
+	typedef std::tuple<Estados,Estados> crossoverEstados;     // Resultado do cross over de dois vetores
 			
 
-	void printCenario(const vector<int>& v);                            // Imprime um estado do tipo vector<int>
-	void printPopulacao(const Populacao);                              // Imprime a população de uma geração
+	void printCenario(const vector<int> v);                            // Imprime um estado do tipo vector<int>
+	void printPopulacao(const VectorCenarios populacao);                              // Imprime a população de uma geração
 	
-	crossoverCenarios crossoverDeUmPonto(Cenario cenario1,Cenario cenario2);   // Implementação do crossover devolve os dois novos estados que são a recombinação de seus pais
-	Cenario crossoverMascaraAleatoria(Cenario cenario1,Cenario cenario2);	   // Implementação do crossover devolve os dois ovos estados
-	Cenario HsTcpPollComm::mutacao(Cenario cenario);
+	crossoverEstados HsTcpPollComm::crossoverDeUmPonto(Estados estado1,Estados estado2);   // Implementação do crossover devolve os dois novos estados que são a recombinação de seus pais
+	Estados HsTcpPollComm::crossoverMascaraAleatoria(Estados estados1,Estados estados2);	   // Implementação do crossover devolve os dois ovos estados
+	Estados HsTcpPollComm::mutacao(Estados estados);
 	
 	void inicializaCenariosPrimeiraGeracao(int tamanhoCenario);  // Função responsavel por definir qual a população inicial de cenarios, utiliza criaCenarioAleatorio
-	Cenario criaCenarioAleatorio(int tamanhoCenario);			
+	std::vector<int> HsTcpPollComm::criaEstadosAleatorio(int tamanhoEstados);
 	
 	// cria nova geração onde qtdElementosReplicados é o número de elementos na geração inicial que serão replicados para a próxima geração
 	// Cria elementos 3 elementos com Crossover, Utiliza a função crossoverDeUmPonto com os dois primeiros elementos, e crossoverMascaraAleatoria com o primeiro e com o terceiro, desse modo criamos mais 3 filhos
 	// Insere elementos do crossover na geração atual
 	// o qtdElementosReplicados representa o número de elementos que será replicado da geração atual, para a proxima geração
 	void criaNovaGeracao(int qtdElementosReplicados);	
-	Populacao geracaoAtual;
-	Populacao geracaoPassada;
+	//Populacao geracaoAtual;
+	//Populacao geracaoPassada;
+	VectorCenarios geracaoAtual;
+	VectorCenarios geracaoPassada;
 
 	void verificaCondicoesDeParada();				// verifica condições de parada ao fim de uma geração
 	void condicaoParadaEngagement(float engagement); // verifica condições de parada a cada chamada de Engagement
@@ -72,9 +81,10 @@ public:
 	int contadorPrimeiraGeracao;		// armazena o numero de cenario na primeira geração, é usado para controlar a avaliação dos cenarios
 	int contadorCrossoversNaoAvaliados; // armazena o numero de cenarios que sairam do crossover e ainda não foram avaliados
 	int contadorNumeroDeGeracoes;		// Controla o numero de gerações
+
 	
 
-
+// end public
 signals:
     void tcpClosed();
 
@@ -87,12 +97,11 @@ public slots:
 //	void sendRequest(void);
 
 private:
-
-
 	//TSessionState sessionState;
 	QString CryptPass(char * szPassword);
     QTcpSocket tcpSocket;
     QTimer pollTimer;
+
 
 
 };

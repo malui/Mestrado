@@ -1,5 +1,0 @@
-Emotiv Composer start up successed. Ready to receive Emotiv signals.Cenario: 1 1 0 
-Engagement_level:  0.1
-Cenario: 1 1 1 
-Engagement_level:  0.3
-Cenario: 0 1 1 
