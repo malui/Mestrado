@@ -483,16 +483,16 @@ void HsTcpPollComm::criaNovaGeracao(int qtdElementosReplicados){
 
 }
 void HsTcpPollComm::verificaCondicoesDeParada(){
-	if (std::get<1>(geracaoAtual.front()) >= 0.95) 
+	if (std::get<1>(geracaoAtual.back()) >= 0.95) 
 	{
-		// geracaoAtual.front() retorna o prieiro elemento do vector geração atual, ou seja, verifica se o mais apto satisfaz a condição de parada
-		emoHandler->ofs <<"Engagement Level alvo atingido, Maior engagement:" << std::get<1>(geracaoAtual.front())  << std::endl;
+		// geracaoAtual.back() retorna o prieiro elemento do vector geração atual, ou seja, verifica se o mais apto satisfaz a condição de parada
+		emoHandler->ofs <<"Engagement Level alvo atingido, Maior engagement:" << std::get<1>(geracaoAtual.back())  << std::endl;
 		exit(0);
 	}
 	// O  mais apto não satisfaz a condição de parada
 	if(contadorNumeroDeGeracoes>=4){ // TRANSFORMAR EM CONSTANTE
 	// Programa para pois alcançou o numero de gerações Limite
-		emoHandler->ofs <<"Engagement Level alvo não atingindo atingido após 4 gerações, Maior engagement:" << std::get<1>(geracaoAtual.front()) << std::endl;				
+		emoHandler->ofs <<"Engagement Level alvo não atingindo atingido após 4 gerações, Maior engagement:" << std::get<1>(geracaoAtual.back()) << std::endl;				
 		exit(0);
 	}
 }
@@ -500,7 +500,7 @@ void HsTcpPollComm::verificaCondicoesDeParada(){
 void HsTcpPollComm::condicaoParadaEngagement(float engagement){
 	if (engagement >= 0.95) 
 	{
-		// geracaoAtual.front() retorna o prieiro elemento do vector geração atual, ou seja, verifica se o mais apto satisfaz a condição de parada
+		// geracaoAtual.back() retorna o prieiro elemento do vector geração atual, ou seja, verifica se o mais apto satisfaz a condição de parada
 		emoHandler->ofs <<"Engagement Level alvo atingido, Maior engagement:" << engagement  << std::endl;
 		exit(0);
 	}
@@ -555,7 +555,7 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 		emoHandler->ofs <<"Engagement_level:  " << std::get<1>(tuplaCenario) << std::endl;
 		condicaoParadaEngagement(std::get<1>(tuplaCenario));
 		contadorPrimeiraGeracao--;		// decrementamos contadorPrimeiraGeracao para na proxima iteração pegarmos o próximo cenario inicial que ainda não foi avaliado
-		if(contadorPrimeiraGeracao>0){
+		if(contadorPrimeiraGeracao>=0){
 			//Ainda há cenarios iniciais a serem avaliados
 			//Setamos o próximo cenario a ser avaliado para não perder tempo esperando a proxima chamada da controle()
 			tuplaCenario = geracaoAtual[contadorPrimeiraGeracao-1];	// retorna uma tupla que concem um dos cenarios inicias 
@@ -572,9 +572,9 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 			
 			emoHandler->ofs <<"Todos Cenarios Iniciais Avaliados"<<std::endl;
 			emoHandler->ofs <<"Cenarios Elite:";
-			printCenario(std::get<0>(geracaoAtual.front()));
+			printCenario(std::get<0>(geracaoAtual.back()));
 			emoHandler->ofs <<  std::endl;
-			emoHandler->ofs <<" Elite possui Engagement_level:  " << std::get<1>(geracaoAtual.front()) << std::endl;
+			emoHandler->ofs <<" Elite possui Engagement_level:  " << std::get<1>(geracaoAtual.back()) << std::endl;
 
 
 			//Para otimizar o tempo de execução, e não experar até a próxima chamada da função controle() já executamos o código abaixo para setar um cenario
@@ -609,9 +609,9 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 			
 			emoHandler->ofs <<"Todos Cenarios do Crossover Avaliados"<<std::endl;
 			emoHandler->ofs <<"Cenarios Elite:";
-			printCenario(std::get<0>(geracaoAtual.front()));
+			printCenario(std::get<0>(geracaoAtual.back()));
 			emoHandler->ofs <<  std::endl;
-			emoHandler->ofs <<" Elite possui Engagement_level:  " << std::get<1>(geracaoAtual.front()) << std::endl;
+			emoHandler->ofs <<" Elite possui Engagement_level:  " << std::get<1>(geracaoAtual.back()) << std::endl;
 
 			verificaCondicoesDeParada();
 			 
