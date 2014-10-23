@@ -59,7 +59,7 @@ QObject(parent)
 	connect(&tcpSocket, SIGNAL(readyRead()), this, SLOT(tcpOnRead()));
 	// timer signals
 	connect(&pollTimer, SIGNAL(timeout()), this, SLOT(pollProcess()));
-	pollTimer.start(2000);
+	pollTimer.start(9000);
 }
 
 bool HsTcpPollComm::tcpConnect(QString host, int port)
@@ -128,7 +128,8 @@ void HsTcpPollComm::pollProcess(void)
 			}
 			else if (ack > 0){
 				qDebug() << "acknoledge: ack = " << ack;
-				tcpSocket.write(makeGetUnit(&unit,1).toLatin1()); //send ack
+				//tcpSocket.write(makeGetUnit(&unit,1).toLatin1()); //send ack
+				setUnit(1,1);
 				ack++; 
 				if (ack >= 4) {
 					qDebug() << "acknoledge: ack = " << ack;
