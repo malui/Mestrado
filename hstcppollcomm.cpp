@@ -51,6 +51,7 @@ QObject(parent)
 	sessionState = DISCONNECTED;
 	resposta_pronta = false;
 	controleFluxo = SET_CENARIOS_INICIAIS;
+	ack = 0;
 	// tcp signals
 	connect(&tcpSocket, SIGNAL(connected()),this,SLOT(tcpOnConnect()));
 	connect(&tcpSocket, SIGNAL(disconnected()), this, SLOT(tcpOnDisconnect()));
@@ -119,9 +120,25 @@ void HsTcpPollComm::pollProcess(void)
 	case SENT_REQUEST: //resposta_pronta = false;
 		//resposta_pronta = true;
 		qDebug() << "SENT_REQUEST";
-		controle();
+		{
+			if (ack == 0){
+				qDebug() << "controle: ack = " << ack;
+				controle();
+				ack ++; 
+			}
+			else if (ack > 0){
+				qDebug() << "acknoledge: ack = " << ack;
+				tcpSocket.write(makeGetUnit(&unit,1).toLatin1()); //send ack
+				ack++; 
+				if (ack >= 4) {
+					qDebug() << "acknoledge: ack = " << ack;
+					ack = 0;
+					qDebug() << "setting ack to:  = " << ack;
+				}
+			}
 		sessionState = WAITING_RESPONSE;
 		qDebug() << "Send get unit";
+		}
 		break;
 	case WAITING_RESPONSE: qDebug() << "Wait get unit";
 		break;
@@ -500,18 +517,29 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 		//	std::cout <<"std::get<0>(tuplaCenario):" << std::get<0>(tuplaCenario)  << std::endl;<< std::get<0>(tuplaCenario).size()  << std::endl;
 		
 		setCenario(units, std::get<0>(tuplaCenario));			// seta um dos cenarios iniciais
+		emoHandler->ofs <<"Cenario: ";
+		printCenario(std::get<0>(tuplaCenario));
+		emoHandler->ofs << std::endl;
+
 		controleFluxo = AVALIA_CENARIOS_INICIAIS;
 		break;
 	case AVALIA_CENARIOS_INICIAIS:
 		// retorna ultima tupla que foi usada na setCenario para avalia-la
 		tuplaCenario = geracaoAtual[contadorPrimeiraGeracao-1];
 		std::get<1>(tuplaCenario) =  emoHandler->affectivEngagementBoredom;	
+		std::cout <<"Engagement_level:  " << std::get<1>(tuplaCenario) << std::endl;
+		emoHandler->ofs <<"Engagement_level:  " << std::get<1>(tuplaCenario) << std::endl;
+
 		contadorPrimeiraGeracao--;		// decrementamos contadorPrimeiraGeracao para na proxima iteração pegarmos o próximo cenario inicial que ainda não foi avaliado
 		if(contadorPrimeiraGeracao>0){
 			//Ainda há cenarios iniciais a serem avaliados
 			//Setamos o próximo cenario a ser avaliado para não perder tempo esperando a proxima chamada da controle()
 			tuplaCenario = geracaoAtual[contadorPrimeiraGeracao-1];	// retorna uma tupla que concem um dos cenarios inicias 
 			setCenario(units, std::get<0>(tuplaCenario));			// seta um dos cenarios iniciais
+			emoHandler->ofs <<"Cenario: ";
+			printCenario(std::get<0>(tuplaCenario));
+			emoHandler->ofs << std::endl;
+
 			controleFluxo = AVALIA_CENARIOS_INICIAIS;
 		}
 		else{
@@ -526,6 +554,10 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 			// retorna uma tupla que contem um cenario crossover não avaliado
 			tuplaCenario = geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados];	
 			setCenario(units, std::get<0>(tuplaCenario));			// seta um dos cenarios do crossover
+			emoHandler->ofs <<"Cenario: ";
+			printCenario(std::get<0>(tuplaCenario));
+			emoHandler->ofs << std::endl;
+
 			controleFluxo = AVALIA_CENARIOS;
 		}
 		break;
@@ -534,6 +566,8 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 		// retorna ultima tupla que foi usada na setCenario para avalia-la
 		tuplaCenario = geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados];
 		std::get<1>(tuplaCenario) =  emoHandler->affectivEngagementBoredom;
+		std::cout <<"Engagement_level:  " << std::get<1>(tuplaCenario) << std::endl;
+		emoHandler->ofs <<"Engagement_level:  " << std::get<1>(tuplaCenario) << std::endl;
 
 		// decrementamos contadorCrossoversNaoAvaliados para na proxima iteração pegarmos o próximo cenario do crossover que ainda não foi avaliado
 		contadorCrossoversNaoAvaliados--;		
@@ -562,6 +596,10 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 			// retorna uma tupla que contem um cenario crossover não avaliado
 			tuplaCenario = geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados];	
 			setCenario(units, std::get<0>(tuplaCenario));			// seta um dos cenarios do crossover
+			emoHandler->ofs <<"Cenario: ";
+			printCenario(std::get<0>(tuplaCenario));
+			emoHandler->ofs << std::endl;
+
 			controleFluxo = AVALIA_CENARIOS;
 			
 		}
@@ -570,6 +608,10 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 			//Setamos o próximo cenario a ser avaliado para não perder tempo esperando a proxima chamada da controle()
 			tuplaCenario = geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados];	// retorna uma tupla que concem um dos cenarios do crossover ainda não avaliado
 			setCenario(units, std::get<0>(tuplaCenario));			// seta um dos cenarios do crossover
+			emoHandler->ofs <<"Cenario: ";
+			printCenario(std::get<0>(tuplaCenario));
+			emoHandler->ofs << std::endl;
+
 			controleFluxo = AVALIA_CENARIOS;
 		}
 		break;

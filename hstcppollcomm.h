@@ -36,6 +36,7 @@ public:
 	bool resposta_pronta;
 	TSessionState sessionState;
 	TControleFluxo controleFluxo;
+	int ack;
 	EmoHandler* emoHandler;
 	void controle();
 	void write_vec(const vector<int>& vec);
