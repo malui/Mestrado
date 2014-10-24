@@ -55,7 +55,7 @@ public:
 	typedef std::tuple<Estados,Estados> crossoverEstados;     // Resultado do cross over de dois vetores
 			
 
-	void printCenario(const vector<int> v);                            // Imprime um estado do tipo vector<int>
+	void printCenario(const vector<int> &v);                            // Imprime um estado do tipo vector<int>
 	void printPopulacao(const VectorCenarios populacao);                              // Imprime a população de uma geração
 	
 	crossoverEstados HsTcpPollComm::crossoverDeUmPonto(Estados estado1,Estados estado2);   // Implementação do crossover devolve os dois novos estados que são a recombinação de seus pais
@@ -77,6 +77,8 @@ public:
 
 	void verificaCondicoesDeParada();				// verifica condições de parada ao fim de uma geração
 	void condicaoParadaEngagement(float engagement); // verifica condições de parada a cada chamada de Engagement
+
+	float mediaHarmonicaPonderada(vector<float> v);
 	
 	int contadorPrimeiraGeracao;		// armazena o numero de cenario na primeira geração, é usado para controlar a avaliação dos cenarios
 	int contadorCrossoversNaoAvaliados; // armazena o numero de cenarios que sairam do crossover e ainda não foram avaliados

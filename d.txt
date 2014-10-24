@@ -1,0 +1,19 @@
+Emotiv Composer start up successed. Ready to receive Emotiv signals.1 1 0 -1
+0 1 0 -1
+0 0 0 -1
+Cenario: 0 0 0 
+Engagement_level:  0
+Cenario: 0 1 0 
+Engagement_level:  2.77556e-017
+Todos Cenarios Iniciais Avaliados
+Cenarios Elite:0 1 0 
+ Elite possui Engagement_level:  2.77556e-017
+Cenario: 0 1 0 
+Engagement_level:  -1
+Cenario: 0 1 0 
+Engagement_level:  0
+Cenario: 0 0 0 
+Engagement_level:  -1
+Todos Cenarios do Crossover Avaliados
+Cenarios Elite:0 1 0 
+ Elite possui Engagement_level:  2.77556e-017

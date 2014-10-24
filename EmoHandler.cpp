@@ -11,16 +11,17 @@
 
 #pragma comment(lib, "./lib/edk.lib")
 
-EmoHandler::EmoHandler(QObject *parent) :
-    QObject(parent)
+EmoHandler::EmoHandler()//(QObject *parent) :
+    //QObject(parent)
 {
-	connect(&pollTimer, SIGNAL(timeout()), this, SLOT(emoAffectivEngagementBoredom()));
+	//connect(&pollTimer, SIGNAL(timeout()), this, SLOT(emoAffectivEngagementBoredom()));
 	
 	eEvent			= EE_EmoEngineEventCreate();
 	eState			= EE_EmoStateCreate();
 	affectivEngagementBoredom = -1.0f;
+	//affectivEngagementBoredomVector.clear();
 
-	pollTimer.start(1000);
+	//pollTimer.start(1000);
 }
 
 EmoHandler::~EmoHandler()
@@ -125,13 +126,11 @@ int EmoHandler::emoConnect() {
 	return result;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void EmoHandler::emoAffectivEngagementBoredom() {
+float EmoHandler::emoAffectivEngagementBoredom() {
 
 	eEvent								= EE_EmoEngineEventCreate();
 	eState								= EE_EmoStateCreate();
 	int state							= 0;
-
-	Sleep(100);
 																											
 	state = EE_EngineGetNextEvent(eEvent);																		
 	if (state == EDK_OK)																							
@@ -140,15 +139,18 @@ void EmoHandler::emoAffectivEngagementBoredom() {
 																													
 		EE_Event_t eventType = EE_EmoEngineEventGetType(eEvent);
 															
-		// Log the EmoState if it has been updated																
-		if (eventType == EE_EmoStateUpdated) 																	
+		// if signal is not noisy and Affective is active:															
+		if (ES_AffectivIsActive(eState, AFF_ENGAGEMENT_BOREDOM)) 																	
 		{																										
 			//std::cout << "eventType == EE_EmoStateUpdated"<< std::endl;											
 			EE_EmoEngineEventGetEmoState(eEvent, eState);														
 			//std::cout<<"Engagement level:" <<ES_AffectivGetEngagementBoredomScore(eState)<<std::endl;
 
-			affectivEngagementBoredom = ES_AffectivGetEngagementBoredomScore(eState);
+			return ES_AffectivGetEngagementBoredomScore(eState);
 		}	
-
+		else 
+			return -1;
 	}	
+	else 
+		return -1;
 }

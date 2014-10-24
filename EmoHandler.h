@@ -4,8 +4,8 @@
 
 //#include <QThread>
 // Qt
-#include <QObject>
-#include <QTimer>
+//#include <QObject>
+//#include <QTimer>
 
 // Emotiv
 #include <iostream>
@@ -14,6 +14,7 @@
 #include <sstream>
 #include <windows.h>
 #include <map>
+#include <vector>
 
 #include "EmoStateDLL.h"
 #include "edk.h"
@@ -25,23 +26,26 @@
 
 #pragma comment(lib, "./lib/edk.lib")
 
- class EmoHandler : public QObject
+ class EmoHandler //: public QObject
  {
-     Q_OBJECT
+     //Q_OBJECT
 
  public:
-		 explicit EmoHandler(QObject *parent = 0);
+		 //explicit EmoHandler(QObject *parent = 0);
+	     EmoHandler();
 		 ~EmoHandler();
 		 int emoConnect();
 		 float affectivEngagementBoredom;
+		 std::vector<float>  affectivEngagementBoredomVector;
 		 //std::string logFileName;
 		 std::ofstream ofs;
 
- public slots:
-		 void emoAffectivEngagementBoredom();
+
+ //public slots:
+		 float emoAffectivEngagementBoredom();
 
  private:
-	    QTimer pollTimer;
+	    //QTimer pollTimer;
 		EmoEngineEventHandle eEvent;
 		EmoStateHandle eState;
  };

@@ -123,16 +123,32 @@ void HsTcpPollComm::pollProcess(void)
 		{
 			if (ack == 0){
 				qDebug() << "controle: ack = " << ack;
+				//pega o ultimo valor de engagement e poe no vector
+				const float eng_temp = emoHandler->emoAffectivEngagementBoredom();
+				if (eng_temp != -1)
+					emoHandler->affectivEngagementBoredomVector.push_back(eng_temp);
+				//faz a media do vector e tem o engagement do cenario anterior
+				emoHandler->affectivEngagementBoredom = mediaHarmonicaPonderada(emoHandler->affectivEngagementBoredomVector);
+				qDebug() << "emoHandler->affectivEngagementBoredom " << emoHandler->affectivEngagementBoredom;
+				//limpa o vector de engagements para comecar um vector novo com o novo cenario
+				emoHandler->affectivEngagementBoredomVector.clear();
 				controle();
 				ack ++; 
 			}
 			else if (ack > 0){
 				qDebug() << "acknoledge: ack = " << ack;
 				//tcpSocket.write(makeGetUnit(&unit,1).toLatin1()); //send ack
-				setUnit(1,1);
+				setUnit(1,1); //manda ack
+				const float eng_temp = emoHandler->emoAffectivEngagementBoredom();
+				if (eng_temp != -1)
+					emoHandler->affectivEngagementBoredomVector.push_back(eng_temp);
 				ack++; 
 				if (ack >= 4) {
 					qDebug() << "acknoledge: ack = " << ack;
+					const float eng_temp = emoHandler->emoAffectivEngagementBoredom();
+					if (eng_temp != -1)
+						emoHandler->affectivEngagementBoredomVector.push_back(eng_temp);
+					
 					ack = 0;
 					qDebug() << "setting ack to:  = " << ack;
 				}
@@ -353,7 +369,7 @@ OBS: mudar para printEstados
 	for( std::vector<int>::const_iterator i = v.begin(); i != v.end(); ++i)
 		emoHandler->ofs << *i << ' ';
 }*/
-void HsTcpPollComm::printCenario (const vector<int> v)
+void HsTcpPollComm::printCenario (const vector<int> &v)
 {
 
 	for( std::vector<int>::const_iterator i = v.begin(); i != v.end(); ++i)
@@ -591,7 +607,6 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 	{								
 	case SET_CENARIOS_INICIAIS:
 		//	Cria n cenarios iniciais com valores aleatórios
-		//inicializaCenariosPrimeiraGeracao(sizeof(unitsInicializador));
 		inicializaCenariosPrimeiraGeracao(units.size());
 
 		printPopulacao(geracaoAtual);
@@ -718,6 +733,23 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 	}
 
 
+}
+/*
+Faz a media harmonica ponderada de um vetor
+com pesos = indice 
+
+M = ( soma(pesos) / (soma (pesoi/xi) ) )
+*/
+float HsTcpPollComm::mediaHarmonicaPonderada(vector<float> v)
+{
+	float sumi = 0.0f, sumx = 0.0f;
+	for( unsigned int i = 0; i < v.size(); ++i)
+	{
+		sumi += i;
+		if (v[i] != 0.0f)
+			sumx += (i/(v[i]));
+	}
+	return sumx == 0.0f ? 0.0f : sumi/sumx;
 }
 
 void logControle(std::ostream& os, unsigned int userID, EmoStateHandle eState, bool withHeader) {
