@@ -494,9 +494,8 @@ cenario.engagement = -1 pois ainda nao foram avaliados
 void HsTcpPollComm::inicializaCenariosPrimeiraGeracao(int tamanhoCenario)
 { 
 	struct CENARIO cen;
-	int tamanho_geracao = 3;
 
-	for(int i=0; i<tamanho_geracao; i++)
+	for(int i=0; i<TAMANHO_GERACAO_INICIAL; i++)
 	{
 		cen.estados = criaEstadosAleatorio(tamanhoCenario);//seta aleatoriamente os estados do cenario
 		cen.engagement = -1; //inicializa engagement com -1 pois ainda nao foi avaliado
@@ -557,30 +556,30 @@ void HsTcpPollComm::criaNovaGeracao(int qtdElementosReplicados)
 /*
 void HsTcpPollComm::verificaCondicoesDeParada()
 Criterios de parada:
-engagement >= 0.95
+engagement >= ENGAGEMENT_ALVO 0.95
 OU
-Numero de Geracoes >= 4
+Numero de Geracoes >= LIMITE_GERACOES 4
 */
 void HsTcpPollComm::verificaCondicoesDeParada()
 {
-	if (((geracaoAtual.front()).engagement) >= 0.95) 
+	if (((geracaoAtual.front()).engagement) >= ENGAGEMENT_ALVO) 
 	{
 		// geracaoAtual.front() retorna o prieiro elemento do vector geração atual, ou seja, verifica se o mais apto satisfaz a condição de parada
-		emoHandler->ofs <<"Criterio de parada atingido: Engagement Level >= 0.95:" << std::endl;
+		emoHandler->ofs <<"Criterio de parada atingido: Engagement Level >= "<< ENGAGEMENT_ALVO << std::endl;
 		emoHandler->ofs <<"Engagement Level Maximo = " << (geracaoAtual.front()).engagement  << std::endl;
 		exit(0);
 	}
 	// O  mais apto não satisfaz a condição de parada
-	if(contadorNumeroDeGeracoes>=4){ // TRANSFORMAR EM CONSTANTE
+	if(contadorNumeroDeGeracoes>=LIMITE_GERACOES){ // TRANSFORMAR EM CONSTANTE
 	// Programa para pois alcançou o numero de gerações Limite
-		emoHandler->ofs <<"Engagement Level alvo não atingindo atingido após 4 gerações: abortar" << std::endl;
+		emoHandler->ofs <<"Engagement Level alvo não atingindo atingido após " << LIMITE_GERACOES << " gerações: abortar" << std::endl;
 		emoHandler->ofs <<"Engagement Level Maximo = " << (geracaoAtual.front()).engagement  << std::endl;
 		exit(0);
 	}
 }
 
 void HsTcpPollComm::condicaoParadaEngagement(float engagement){
-	if (engagement >= 0.95) 
+	if (engagement >= ENGAGEMENT_ALVO) 
 	{
 		// geracaoAtual.front() retorna o prieiro elemento do vector geração atual, ou seja, verifica se o mais apto satisfaz a condição de parada
 		emoHandler->ofs <<"Engagement Level alvo atingido, Maior engagement:" << engagement  << std::endl;
@@ -658,9 +657,9 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 
 			//Para otimizar o tempo de execução, e não experar até a próxima chamada da função controle() já executamos o código abaixo para setar um cenario
 			//Alem de criar uma nova geração, cria 3 elementos utilizando os dois tipos de crossover,e mutação
-			 // o 4 representa o número de elementos que será replicado da geração atual, para a proxima geração, TRANSFORMAR EM CONSTANTE!!
+			 // o ELEMENTOS_REPLICADOS_PROXIMA_GERACAO igual a 4 representa o número de elementos que será replicado da geração atual, para a proxima geração, TRANSFORMAR EM CONSTANTE!!
 			std::cout <<"Criando geração de numero:  " << contadorNumeroDeGeracoes << std::endl;
-			criaNovaGeracao(4);
+			criaNovaGeracao(ELEMENTOS_REPLICADOS_PROXIMA_GERACAO);
 			
 			// retorna uma tupla que contem um cenario crossover não avaliado
 			//tuplaCenario = geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados];	
@@ -701,9 +700,9 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 			// cria nova geração
 			//Cria elementos Para Crossover, Utiliza a função crossoverDeUmPonto com os dois primeiros elementos, e crossoverMascaraAleatoria com o primeiro e com o terceiro, desse modo criamos mais 3 filhos
 			// Insere crossover na geração atual
-			// o 4 representa o número de elementos que será replicado da geração atual, para a proxima geração
+			// o ELEMENTOS_REPLICADOS_PROXIMA_GERACAO igual a 4 representa o número de elementos que será replicado da geração atual, para a proxima geração
 			std::cout <<"Criando geração de numero:  " << contadorNumeroDeGeracoes << std::endl;
-			criaNovaGeracao(4); 
+			criaNovaGeracao(ELEMENTOS_REPLICADOS_PROXIMA_GERACAO); 
 				
 			// retorna uma tupla que contem um cenario crossover não avaliado
 			//tuplaCenario = geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados];	

@@ -5,14 +5,14 @@
 #include <QTcpSocket>
 #include <QTimer>
 #include <QHostAddress>
-//GUILHERME BEGIN
+
 #include <tuple>
 #include <vector>
 #include <algorithm>
 #include <iostream>
 
 using namespace std;
-//GUILHERME END
+
 
 
 #include "EmoHandler.h"
@@ -22,6 +22,11 @@ enum TSessionState{DISCONNECTED, SENT_AUTH, CHECK_AUTH, WAITING_CONN, SENT_REQUE
 
 enum TControleFluxo{SET_CENARIOS_INICIAIS, AVALIA_CENARIOS_INICIAIS,SET_CENARIOS,AVALIA_CENARIOS,};
 
+// Definição de constantes usadas no algoritmo genético
+#define LIMITE_GERACOES 4						  // número limite de gerações
+#define ENGAGEMENT_ALVO 0.95					 // número limite de engagement
+#define TAMANHO_GERACAO_INICIAL 3				// tamanho da geração inicial
+#define ELEMENTOS_REPLICADOS_PROXIMA_GERACAO 4 // numeros de elementos replidados de uma geração para outra
 
 class HsTcpPollComm : public QObject
 {
