@@ -1,0 +1,215 @@
+Emotiv Composer start up successed. Ready to receive Emotiv signals.controle: ack = 0
+affectivEngagementBoredomVector: -6.97301e+009 
+num sinais aproveitados: 1
+Vetor entrada antes daMediaHarmonicaPonderada: -6.97301e+009 
+Vetor entrada MediaHarmonicaPonderada: -6.97301e+009 
+MediaHarmonicaPonderada: -1.#IND
+1 1 0 -1
+0 1 0 -1
+0 0 0 -1
+Cenario: 0 0 0 
+acknoledge: ack = 1
+affectivEngagementBoredomVector: 0.3 
+num sinais aproveitados: 2
+acknoledge: ack = 2
+acknoledge: ack = 3
+acknoledge: ack = 4
+acknoledge: ack = 5
+acknoledge: ack = 6
+acknoledge: ack = 7
+acknoledge: ack = 8
+acknoledge: ack = 9
+acknoledge: ack = 10
+acknoledge: ack = 11
+acknoledge: ack = 12
+acknoledge: ack = 13
+acknoledge: ack = 14
+affectivEngagementBoredomVector: 0.3 0.2 
+num sinais aproveitados: 3
+acknoledge: ack = 15
+setting ack to:  = 0
+controle: ack = 0
+Vetor entrada antes daMediaHarmonicaPonderada: 0.3 0.2 
+Vetor entrada MediaHarmonicaPonderada: 0.3 0.2 
+MediaHarmonicaPonderada: 0.2
+Engagement_level:  0.2
+Cenario: 0 1 0 
+acknoledge: ack = 1
+acknoledge: ack = 2
+acknoledge: ack = 3
+affectivEngagementBoredomVector: 0.5 
+num sinais aproveitados: 1
+acknoledge: ack = 4
+acknoledge: ack = 5
+affectivEngagementBoredomVector: 0.5 0.8 
+num sinais aproveitados: 2
+acknoledge: ack = 6
+acknoledge: ack = 7
+affectivEngagementBoredomVector: 0.5 0.8 0.6 
+num sinais aproveitados: 3
+acknoledge: ack = 8
+acknoledge: ack = 9
+acknoledge: ack = 10
+acknoledge: ack = 11
+affectivEngagementBoredomVector: 0.5 0.8 0.6 0.4 
+num sinais aproveitados: 4
+acknoledge: ack = 12
+acknoledge: ack = 13
+acknoledge: ack = 14
+affectivEngagementBoredomVector: 0.5 0.8 0.6 0.4 0.8 
+num sinais aproveitados: 5
+acknoledge: ack = 15
+setting ack to:  = 0
+controle: ack = 0
+Vetor entrada antes daMediaHarmonicaPonderada: 0.5 0.8 0.6 0.4 0.8 
+Vetor entrada MediaHarmonicaPonderada: 0.5 0.8 0.6 0.4 0.8 
+MediaHarmonicaPonderada: 0.585366
+Engagement_level:  0.585366
+Todos Cenarios Iniciais Avaliados
+Cenarios Elite:0 1 0 
+ Elite possui Engagement_level:  0.585366
+Cenario: 1 1 0 
+acknoledge: ack = 1
+acknoledge: ack = 2
+acknoledge: ack = 3
+acknoledge: ack = 4
+acknoledge: ack = 5
+acknoledge: ack = 6
+acknoledge: ack = 7
+acknoledge: ack = 8
+acknoledge: ack = 9
+acknoledge: ack = 10
+acknoledge: ack = 11
+acknoledge: ack = 12
+acknoledge: ack = 13
+acknoledge: ack = 14
+acknoledge: ack = 15
+setting ack to:  = 0
+controle: ack = 0
+Vetor entrada antes daMediaHarmonicaPonderada: 
+Vetor entrada MediaHarmonicaPonderada: 
+MediaHarmonicaPonderada: -1.#IND
+Engagement_level:  0
+Cenario: 0 0 0 
+acknoledge: ack = 1
+affectivEngagementBoredomVector: 1 
+num sinais aproveitados: 1
+acknoledge: ack = 2
+acknoledge: ack = 3
+affectivEngagementBoredomVector: 1 1 
+num sinais aproveitados: 2
+acknoledge: ack = 4
+acknoledge: ack = 5
+affectivEngagementBoredomVector: 1 1 0.7 
+num sinais aproveitados: 3
+acknoledge: ack = 6
+acknoledge: ack = 7
+acknoledge: ack = 8
+affectivEngagementBoredomVector: 1 1 0.7 0.5 
+num sinais aproveitados: 4
+acknoledge: ack = 9
+acknoledge: ack = 10
+acknoledge: ack = 11
+affectivEngagementBoredomVector: 1 1 0.7 0.5 0.7 
+num sinais aproveitados: 5
+acknoledge: ack = 12
+acknoledge: ack = 13
+acknoledge: ack = 14
+acknoledge: ack = 15
+setting ack to:  = 0
+controle: ack = 0
+Vetor entrada antes daMediaHarmonicaPonderada: 1 1 0.7 0.5 0.7 
+Vetor entrada MediaHarmonicaPonderada: 1 1 0.7 0.5 0.7 
+MediaHarmonicaPonderada: 0.642202
+Engagement_level:  0.642202
+Cenario: 0 1 0 
+acknoledge: ack = 1
+acknoledge: ack = 2
+acknoledge: ack = 3
+acknoledge: ack = 4
+acknoledge: ack = 5
+acknoledge: ack = 6
+acknoledge: ack = 7
+acknoledge: ack = 8
+affectivEngagementBoredomVector: 0.7 
+num sinais aproveitados: 1
+acknoledge: ack = 9
+acknoledge: ack = 10
+affectivEngagementBoredomVector: 0.7 0.4 
+num sinais aproveitados: 2
+acknoledge: ack = 11
+acknoledge: ack = 12
+acknoledge: ack = 13
+affectivEngagementBoredomVector: 0.7 0.4 0.1 
+num sinais aproveitados: 3
+acknoledge: ack = 14
+acknoledge: ack = 15
+setting ack to:  = 0
+controle: ack = 0
+Vetor entrada antes daMediaHarmonicaPonderada: 0.7 0.4 0.1 
+Vetor entrada MediaHarmonicaPonderada: 0.7 0.4 0.1 
+MediaHarmonicaPonderada: 0.133333
+Engagement_level:  0.133333
+Todos Cenarios do Crossover Avaliados
+Cenarios Elite:0 0 0 
+ Elite possui Engagement_level:  0.642202
+Cenario: 0 0 0 
+acknoledge: ack = 1
+acknoledge: ack = 2
+acknoledge: ack = 3
+acknoledge: ack = 4
+acknoledge: ack = 5
+acknoledge: ack = 6
+acknoledge: ack = 7
+acknoledge: ack = 8
+acknoledge: ack = 9
+acknoledge: ack = 10
+acknoledge: ack = 11
+acknoledge: ack = 12
+acknoledge: ack = 13
+acknoledge: ack = 14
+acknoledge: ack = 15
+setting ack to:  = 0
+controle: ack = 0
+Vetor entrada antes daMediaHarmonicaPonderada: 
+Vetor entrada MediaHarmonicaPonderada: 
+MediaHarmonicaPonderada: -1.#IND
+Engagement_level:  0
+Cenario: 0 1 0 
+acknoledge: ack = 1
+acknoledge: ack = 2
+acknoledge: ack = 3
+acknoledge: ack = 4
+acknoledge: ack = 5
+acknoledge: ack = 6
+acknoledge: ack = 7
+acknoledge: ack = 8
+acknoledge: ack = 9
+acknoledge: ack = 10
+acknoledge: ack = 11
+acknoledge: ack = 12
+acknoledge: ack = 13
+acknoledge: ack = 14
+acknoledge: ack = 15
+setting ack to:  = 0
+controle: ack = 0
+Vetor entrada antes daMediaHarmonicaPonderada: 
+Vetor entrada MediaHarmonicaPonderada: 
+MediaHarmonicaPonderada: -1.#IND
+Engagement_level:  0
+Cenario: 0 0 0 
+acknoledge: ack = 1
+acknoledge: ack = 2
+acknoledge: ack = 3
+acknoledge: ack = 4
+acknoledge: ack = 5
+affectivEngagementBoredomVector: 0.1 
+num sinais aproveitados: 1
+acknoledge: ack = 6
+acknoledge: ack = 7
+acknoledge: ack = 8
+acknoledge: ack = 9
+acknoledge: ack = 10
+acknoledge: ack = 11
+acknoledge: ack = 12
+acknoledge: ack = 13

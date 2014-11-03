@@ -37,6 +37,7 @@ public:
 	TSessionState sessionState;
 	TControleFluxo controleFluxo;
 	int ack;
+	int cont_sinal;
 	EmoHandler* emoHandler;
 	void controle();
 	void write_vec(const vector<int>& vec);
@@ -57,6 +58,7 @@ public:
 
 	void printCenario(const vector<int> &v);                            // Imprime um estado do tipo vector<int>
 	void printPopulacao(const VectorCenarios populacao);                              // Imprime a população de uma geração
+	void printVector (const vector<float> &v);
 	
 	crossoverEstados HsTcpPollComm::crossoverDeUmPonto(Estados estado1,Estados estado2);   // Implementação do crossover devolve os dois novos estados que são a recombinação de seus pais
 	Estados HsTcpPollComm::crossoverMascaraAleatoria(Estados estados1,Estados estados2);	   // Implementação do crossover devolve os dois ovos estados

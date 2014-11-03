@@ -52,6 +52,7 @@ QObject(parent)
 	resposta_pronta = false;
 	controleFluxo = SET_CENARIOS_INICIAIS;
 	ack = 0;
+	cont_sinal = 0;
 	// tcp signals
 	connect(&tcpSocket, SIGNAL(connected()),this,SLOT(tcpOnConnect()));
 	connect(&tcpSocket, SIGNAL(disconnected()), this, SLOT(tcpOnDisconnect()));
@@ -59,7 +60,7 @@ QObject(parent)
 	connect(&tcpSocket, SIGNAL(readyRead()), this, SLOT(tcpOnRead()));
 	// timer signals
 	connect(&pollTimer, SIGNAL(timeout()), this, SLOT(pollProcess()));
-	pollTimer.start(1000);
+	pollTimer.start(2000);
 }
 
 bool HsTcpPollComm::tcpConnect(QString host, int port)
@@ -122,12 +123,23 @@ void HsTcpPollComm::pollProcess(void)
 		qDebug() << "SENT_REQUEST";
 		{
 			if (ack == 0){
-				qDebug() << "controle: ack = " << ack;
+				emoHandler->ofs << "controle: ack = " << ack << std::endl;
 				//pega o ultimo valor de engagement e poe no vector
 				const float eng_temp = emoHandler->emoAffectivEngagementBoredom();
 				if (eng_temp != -1)
+				{
 					emoHandler->affectivEngagementBoredomVector.push_back(eng_temp);
+					emoHandler->ofs <<"affectivEngagementBoredomVector: ";
+					printVector(emoHandler->affectivEngagementBoredomVector);
+					emoHandler->ofs << std::endl;
+					cont_sinal ++;
+					emoHandler->ofs <<"num sinais aproveitados: " << cont_sinal << std::endl;
+
+				}
 				//faz a media do vector e tem o engagement do cenario anterior
+				emoHandler->ofs <<"Vetor entrada antes daMediaHarmonicaPonderada: ";
+					printVector(emoHandler->affectivEngagementBoredomVector);
+					emoHandler->ofs << std::endl;
 				emoHandler->affectivEngagementBoredom = mediaHarmonicaPonderada(emoHandler->affectivEngagementBoredomVector);
 				qDebug() << "emoHandler->affectivEngagementBoredom " << emoHandler->affectivEngagementBoredom;
 				//limpa o vector de engagements para comecar um vector novo com o novo cenario
@@ -136,21 +148,36 @@ void HsTcpPollComm::pollProcess(void)
 				ack ++; 
 			}
 			else if (ack > 0){
-				qDebug() << "acknoledge: ack = " << ack;
+				emoHandler->ofs << "acknoledge: ack = " << ack<< std::endl;
 				//tcpSocket.write(makeGetUnit(&unit,1).toLatin1()); //send ack
 				setUnit(1,1); //manda ack
 				const float eng_temp = emoHandler->emoAffectivEngagementBoredom();
 				if (eng_temp != -1)
+				{
 					emoHandler->affectivEngagementBoredomVector.push_back(eng_temp);
+					emoHandler->ofs <<"affectivEngagementBoredomVector: ";
+					printVector(emoHandler->affectivEngagementBoredomVector);
+					emoHandler->ofs << std::endl;
+					cont_sinal ++;
+					emoHandler->ofs <<"num sinais aproveitados: " << cont_sinal << std::endl;
+				}
 				ack++; 
-				if (ack >= 4) {
-					qDebug() << "acknoledge: ack = " << ack;
+				if (ack >= 15) {
+					emoHandler->ofs << "acknoledge: ack = " << ack<< std::endl;
 					const float eng_temp = emoHandler->emoAffectivEngagementBoredom();
 					if (eng_temp != -1)
+					{
 						emoHandler->affectivEngagementBoredomVector.push_back(eng_temp);
+						emoHandler->ofs <<"affectivEngagementBoredomVector: ";
+						printVector(emoHandler->affectivEngagementBoredomVector);
+						emoHandler->ofs << std::endl;
+						cont_sinal ++;
+						emoHandler->ofs <<"num sinais aproveitados: " << cont_sinal << std::endl;
+					}
 					
 					ack = 0;
-					qDebug() << "setting ack to:  = " << ack;
+					emoHandler->ofs << "setting ack to:  = " << ack << std::endl;
+					cont_sinal = 0;
 				}
 			}
 		sessionState = WAITING_RESPONSE;
@@ -356,8 +383,6 @@ QString HsTcpPollComm::CryptPass(char * szPassword)
 
 /////////////////////////////////////
 
-
-/////////GUILHERME BEGIN//////////////////
 /*
 printCenario (const vector<int>& v)
 Imprimie vetor v em emoHandler->ofs
@@ -373,6 +398,13 @@ void HsTcpPollComm::printCenario (const vector<int> &v)
 {
 
 	for( std::vector<int>::const_iterator i = v.begin(); i != v.end(); ++i)
+		emoHandler->ofs << *i << ' ';
+}
+
+void HsTcpPollComm::printVector (const vector<float> &v)
+{
+
+	for( std::vector<float>::const_iterator i = v.begin(); i != v.end(); ++i)
 		emoHandler->ofs << *i << ' ';
 }
 
@@ -743,12 +775,17 @@ M = ( soma(pesos) / (soma (pesoi/xi) ) )
 float HsTcpPollComm::mediaHarmonicaPonderada(vector<float> v)
 {
 	float sumi = 0.0f, sumx = 0.0f;
+
+	emoHandler->ofs <<"Vetor entrada MediaHarmonicaPonderada: ";
+	printVector(v);
+	emoHandler->ofs << std::endl;
 	for( unsigned int i = 0; i < v.size(); ++i)
 	{
 		sumi += i;
 		if (v[i] != 0.0f)
 			sumx += (i/(v[i]));
 	}
+	emoHandler->ofs <<"MediaHarmonicaPonderada: " << sumi/sumx << std::endl;
 	return sumx == 0.0f ? 0.0f : sumi/sumx;
 }
 

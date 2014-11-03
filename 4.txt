@@ -1,0 +1,158 @@
+Emotiv Composer start up successed. Ready to receive Emotiv signals.controle: ack = 0
+affectivEngagementBoredomVector: -6.97301e+009 
+Vetor entrada antes daMediaHarmonicaPonderada: -6.97301e+009 
+Vetor entrada MediaHarmonicaPonderada: -6.97301e+009 
+MediaHarmonicaPonderada: -1.#IND
+1 1 0 -1
+0 1 0 -1
+0 0 0 -1
+Cenario: 0 0 0 
+acknoledge: ack = 1
+affectivEngagementBoredomVector: 0.5 
+acknoledge: ack = 2
+affectivEngagementBoredomVector: 0.5 0.3 
+acknoledge: ack = 3
+affectivEngagementBoredomVector: 0.5 0.3 0.5 
+acknoledge: ack = 4
+setting ack to:  = 0
+controle: ack = 0
+affectivEngagementBoredomVector: 0.5 0.3 0.5 0.7 
+Vetor entrada antes daMediaHarmonicaPonderada: 0.5 0.3 0.5 0.7 
+Vetor entrada MediaHarmonicaPonderada: 0.5 0.3 0.5 0.7 
+MediaHarmonicaPonderada: 0.516393
+Engagement_level:  0.516393
+Cenario: 0 1 0 
+acknoledge: ack = 1
+acknoledge: ack = 2
+acknoledge: ack = 3
+affectivEngagementBoredomVector: 0.4 
+acknoledge: ack = 4
+setting ack to:  = 0
+controle: ack = 0
+Vetor entrada antes daMediaHarmonicaPonderada: 0.4 
+Vetor entrada MediaHarmonicaPonderada: 0.4 
+MediaHarmonicaPonderada: -1.#IND
+Engagement_level:  0
+Todos Cenarios Iniciais Avaliados
+Cenarios Elite:0 0 0 
+ Elite possui Engagement_level:  0.516393
+Cenario: 1 0 0 
+acknoledge: ack = 1
+acknoledge: ack = 2
+affectivEngagementBoredomVector: 0.1 
+acknoledge: ack = 3
+affectivEngagementBoredomVector: 0.1 0 
+acknoledge: ack = 4
+setting ack to:  = 0
+controle: ack = 0
+affectivEngagementBoredomVector: 0.1 0 0 
+Vetor entrada antes daMediaHarmonicaPonderada: 0.1 0 0 
+Vetor entrada MediaHarmonicaPonderada: 0.1 0 0 
+MediaHarmonicaPonderada: 1.#INF
+Engagement_level:  0
+Cenario: 0 0 0 
+acknoledge: ack = 1
+affectivEngagementBoredomVector: 0 
+acknoledge: ack = 2
+affectivEngagementBoredomVector: 0 0 
+acknoledge: ack = 3
+acknoledge: ack = 4
+setting ack to:  = 0
+controle: ack = 0
+Vetor entrada antes daMediaHarmonicaPonderada: 0 0 
+Vetor entrada MediaHarmonicaPonderada: 0 0 
+MediaHarmonicaPonderada: 1.#INF
+Engagement_level:  0
+Cenario: 0 0 1 
+acknoledge: ack = 1
+affectivEngagementBoredomVector: 0.2 
+acknoledge: ack = 2
+acknoledge: ack = 3
+affectivEngagementBoredomVector: 0.2 0.5 
+acknoledge: ack = 4
+setting ack to:  = 0
+controle: ack = 0
+Vetor entrada antes daMediaHarmonicaPonderada: 0.2 0.5 
+Vetor entrada MediaHarmonicaPonderada: 0.2 0.5 
+MediaHarmonicaPonderada: 0.5
+Engagement_level:  0.5
+Todos Cenarios do Crossover Avaliados
+Cenarios Elite:0 0 0 
+ Elite possui Engagement_level:  0.516393
+Cenario: 0 0 0 
+acknoledge: ack = 1
+acknoledge: ack = 2
+affectivEngagementBoredomVector: 0.9 
+acknoledge: ack = 3
+acknoledge: ack = 4
+setting ack to:  = 0
+controle: ack = 0
+Vetor entrada antes daMediaHarmonicaPonderada: 0.9 
+Vetor entrada MediaHarmonicaPonderada: 0.9 
+MediaHarmonicaPonderada: -1.#IND
+Engagement_level:  0
+Cenario: 0 0 1 
+acknoledge: ack = 1
+affectivEngagementBoredomVector: 0.6 
+acknoledge: ack = 2
+acknoledge: ack = 3
+acknoledge: ack = 4
+setting ack to:  = 0
+controle: ack = 0
+Vetor entrada antes daMediaHarmonicaPonderada: 0.6 
+Vetor entrada MediaHarmonicaPonderada: 0.6 
+MediaHarmonicaPonderada: -1.#IND
+Engagement_level:  0
+Cenario: 0 0 0 
+acknoledge: ack = 1
+acknoledge: ack = 2
+acknoledge: ack = 3
+acknoledge: ack = 4
+setting ack to:  = 0
+controle: ack = 0
+Vetor entrada antes daMediaHarmonicaPonderada: 
+Vetor entrada MediaHarmonicaPonderada: 
+MediaHarmonicaPonderada: -1.#IND
+Engagement_level:  0
+Todos Cenarios do Crossover Avaliados
+Cenarios Elite:0 0 0 
+ Elite possui Engagement_level:  0.516393
+Cenario: 0 1 0 
+acknoledge: ack = 1
+acknoledge: ack = 2
+acknoledge: ack = 3
+affectivEngagementBoredomVector: 0.6 
+acknoledge: ack = 4
+setting ack to:  = 0
+controle: ack = 0
+Vetor entrada antes daMediaHarmonicaPonderada: 0.6 
+Vetor entrada MediaHarmonicaPonderada: 0.6 
+MediaHarmonicaPonderada: -1.#IND
+Engagement_level:  0
+Cenario: 0 0 1 
+acknoledge: ack = 1
+acknoledge: ack = 2
+acknoledge: ack = 3
+acknoledge: ack = 4
+setting ack to:  = 0
+controle: ack = 0
+Vetor entrada antes daMediaHarmonicaPonderada: 
+Vetor entrada MediaHarmonicaPonderada: 
+MediaHarmonicaPonderada: -1.#IND
+Engagement_level:  0
+Cenario: 0 0 0 
+acknoledge: ack = 1
+acknoledge: ack = 2
+acknoledge: ack = 3
+acknoledge: ack = 4
+setting ack to:  = 0
+controle: ack = 0
+Vetor entrada antes daMediaHarmonicaPonderada: 
+Vetor entrada MediaHarmonicaPonderada: 
+MediaHarmonicaPonderada: -1.#IND
+Engagement_level:  0
+Todos Cenarios do Crossover Avaliados
+Cenarios Elite:0 0 0 
+ Elite possui Engagement_level:  0.516393
+Engagement Level alvo não atingindo atingido após 4 gerações: abortar
+Engagement Level Maximo = 0.516393
