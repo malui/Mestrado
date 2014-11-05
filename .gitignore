@@ -14,3 +14,10 @@ Release/HsSystembox.log
 Release/hstcppollcomm.obj
 *.obj
 ipch/hssystembox-6285547d/hssystembox-f7ffc1ef.ipch
+HsSystembox.suo
+HsSystembox.sdf
+HsSystembox.suo
+ipch/hssystembox-1720b87f/hssystembox-f7ffc1ef.ipch
+*.ipch
+*.tlog
+Release/moc_hstcppollcomm.obj

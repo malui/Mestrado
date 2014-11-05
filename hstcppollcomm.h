@@ -91,7 +91,30 @@ public:
 	int contadorCrossoversNaoAvaliados; // armazena o numero de cenarios que sairam do crossover e ainda não foram avaliados
 	int contadorNumeroDeGeracoes;		// Controla o numero de gerações
 
+	std::vector<int> codCenariosExistentes;
 	
+	//Inicializa com 0 em todas as posições o codificador de cenarios existentes com um numero de posições igual a 2^(tamanhoCenario) 
+	void inicializaCodificadorCenariosExistentes(int tamanhoCenario);
+	// Recebe um cenario, usa codificaCenario() para codificar, e verifica se cenario já existe
+	bool isCenarioRepetido(Estados estado);
+
+	//faz uma codificacao por posicao, caso a primeira posicao esteja peenchida, somamos 1, 
+	//caso a segunda somamos 2, caso a terceira somamos 4, e assim por diante  
+	// dessa forma temos uma codificação em potencia de 2 baseada nas posições que devolve 
+	//um código único para o estado recebido
+	int codificaCenario(Estados estado);
+
+	//chamada quando se tem certeza que o cenario existe para ser inserido ao vectod codCenariosExistentes
+	void insereCenarioCodificador(Estados estado);
+
+	//faz o inverso da função codificacao, a partir de um numero descodifica em zeros e uns
+	Estados decodificaCenario(int codificacao);
+
+	// resgata do vetor codCenariosExixtentes um cenario ainda não usado e o retorn
+	Estados getCenarioNaoUsado();
+
+	//Transforma um valor inteiro para binario e returna na forma de um vetor
+	HsTcpPollComm::Estados HsTcpPollComm::toBinary(int number);
 
 // end public
 signals:
