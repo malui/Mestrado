@@ -517,6 +517,81 @@ std::vector<int> HsTcpPollComm::criaEstadosAleatorio(int tamanhoEstados)  // cri
 	return estados;
 }
 
+
+//Inicializa com 0 em todas as posições o codificador de cenarios existentes com um numero de posições igual a 2^(tamanhoCenario)  
+void HsTcpPollComm::inicializaCodificadorCenariosExistentes(int tamanhoCenario){
+	for(int i=0; i<pow(double(2),double(tamanhoCenario)); i++)
+	{
+		codCenariosExistentes.push_back(0);	
+	}
+}
+
+//chamada quando se tem certeza que o cenario existe para ser inserido ao vectod codCenariosExistentes
+void HsTcpPollComm::insereCenarioCodificador(std::vector<int> cenario){
+	codCenariosExistentes[codificaCenario(cenario)]++; 
+}
+
+// Recebe um cenario, usa codificaCenario() para codificar, e verifica se cenario já existe
+bool HsTcpPollComm::isCenarioRepetido(std::vector<int> cenario){
+	if (codCenariosExistentes[codificaCenario(cenario)]>0)
+		return true;
+	else
+		return false;
+}
+
+//faz uma codificacao por posicao, caso a primeira posicao esteja peenchida, somamos 1, 
+//caso a segunda somamos 2, caso a terceira somamos 4, e assim por diante  
+// dessa forma temos uma codificação em potencia de 2 baseada nas posições que devolve 
+//um código único para o estado recebido
+int HsTcpPollComm::codificaCenario(std::vector<int> cenario){
+	int codificacao = 0;
+	for(int i=0; i<cenario.size(); i++)
+	{
+		if (cenario[i] == 1)
+			codificacao = codificacao + pow(double(2),double(i));
+	}
+	return codificacao;
+}
+
+//faz o inverso da função codificacao, a partir de um numero descodifica em zeros e uns
+HsTcpPollComm::Estados HsTcpPollComm::decodificaCenario(int codificacao){
+	Estados cenario; 
+	cenario = toBinary(codificacao); // NÃO ESTA COM O TAMANHO CERTO
+	// preencher com zeros o vertor cenario atéque ele atinja o tamanho tamanhoCenario(pegar de algum lugar ???)
+	return cenario;
+}
+
+//Transforma um valor inteiro para binario e returna na forma de um vetor
+HsTcpPollComm::Estados HsTcpPollComm::toBinary(int number) {
+	int remainder;
+	Estados cenario;
+
+	if(number <= 1) {
+		cenario.push_back(number);
+		return cenario;
+	}
+
+	remainder = number%2;  // % - operação resto de divisão 
+	toBinary(number >> 1);
+	cenario.push_back(remainder);;
+
+}
+
+// resgata do vetor codCenariosExixtentes um cenario ainda não usado e o retorn
+HsTcpPollComm::Estados HsTcpPollComm::getCenarioNaoUsado(){
+	int codificacao;
+	for(int i=0; i<codCenariosExistentes.size(); i++)
+	{
+		if (codCenariosExistentes[i] == 0)
+			return decodificaCenario(i);
+	}
+
+	// Representa a utilização de todos os cenarios
+	Estados todosCenariosUsados;
+	todosCenariosUsados.push_back(-1);
+	return todosCenariosUsados;
+}
+
 /*
 void HsTcpPollComm::inicializaCenariosPrimeiraGeracao(int tamanhoCenario)
 Inicializa a primeira geração de cenarios
@@ -530,6 +605,13 @@ void HsTcpPollComm::inicializaCenariosPrimeiraGeracao(int tamanhoCenario)
 	for(int i=0; i<TAMANHO_GERACAO_INICIAL; i++)
 	{
 		cen.estados = criaEstadosAleatorio(tamanhoCenario);//seta aleatoriamente os estados do cenario
+		while(isCenarioRepetido(cen.estados)){	// Faz mutação até encontrar um estado não existente
+			cen.estados = mutacao(cen.estados);
+			if(isCenarioRepetido(cen.estados))
+				cen.estados = getCenarioNaoUsado();
+		}
+		insereCenarioCodificador(cen.estados);
+
 		cen.engagement = -1; //inicializa engagement com -1 pois ainda nao foi avaliado
 		geracaoAtual.push_back(cen);
 	}
@@ -567,6 +649,14 @@ void HsTcpPollComm::criaNovaGeracao(int qtdElementosReplicados)
 	
 	// cria estadosFilho1 com crossoverMascaraAleatoria
 	cen.estados = crossoverMascaraAleatoria(geracaoAtual[0].estados ,geracaoAtual[2].estados);
+
+	while(isCenarioRepetido(cen.estados)){	// Faz mutação até encontrar um estado não existente
+			cen.estados = mutacao(cen.estados);
+			if(isCenarioRepetido(cen.estados))
+				cen.estados = getCenarioNaoUsado();
+		}
+	insereCenarioCodificador(cen.estados);
+
 	//cen.estados = estadosFilho1;
 	geracaoAtual.push_back(cen); //insere novo cenario (estadosFilho1 , -1) na geracaoAtual
 	contadorCrossoversNaoAvaliados++;		//incrementa o numeor de cenarios criados com crossover que ainda devem ser avaliados
@@ -576,10 +666,28 @@ void HsTcpPollComm::criaNovaGeracao(int qtdElementosReplicados)
 	tuplaCrossoverEstados = crossoverDeUmPonto(geracaoAtual[0].estados ,geracaoAtual[1].estados); 
 
 	cen.estados = std::get<0>(tuplaCrossoverEstados);
+	
+	while(isCenarioRepetido(cen.estados)){	// Faz mutação até encontrar um estado não existente
+			cen.estados = mutacao(cen.estados);
+			if(isCenarioRepetido(cen.estados))
+				cen.estados = getCenarioNaoUsado();
+	}
+	insereCenarioCodificador(cen.estados);
+	
 	geracaoAtual.push_back(cen);  // Insere crossover na geração atual
 	contadorCrossoversNaoAvaliados++;		//incrementa o numeor de cenarios criados com crossover que ainda devem ser avaliados
 
+
+
 	cen.estados = std::get<1>(tuplaCrossoverEstados);
+	
+	while(isCenarioRepetido(cen.estados)){	// Faz mutação até encontrar um estado não existente
+			cen.estados = mutacao(cen.estados);
+			if(isCenarioRepetido(cen.estados))
+				cen.estados = getCenarioNaoUsado();
+	}
+	insereCenarioCodificador(cen.estados);
+	
 	geracaoAtual.push_back(cen);  // Insere crossover na geração atual
 	contadorCrossoversNaoAvaliados++;		//incrementa o numeor de cenarios criados com crossover que ainda devem ser avaliados
 
