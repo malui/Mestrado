@@ -1,13 +1,7 @@
-Emotiv Composer start up successed. Ready to receive Emotiv signals.1 1 0 -1
-0 1 0 -1
-0 0 0 -1
-Cenario: 0 0 0 
-Engagement_level:  -1
-Cenario: 0 1 0 
-Engagement_level:  -7.5
-Todos Cenarios Iniciais Avaliados
-Cenarios Elite:1 1 0 
- Elite possui Engagement_level:  -1
-Cenario: 0 1 0 
-Engagement_level:  3
-Engagement Level alvo atingido, Maior engagement:3
+Emotiv Composer start up successed. Ready to receive Emotiv signals.controle: ack = 0
+affectivEngagementBoredomVector: -6.97301e+009 
+num sinais aproveitados: 1
+Vetor entrada antes daMediaHarmonicaPonderada: -6.97301e+009 
+Vetor entrada MediaHarmonicaPonderada: -6.97301e+009 
+MediaHarmonicaPonderada divisao por zero, retornando valor zero
+Dentro da controle()

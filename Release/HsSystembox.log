@@ -1,4 +1,4 @@
-﻿Build started 11/5/2014 4:47:42 PM.
+﻿Build started 11/5/2014 7:13:53 PM.
      1>Project "C:\Users\Public\Documents\mestrado\dissertacao\Implementacao C\HsSystembox\HsSystembox.vcxproj" on node 2 (rebuild target(s)).
      1>_PrepareForClean:
          Deleting file "Release\HsSystembox.lastbuildstate".
@@ -18,7 +18,7 @@
          hstcppollcomm.cpp
          main.cpp
          Generating Code...
-     1>c:\users\public\documents\mestrado\dissertacao\implementacao c\hssystembox\hstcppollcomm.cpp(583): warning C4715: 'HsTcpPollComm::toBinary' : not all control paths return a value
+     1>c:\users\public\documents\mestrado\dissertacao\implementacao c\hssystembox\hstcppollcomm.cpp(588): warning C4715: 'HsTcpPollComm::toBinary' : not all control paths return a value
          c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I.\GeneratedFiles /I. /IC:\Qt\Qt5.3.1\5.3\msvc2010_opengl\include /I.\GeneratedFiles\Release /IC:\Qt\Qt5.3.1\5.3\msvc2010_opengl\include\QtCore /IC:\Qt\Qt5.3.1\5.3\msvc2010_opengl\include\QtGui /IC:\Qt\Qt5.3.1\5.3\msvc2010_opengl\include\QtNetwork /IC:\Qt\Qt5.3.1\5.3\msvc2010_opengl\include\QtWidgets /nologo /W1 /WX- /O2 /Oy- /D UNICODE /D WIN32 /D WIN64 /D QT_DLL /D QT_NO_DEBUG /D NDEBUG /D QT_CORE_LIB /D QT_GUI_LIB /D QT_NETWORK_LIB /D QT_WIDGETS_LIB /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt GeneratedFiles\qrc_hssystembox.cpp
          qrc_hssystembox.cpp
        Link:
@@ -38,4 +38,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:16.24
+Time Elapsed 00:00:16.31

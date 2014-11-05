@@ -24,7 +24,7 @@ enum TControleFluxo{SET_CENARIOS_INICIAIS, AVALIA_CENARIOS_INICIAIS,SET_CENARIOS
 
 // Definição de constantes usadas no algoritmo genético
 #define LIMITE_GERACOES 4						  // número limite de gerações
-#define ENGAGEMENT_ALVO 0.95					 // número limite de engagement
+//#define ENGAGEMENT_ALVO 0.95					 // número limite de engagement
 #define TAMANHO_GERACAO_INICIAL 3				// tamanho da geração inicial
 #define ELEMENTOS_REPLICADOS_PROXIMA_GERACAO 4 // numeros de elementos replidados de uma geração para outra
 
@@ -43,6 +43,7 @@ public:
 	TControleFluxo controleFluxo;
 	int ack;
 	int cont_sinal;
+	float treshold;
 	EmoHandler* emoHandler;
 	void controle();
 	void write_vec(const vector<int>& vec);

@@ -53,6 +53,7 @@ QObject(parent)
 	controleFluxo = SET_CENARIOS_INICIAIS;
 	ack = 0;
 	cont_sinal = 0;
+	treshold = 0.9;
 	// tcp signals
 	connect(&tcpSocket, SIGNAL(connected()),this,SLOT(tcpOnConnect()));
 	connect(&tcpSocket, SIGNAL(disconnected()), this, SLOT(tcpOnDisconnect()));
@@ -162,7 +163,7 @@ void HsTcpPollComm::pollProcess(void)
 					emoHandler->ofs <<"num sinais aproveitados: " << cont_sinal << std::endl;
 				}
 				ack++; 
-				if (ack >= 15) {
+				if (ack >= 5) {
 					emoHandler->ofs << "acknoledge: ack = " << ack<< std::endl;
 					const float eng_temp = emoHandler->emoAffectivEngagementBoredom();
 					if (eng_temp != -1)
@@ -535,7 +536,11 @@ void HsTcpPollComm::insereCenarioCodificador(std::vector<int> cenario){
 
 // Recebe um cenario, usa codificaCenario() para codificar, e verifica se cenario já existe
 bool HsTcpPollComm::isCenarioRepetido(std::vector<int> cenario){
-		
+		emoHandler->ofs <<"isCenarioRepetido() 1" << std::endl;
+	qDebug() <<"isCenarioRepetido() 1";
+
+	emoHandler->ofs <<"codCenariosExistentes[codificaCenario(cenario)]" << codCenariosExistentes[codificaCenario(cenario)]<< std::endl;
+	qDebug() <<"codCenariosExistentes[codificaCenario(cenario)]" << codCenariosExistentes[codificaCenario(cenario)];
 	if (codCenariosExistentes[codificaCenario(cenario)]>0){
 		return true; }
 	else
@@ -582,18 +587,33 @@ HsTcpPollComm::Estados HsTcpPollComm::toBinary(int number) {
 
 }
 
-// resgata do vetor codCenariosExixtentes um cenario ainda não usado e o retorn
+/* resgata do vetor codCenariosExixtentes um cenario ainda não usado e o retorn
+
+Quando todos os cenarios ja foram usados, retorna um vector com {-1}
+*/
 HsTcpPollComm::Estados HsTcpPollComm::getCenarioNaoUsado( int tamanhoEstadosCenario){
 	int codificacao;
+
+	emoHandler->ofs <<"dentro de getCenarioNaoUsado" << std::endl;
+	qDebug() <<"dentro de getCenarioNaoUsado";
+
 	for(int i=0; i<codCenariosExistentes.size(); i++)
 	{
 		if (codCenariosExistentes[i] == 0)
+			emoHandler->ofs <<"dentro de getCenarioNaoUsado 1" << std::endl;
+			qDebug() <<"dentro de getCenarioNaoUsado 1";
 			return decodificaCenario(i, tamanhoEstadosCenario);
 	}
 
 	// Representa a utilização de todos os cenarios
+	emoHandler->ofs <<"dentro de getCenarioNaoUsado 2" << std::endl;
+	qDebug() <<"dentro de getCenarioNaoUsado 2";
 	Estados todosCenariosUsados;
 	todosCenariosUsados.push_back(-1);
+
+	emoHandler->ofs <<"todosCenariosUsados:" << todosCenariosUsados[0] << std::endl;
+	qDebug() <<"todosCenariosUsados:" << todosCenariosUsados[0];
+
 	return todosCenariosUsados;
 }
 
@@ -611,12 +631,12 @@ void HsTcpPollComm::inicializaCenariosPrimeiraGeracao(int tamanhoCenario)
 	{
 		cen.estados = criaEstadosAleatorio(tamanhoCenario);//seta aleatoriamente os estados do cenario
 
-		while(isCenarioRepetido(cen.estados)){	// Faz mutação até encontrar um estado não existente
+	/*	while(isCenarioRepetido(cen.estados)){	// Faz mutação até encontrar um estado não existente
 			cen.estados = mutacao(cen.estados);
 
 			if(isCenarioRepetido(cen.estados))
 				cen.estados = getCenarioNaoUsado(tamanhoCenario);
-		}
+		}*/
 		insereCenarioCodificador(cen.estados);
 
 		cen.engagement = -1; //inicializa engagement com -1 pois ainda nao foi avaliado
@@ -634,10 +654,14 @@ Cria elementos Para Crossover e criar mais 3 filhos:
 */
 void HsTcpPollComm::criaNovaGeracao(int qtdElementosReplicados)
 { 
+
 	struct CENARIO cen;
 	cen.engagement = -1;
 	geracaoPassada.swap(geracaoAtual);			// geração passada passa a ser a geração atual
 	geracaoAtual.clear();						// geração atual é limpa
+
+	emoHandler->ofs <<"dentro de criaNovaGeracao()" << std::endl;
+	qDebug() <<"dentro de criaNovaGeracao()";
 
 	// inicializa geracaoAtual com 'qtdElementosReplicados' número de elementos da geração inicial 
 	//(que serão replicados para a próxima geração)
@@ -656,13 +680,28 @@ void HsTcpPollComm::criaNovaGeracao(int qtdElementosReplicados)
 	
 	// cria estadosFilho1 com crossoverMascaraAleatoria
 	cen.estados = crossoverMascaraAleatoria(geracaoAtual[0].estados ,geracaoAtual[2].estados);
+	emoHandler->ofs <<"dentro de criaNovaGeracao()0.1" << std::endl;
+	qDebug() <<"dentro de criaNovaGeracao()0.1";
 
 	while(isCenarioRepetido(cen.estados)){	// Faz mutação até encontrar um estado não existente
 			cen.estados = mutacao(cen.estados);
 			if(isCenarioRepetido(cen.estados))
-				cen.estados = getCenarioNaoUsado(cen.estados.size());
+			{
+				if ( getCenarioNaoUsado(cen.estados.size())[0] == -1) //todos os cenarios foram usados
+				{
+					//Usa cenario de maior engagement
+					//novo treshold para maior engagement encontrado
+					treshold = (geracaoAtual.front()).engagement;
+					condicaoParadaEngagement(treshold);
+				}
+				else
+					cen.estados = getCenarioNaoUsado(cen.estados.size());
+			}
 		}
 	insereCenarioCodificador(cen.estados);
+
+	emoHandler->ofs <<"dentro de criaNovaGeracao() 1" << std::endl;
+	qDebug() <<"dentro de criaNovaGeracao() 1";
 
 	//cen.estados = estadosFilho1;
 	geracaoAtual.push_back(cen); //insere novo cenario (estadosFilho1 , -1) na geracaoAtual
@@ -673,27 +712,66 @@ void HsTcpPollComm::criaNovaGeracao(int qtdElementosReplicados)
 	tuplaCrossoverEstados = crossoverDeUmPonto(geracaoAtual[0].estados ,geracaoAtual[1].estados); 
 
 	cen.estados = std::get<0>(tuplaCrossoverEstados);
+
+	emoHandler->ofs <<"dentro de criaNovaGeracao() 2" << std::endl;
+	qDebug() <<"dentro de criaNovaGeracao() 2";
 	
 	while(isCenarioRepetido(cen.estados)){	// Faz mutação até encontrar um estado não existente
 			cen.estados = mutacao(cen.estados);
-			if(isCenarioRepetido(cen.estados))
-				cen.estados = getCenarioNaoUsado(cen.estados.size());
+			emoHandler->ofs <<"dentro de criaNovaGeracao() 2.1" << std::endl;
+	qDebug() <<"dentro de criaNovaGeracao() 2.1";
+			if(isCenarioRepetido(cen.estados)){
+				emoHandler->ofs <<"dentro de criaNovaGeracao() 2.1.1" << std::endl;
+				qDebug() <<"dentro de criaNovaGeracao() 2.1.1";
+
+				emoHandler->ofs <<"getCenarioNaoUsado(cen.estados.size())[0] =" << getCenarioNaoUsado(cen.estados.size())[0] << std::endl;
+				qDebug() <<"getCenarioNaoUsado(cen.estados.size())[0] =" << getCenarioNaoUsado(cen.estados.size())[0];
+				//cen.estados = getCenarioNaoUsado(cen.estados.size());
+				if ( getCenarioNaoUsado(cen.estados.size())[0] == -1) //todos os cenarios foram usados
+				{
+					//Usa cenario de maior engagement
+					//novo treshold para maior engagement encontrado
+					treshold = (geracaoAtual.front()).engagement;
+					condicaoParadaEngagement(treshold);
+				}
+				else
+					cen.estados = getCenarioNaoUsado(cen.estados.size());
+			emoHandler->ofs <<"dentro de criaNovaGeracao() 2.1.1.1" << std::endl;
+				qDebug() <<"dentro de criaNovaGeracao() 2.1.1.1";}
 	}
+	emoHandler->ofs <<"dentro de criaNovaGeracao() 2.2" << std::endl;
+	qDebug() <<"dentro de criaNovaGeracao() 2.2";
 	insereCenarioCodificador(cen.estados);
+	emoHandler->ofs <<"dentro de criaNovaGeracao() 2.3" << std::endl;
+	qDebug() <<"dentro de criaNovaGeracao() 2.3";
 	
 	geracaoAtual.push_back(cen);  // Insere crossover na geração atual
 	contadorCrossoversNaoAvaliados++;		//incrementa o numeor de cenarios criados com crossover que ainda devem ser avaliados
 
-
+	emoHandler->ofs <<"dentro de criaNovaGeracao() 3" << std::endl;
+	qDebug() <<"dentro de criaNovaGeracao() 3";
 
 	cen.estados = std::get<1>(tuplaCrossoverEstados);
 	
 	while(isCenarioRepetido(cen.estados)){	// Faz mutação até encontrar um estado não existente
 			cen.estados = mutacao(cen.estados);
 			if(isCenarioRepetido(cen.estados))
-				cen.estados = getCenarioNaoUsado(cen.estados.size());
+			{
+				if ( getCenarioNaoUsado(cen.estados.size())[0] == -1) //todos os cenarios foram usados
+				{
+					//Usa cenario de maior engagement
+					//novo treshold para maior engagement encontrado
+					treshold = (geracaoAtual.front()).engagement;
+					condicaoParadaEngagement(treshold);
+				}
+				else
+					cen.estados = getCenarioNaoUsado(cen.estados.size());
+			}
 	}
 	insereCenarioCodificador(cen.estados);
+
+	emoHandler->ofs <<"dentro de criaNovaGeracao() 4" << std::endl;
+	qDebug() <<"dentro de criaNovaGeracao() 4";
 	
 	geracaoAtual.push_back(cen);  // Insere crossover na geração atual
 	contadorCrossoversNaoAvaliados++;		//incrementa o numeor de cenarios criados com crossover que ainda devem ser avaliados
@@ -709,10 +787,10 @@ Numero de Geracoes >= LIMITE_GERACOES 4
 */
 void HsTcpPollComm::verificaCondicoesDeParada()
 {
-	if (((geracaoAtual.front()).engagement) >= ENGAGEMENT_ALVO) 
+	if (((geracaoAtual.front()).engagement) >= treshold) //ENGAGEMENT_ALVO) 
 	{
 		// geracaoAtual.front() retorna o prieiro elemento do vector geração atual, ou seja, verifica se o mais apto satisfaz a condição de parada
-		emoHandler->ofs <<"Criterio de parada atingido: Engagement Level >= "<< ENGAGEMENT_ALVO << std::endl;
+		emoHandler->ofs <<"Criterio de parada atingido: Engagement Level >= "<< treshold << std::endl;  //ENGAGEMENT_ALVO
 		emoHandler->ofs <<"Engagement Level Maximo = " << (geracaoAtual.front()).engagement  << std::endl;
 		exit(0);
 	}
@@ -726,10 +804,11 @@ void HsTcpPollComm::verificaCondicoesDeParada()
 }
 
 void HsTcpPollComm::condicaoParadaEngagement(float engagement){
-	if (engagement >= ENGAGEMENT_ALVO) 
+	if (engagement >= treshold) //ENGAGEMENT_ALVO) 
 	{
 		// geracaoAtual.front() retorna o prieiro elemento do vector geração atual, ou seja, verifica se o mais apto satisfaz a condição de parada
 		emoHandler->ofs <<"Engagement Level alvo atingido, Maior engagement:" << engagement  << std::endl;
+		// setar o cenario com maior engagement?
 		exit(0);
 	}
 }
