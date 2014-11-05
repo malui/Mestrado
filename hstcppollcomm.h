@@ -94,7 +94,7 @@ public:
 	std::vector<int> codCenariosExistentes;
 	
 	//Inicializa com 0 em todas as posições o codificador de cenarios existentes com um numero de posições igual a 2^(tamanhoCenario) 
-	void inicializaCodificadorCenariosExistentes(int tamanhoCenario);
+//	void inicializaCodificadorCenariosExistentes(int tamanhoCenario);
 	// Recebe um cenario, usa codificaCenario() para codificar, e verifica se cenario já existe
 	bool isCenarioRepetido(Estados estado);
 
@@ -108,10 +108,10 @@ public:
 	void insereCenarioCodificador(Estados estado);
 
 	//faz o inverso da função codificacao, a partir de um numero descodifica em zeros e uns
-	Estados decodificaCenario(int codificacao);
+	Estados decodificaCenario(int codificacao, int tamanhoCenario);
 
 	// resgata do vetor codCenariosExixtentes um cenario ainda não usado e o retorn
-	Estados getCenarioNaoUsado();
+	Estados getCenarioNaoUsado(int tamanhoEstadosCenario);
 
 	//Transforma um valor inteiro para binario e returna na forma de um vetor
 	HsTcpPollComm::Estados HsTcpPollComm::toBinary(int number);

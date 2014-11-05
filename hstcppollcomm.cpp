@@ -519,12 +519,14 @@ std::vector<int> HsTcpPollComm::criaEstadosAleatorio(int tamanhoEstados)  // cri
 
 
 //Inicializa com 0 em todas as posições o codificador de cenarios existentes com um numero de posições igual a 2^(tamanhoCenario)  
-void HsTcpPollComm::inicializaCodificadorCenariosExistentes(int tamanhoCenario){
-	for(int i=0; i<pow(double(2),double(tamanhoCenario)); i++)
-	{
-		codCenariosExistentes.push_back(0);	
-	}
-}
+//void HsTcpPollComm::inicializaCodificadorCenariosExistentes(int tamanhoCenario){
+
+//	std::vector<int> codCenariosExistentes( pow( double(2),double(tamanhoCenario) ), 0 );
+	//for(int i=0; i<pow(double(2),double(tamanhoCenario)); i++)
+	//{
+	//	codCenariosExistentes.push_back(0);	
+	//}
+//}
 
 //chamada quando se tem certeza que o cenario existe para ser inserido ao vectod codCenariosExistentes
 void HsTcpPollComm::insereCenarioCodificador(std::vector<int> cenario){
@@ -533,8 +535,9 @@ void HsTcpPollComm::insereCenarioCodificador(std::vector<int> cenario){
 
 // Recebe um cenario, usa codificaCenario() para codificar, e verifica se cenario já existe
 bool HsTcpPollComm::isCenarioRepetido(std::vector<int> cenario){
-	if (codCenariosExistentes[codificaCenario(cenario)]>0)
-		return true;
+		
+	if (codCenariosExistentes[codificaCenario(cenario)]>0){
+		return true; }
 	else
 		return false;
 }
@@ -545,19 +548,21 @@ bool HsTcpPollComm::isCenarioRepetido(std::vector<int> cenario){
 //um código único para o estado recebido
 int HsTcpPollComm::codificaCenario(std::vector<int> cenario){
 	int codificacao = 0;
+
 	for(int i=0; i<cenario.size(); i++)
 	{
-		if (cenario[i] == 1)
-			codificacao = codificacao + pow(double(2),double(i));
+		if (cenario[i] == 1){
+			codificacao = codificacao + pow(double(2),double(i));}
 	}
 	return codificacao;
 }
 
 //faz o inverso da função codificacao, a partir de um numero descodifica em zeros e uns
-HsTcpPollComm::Estados HsTcpPollComm::decodificaCenario(int codificacao){
+HsTcpPollComm::Estados HsTcpPollComm::decodificaCenario(int codificacao, int tamanhoCenario){
 	Estados cenario; 
 	cenario = toBinary(codificacao); // NÃO ESTA COM O TAMANHO CERTO
 	// preencher com zeros o vertor cenario atéque ele atinja o tamanho tamanhoCenario(pegar de algum lugar ???)
+	cenario.resize(tamanhoCenario,  0);
 	return cenario;
 }
 
@@ -578,12 +583,12 @@ HsTcpPollComm::Estados HsTcpPollComm::toBinary(int number) {
 }
 
 // resgata do vetor codCenariosExixtentes um cenario ainda não usado e o retorn
-HsTcpPollComm::Estados HsTcpPollComm::getCenarioNaoUsado(){
+HsTcpPollComm::Estados HsTcpPollComm::getCenarioNaoUsado( int tamanhoEstadosCenario){
 	int codificacao;
 	for(int i=0; i<codCenariosExistentes.size(); i++)
 	{
 		if (codCenariosExistentes[i] == 0)
-			return decodificaCenario(i);
+			return decodificaCenario(i, tamanhoEstadosCenario);
 	}
 
 	// Representa a utilização de todos os cenarios
@@ -605,10 +610,12 @@ void HsTcpPollComm::inicializaCenariosPrimeiraGeracao(int tamanhoCenario)
 	for(int i=0; i<TAMANHO_GERACAO_INICIAL; i++)
 	{
 		cen.estados = criaEstadosAleatorio(tamanhoCenario);//seta aleatoriamente os estados do cenario
+
 		while(isCenarioRepetido(cen.estados)){	// Faz mutação até encontrar um estado não existente
 			cen.estados = mutacao(cen.estados);
+
 			if(isCenarioRepetido(cen.estados))
-				cen.estados = getCenarioNaoUsado();
+				cen.estados = getCenarioNaoUsado(tamanhoCenario);
 		}
 		insereCenarioCodificador(cen.estados);
 
@@ -653,7 +660,7 @@ void HsTcpPollComm::criaNovaGeracao(int qtdElementosReplicados)
 	while(isCenarioRepetido(cen.estados)){	// Faz mutação até encontrar um estado não existente
 			cen.estados = mutacao(cen.estados);
 			if(isCenarioRepetido(cen.estados))
-				cen.estados = getCenarioNaoUsado();
+				cen.estados = getCenarioNaoUsado(cen.estados.size());
 		}
 	insereCenarioCodificador(cen.estados);
 
@@ -670,7 +677,7 @@ void HsTcpPollComm::criaNovaGeracao(int qtdElementosReplicados)
 	while(isCenarioRepetido(cen.estados)){	// Faz mutação até encontrar um estado não existente
 			cen.estados = mutacao(cen.estados);
 			if(isCenarioRepetido(cen.estados))
-				cen.estados = getCenarioNaoUsado();
+				cen.estados = getCenarioNaoUsado(cen.estados.size());
 	}
 	insereCenarioCodificador(cen.estados);
 	
@@ -684,7 +691,7 @@ void HsTcpPollComm::criaNovaGeracao(int qtdElementosReplicados)
 	while(isCenarioRepetido(cen.estados)){	// Faz mutação até encontrar um estado não existente
 			cen.estados = mutacao(cen.estados);
 			if(isCenarioRepetido(cen.estados))
-				cen.estados = getCenarioNaoUsado();
+				cen.estados = getCenarioNaoUsado(cen.estados.size());
 	}
 	insereCenarioCodificador(cen.estados);
 	
@@ -742,10 +749,16 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 //	crossoverCenarios tuplaCrossoverCenarios;
 //	Cenario cenarioFilho1;
 
+	emoHandler->ofs <<"controleFluxo = "<< controleFluxo << std::endl;
+	qDebug() <<"controleFluxo = "<< controleFluxo;
+
 	switch(controleFluxo)           
 	{								
 	case SET_CENARIOS_INICIAIS:
 		//	Cria n cenarios iniciais com valores aleatórios
+		//inicializaCodificadorCenariosExistentes(units.size());
+		codCenariosExistentes.resize( pow( double(2),double(units.size()) ), 0 );
+
 		inicializaCenariosPrimeiraGeracao(units.size());
 
 		printPopulacao(geracaoAtual);
@@ -892,7 +905,11 @@ float HsTcpPollComm::mediaHarmonicaPonderada(vector<float> v)
 		if (v[i] != 0.0f)
 			sumx += (i/(v[i]));
 	}
-	emoHandler->ofs <<"MediaHarmonicaPonderada: " << sumi/sumx << std::endl;
+
+	if (sumx != 0)
+		emoHandler->ofs <<"MediaHarmonicaPonderada: " << sumi/sumx << std::endl;
+	else
+		emoHandler->ofs <<"MediaHarmonicaPonderada divisao por zero, retornando valor zero"<< std::endl;
 	return sumx == 0.0f ? 0.0f : sumi/sumx;
 }
 
