@@ -26,7 +26,7 @@ enum TControleFluxo{SET_CENARIOS_INICIAIS, AVALIA_CENARIOS_INICIAIS,SET_CENARIOS
 #define LIMITE_GERACOES 4						  // número limite de gerações
 //#define ENGAGEMENT_ALVO 0.95					 // número limite de engagement
 #define TAMANHO_GERACAO_INICIAL 3				// tamanho da geração inicial
-#define ELEMENTOS_REPLICADOS_PROXIMA_GERACAO 4 // numeros de elementos replidados de uma geração para outra
+#define ELEMENTOS_REPLICADOS_PROXIMA_GERACAO 3 // numeros de elementos replidados de uma geração para outra
 
 class HsTcpPollComm : public QObject
 {
@@ -50,7 +50,7 @@ public:
 	void logAffectiveSuiteState(std::ostream& os, unsigned int userID, EmoStateHandle eState, bool withHeader);
 	
 	struct CENARIO {   // Declare CENARIO struct type
-    std::vector<int> estados;   // Declare member types
+    std::vector<int> estados;   
     float            engagement;
     } cenario;   // Define object of type CENARIO
 
@@ -115,7 +115,7 @@ public:
 	Estados getCenarioNaoUsado(int tamanhoEstadosCenario);
 
 	//Transforma um valor inteiro para binario e returna na forma de um vetor
-	HsTcpPollComm::Estados HsTcpPollComm::toBinary(int number);
+	HsTcpPollComm::Estados HsTcpPollComm::toBinary(int number, Estados cenario);
 
 // end public
 signals:
