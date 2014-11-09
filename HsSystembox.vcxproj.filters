@@ -56,6 +56,9 @@
     <ClCompile Include="DefinicoesGlobais.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AlgGen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="hssystembox.ui">
@@ -68,6 +71,9 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="EmoHandler.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="AlgGen.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

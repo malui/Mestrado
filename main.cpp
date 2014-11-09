@@ -1,16 +1,18 @@
 #include <QtCore/QCoreApplication>
 #include "hstcppollcomm.h"
-#include "EmoHandler.h"
+//#include "EmoHandler.h"
+//#include "AlgGen.h"
 
 int main(int argc, char *argv[])
 {
 	QCoreApplication app(argc, argv); //QObject::startTimer: Timers can only be used with threads started with QThread
-
-    HsTcpPollComm hsTcpPollComm;
+	
+	HsTcpPollComm hsTcpPollComm;
 	EmoHandler emoHandler;
-	//emoHandler.setHsTcpPollComm(&hsTcpPollComm); //as duas threads Emo e Hs tem o mesmo valor da hsTcpPollComm
+	AlgGen algGen;
 
-	hsTcpPollComm.emoHandler = &emoHandler;
+	algGen.emoHandler = &emoHandler;
+	hsTcpPollComm.algGen = &algGen;
 
 	try {
 		//Inicia tentativa de conexao com emotiv
@@ -19,12 +21,12 @@ int main(int argc, char *argv[])
 		}
 
 		// Inicia tentativa de conexao com o systembox  
-#ifdef KIT
-		hsTcpPollComm.tcpConnect("10.1.7.37");
-#endif
-#ifdef HS
-		hsTcpPollComm.tcpConnect("192.168.0.209");
-#endif
+		#ifdef KIT
+			hsTcpPollComm.tcpConnect("10.1.7.37");
+		#endif
+		#ifdef HS
+			hsTcpPollComm.tcpConnect("192.168.0.209");
+		#endif
 	}//end try
 	catch (const std::exception& e) {
 		std::cerr << e.what() << std::endl;
@@ -33,6 +35,6 @@ int main(int argc, char *argv[])
 			exit(0);
 		}
 	}
-
+	
 	return app.exec();
 }

@@ -22,7 +22,7 @@
 
 //Emotiv enxerga HomeSystem
 //#include "hstcppollcomm.h"
-#include "DefinicoesGlobais.h"
+//#include "DefinicoesGlobais.h"
 
 #pragma comment(lib, "./lib/edk.lib")
 
