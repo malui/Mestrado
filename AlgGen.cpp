@@ -52,10 +52,12 @@ AlgGen::Estados AlgGen::toBinary(int number, AlgGen::Estados cenario) {
 		cenario.push_back(number);
 		return cenario;
 	}
-
-	remainder = number%2;  // % - operação resto de divisão
-	cenario.push_back(remainder);
-	toBinary(number >> 1, cenario);
+	else
+	{
+		remainder = number%2;  // % - operação resto de divisão
+		cenario.push_back(remainder);
+		return toBinary(number >> 1, cenario);
+	}
 }
 /*
 crossoverEstados crossoverDeUmPonto(Estados estado1,Estados estado2)
@@ -231,13 +233,20 @@ void AlgGen::inicializaCenariosPrimeiraGeracao(int tamanhoCenario)
 	for(int i=0; i<TAMANHO_GERACAO_INICIAL; i++)
 	{
 		cen.estados = criaEstadosAleatorio(tamanhoCenario);//seta aleatoriamente os estados do cenario
-
 		while(isCenarioRepetido(cen.estados))
 		{	// Faz mutação até encontrar um estado não existente
-			cen.estados = mutacao(cen.estados);
-
-			if(isCenarioRepetido(cen.estados))  //sempre vai retornar um cenario que nao foi usado, pois eh a primiera geracao
-				cen.estados = getCenarioNaoUsado(tamanhoCenario);
+			if(isCenarioRepetido(cen.estados))
+			{
+				std::vector <int> cenarioNaoUsado = getCenarioNaoUsado(cen.estados.size());
+				if ( cenarioNaoUsado[0] == -1) //todos os cenarios foram usados
+				{
+					return;  // do nothing
+				}
+				else
+				{
+					cen.estados = cenarioNaoUsado;
+				}
+			}
 		}
 		insereCenarioCodificador(cen.estados);
 
@@ -289,10 +298,7 @@ void AlgGen::criaNovaGeracao(int qtdElementosReplicados)
 				std::vector <int> cenarioNaoUsado = getCenarioNaoUsado(cen.estados.size());
 				if ( cenarioNaoUsado[0] == -1) //todos os cenarios foram usados
 				{
-					//Usa cenario de maior engagement
-					//novo treshold para maior engagement encontrado
-					treshold = (geracaoAtual.front()).engagement;
-					condicaoParadaEngagement(treshold);
+					return; //do notihing
 				}
 				else
 				{
@@ -321,10 +327,7 @@ void AlgGen::criaNovaGeracao(int qtdElementosReplicados)
 				std::vector <int> cenarioNaoUsado = getCenarioNaoUsado(cen.estados.size());
 				if ( cenarioNaoUsado[0] == -1) //todos os cenarios foram usados
 				{
-					//Usa cenario de maior engagement
-					//novo treshold para maior engagement encontrado
-					treshold = (geracaoAtual.front()).engagement;
-					condicaoParadaEngagement(treshold);
+					return; //do notihing
 				}
 				else
 				{
@@ -349,10 +352,7 @@ void AlgGen::criaNovaGeracao(int qtdElementosReplicados)
 
 				if ( cenarioNaoUsado[0] == -1) //todos os cenarios foram usados
 				{
-					//Usa cenario de maior engagement
-					//novo treshold para maior engagement encontrado
-					treshold = (geracaoAtual.front()).engagement;
-					condicaoParadaEngagement(treshold);
+					return; //do notihing
 				}
 				else
 				{

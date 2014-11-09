@@ -242,7 +242,7 @@ int HsTcpPollComm::setCenario(std::vector<int> units, std::vector<int> values)
 	if ( units.size() != values.size() )
 	{
 		//erro!
-		qDebug() << "setCenario erro: tamanho units = , " << units.size(); 
+		qDebug() << "setCenario erro: tamanho units = " << units.size(); 
 		qDebug() << "tamanho values = " << values.size();
 		return 0;
 	}
@@ -255,6 +255,10 @@ int HsTcpPollComm::setCenario(std::vector<int> units, std::vector<int> values)
 
 		tcpSocket.write(strSet.toLatin1());
 		qDebug() << "setCenario: "<< strSet;
+
+		algGen->emoHandler->ofs << "SetCenario:Eviado para HS cenario:";
+		algGen->printCenario(values);
+		algGen->emoHandler->ofs << std::endl;
 
 		return 1; //sucesso!
 	}
@@ -426,7 +430,7 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 		algGen->condicaoParadaEngagement(algGen->geracaoAtual[algGen->contadorPrimeiraGeracao].engagement);
 		algGen->contadorPrimeiraGeracao--;		// decrementamos contadorPrimeiraGeracao para na proxima iteração pegarmos o próximo cenario inicial que ainda não foi avaliado
 		
-		if(algGen->contadorPrimeiraGeracao>0){
+		if(algGen->contadorPrimeiraGeracao>=0){
 			//Ainda há cenarios iniciais a serem avaliados
 			//Setamos o próximo cenario a ser avaliado para não perder tempo esperando a proxima chamada da controle()
 			//tuplaCenario = geracaoAtual[contadorPrimeiraGeracao];	// retorna uma tupla que concem um dos cenarios inicias 
