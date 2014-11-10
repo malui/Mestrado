@@ -6,6 +6,7 @@
 AlgGen::AlgGen()
 {
 	emoHandler = NULL;
+	treshold = 0.9;
 }
 
 AlgGen::~AlgGen()
@@ -33,6 +34,7 @@ aleatoriamente escolhe bit que sofrerá mutação:
 AlgGen::Estados AlgGen::mutacao(AlgGen::Estados estados) 
 {
 	 // aleatoriamente escolhe bit que sofrerá mutação, ou seja, caso tenha valor 1, passará a ser 0, caso tenha valor 0, passará a ter valor 1
+	srand (time(NULL));
 	int bitQueSofreraMutacao = (rand() % estados.size());
 
 	//  transforma 0 em 1, e 1 em 0 . //A função abs retorna o valor absoludo de um número
@@ -135,6 +137,9 @@ retorna vector<int> estados do tamanho de tamanhoEstados
 std::vector<int> AlgGen::criaEstadosAleatorio(int tamanhoEstados)  // cria estados aleatorio
 {
 	std::vector<int> estados;
+	//std::random_device rd;
+	//srand (rd());
+	srand (time(NULL));
 	for(int i=0; i<tamanhoEstados; i++)
 		// rand() % 2 retorna aleatoriamente 0 ou 1, cenario é preenchido com 0 e 1
 		estados.push_back(rand() % 2);	
@@ -148,19 +153,62 @@ void AlgGen::insereCenarioCodificador(std::vector<int> cenario){
 	codCenariosExistentes[codificaCenario(cenario)]++; 
 }
 
-/*   isCenarioRepetido
-     Recebe um cenario, usa codificaCenario() para codificar, e verifica se cenario já existe
-	 Inicializa com 0 em todas as posições o codificador de cenarios existentes com um numero de posições igual a 2^(tamanhoCenario) 
-	 */
-bool AlgGen::isCenarioRepetido(std::vector<int> cenario){
+/*	Estados getCenarioNaoUsado( int tamanhoEstadosCenario)
+	resgata do vetor codCenariosExixtentes um cenario ainda não usado e o retorn
 
-	if (codCenariosExistentes[codificaCenario(cenario)]>0)
+	Quando todos os cenarios ja foram usados, retorna um vector com {-1}
+*/
+AlgGen::Estados AlgGen::getCenarioNaoUsado( int tamanhoEstadosCenario){
+	int codificacao;
+
+	for(int i=0; i < codCenariosExistentes.size(); i++)
 	{
-		return true; 
+		if (codCenariosExistentes[i] == 0)
+		{
+			return decodificaCenario(i, tamanhoEstadosCenario);
+		}
+	}
+
+	// Representa a utilização de todos os cenarios
+
+	AlgGen::Estados todosCenariosUsados;
+	todosCenariosUsados.push_back(-1);
+
+	return todosCenariosUsados;
+}
+
+/*   Estados isCenarioRepetido(std::vector<int> cenario)
+     - retorna -1 se cenario eh repetido e todos os cenarios ja foram usados
+	 - retorna novo cenario nao usado se o cenario eh repetido
+	 - retorna o mesmo cenario de entrada se ele nao for repetido
+	 */
+AlgGen::Estados AlgGen::isCenarioRepetido(std::vector<int> cenario)
+{
+	//AlgGen::Estados todosCenariosUsados;
+
+	if (codCenariosExistentes[codificaCenario(cenario)]>0) //Cenario eh repetido:
+	{
+		emoHandler->ofs <<"isCenarioRepetido 1" << std::endl;
+		// Faz mutação até encontrar um estado não existente
+		cenario = mutacao(cenario);
+		emoHandler->ofs <<"isCenarioRepetido 2" << std::endl;
+		if(codCenariosExistentes[codificaCenario(cenario)]>0) //se cenario mutado tambem eh repetido,
+		{
+			emoHandler->ofs <<"isCenarioRepetido 3" << std::endl;
+			//pega proximo cenario nao usado:
+			return getCenarioNaoUsado(cenario.size());
+			// retorna -1 se todos os cenarios possiveis ja foram usados
+			// se nao, retorna o proximo cenario possivel ainda nao usado
+		}
+		else //novo cenario nao eh repetido
+		{
+			return cenario;
+		}
 	}
 	else
 	{
-		return false;
+		emoHandler->ofs <<"isCenarioRepetido 4" << std::endl;
+		return cenario; // retorna o mesmo cenario de entrada se cenario nao eh repetido
 	}
 }
 
@@ -188,37 +236,12 @@ int AlgGen::codificaCenario(std::vector<int> cenario){
 AlgGen::Estados AlgGen::decodificaCenario(int codificacao, int tamanhoCenario){
 	AlgGen::Estados cenario; 
 
-	cenario = toBinary(codificacao, cenario); // NÃO ESTA COM O TAMANHO CERTO
-	// preencher com zeros o vertor cenario atéque ele atinja o tamanho tamanhoCenario(pegar de algum lugar ???)
+	cenario = toBinary(codificacao, cenario);
 	cenario.resize(tamanhoCenario,  0);
 
 	return cenario;
 }
 
-
-/*	Estados getCenarioNaoUsado( int tamanhoEstadosCenario)
-	resgata do vetor codCenariosExixtentes um cenario ainda não usado e o retorn
-
-	Quando todos os cenarios ja foram usados, retorna um vector com {-1}
-*/
-AlgGen::Estados AlgGen::getCenarioNaoUsado( int tamanhoEstadosCenario){
-	int codificacao;
-
-	for(int i=0; i < codCenariosExistentes.size(); i++)
-	{
-		if (codCenariosExistentes[i] == 0)
-		{
-			return decodificaCenario(i, tamanhoEstadosCenario);
-		}
-	}
-
-	// Representa a utilização de todos os cenarios
-
-	AlgGen::Estados todosCenariosUsados;
-	todosCenariosUsados.push_back(-1);
-
-	return todosCenariosUsados;
-}
 
 /*
 void inicializaCenariosPrimeiraGeracao(int tamanhoCenario)
@@ -232,26 +255,26 @@ void AlgGen::inicializaCenariosPrimeiraGeracao(int tamanhoCenario)
 
 	for(int i=0; i<TAMANHO_GERACAO_INICIAL; i++)
 	{
-		cen.estados = criaEstadosAleatorio(tamanhoCenario);//seta aleatoriamente os estados do cenario
-		while(isCenarioRepetido(cen.estados))
-		{	// Faz mutação até encontrar um estado não existente
-			if(isCenarioRepetido(cen.estados))
-			{
-				std::vector <int> cenarioNaoUsado = getCenarioNaoUsado(cen.estados.size());
-				if ( cenarioNaoUsado[0] == -1) //todos os cenarios foram usados
-				{
-					return;  // do nothing
-				}
-				else
-				{
-					cen.estados = cenarioNaoUsado;
-				}
-			}
+		emoHandler->ofs <<"inicializaCenariosPrimeiraGeracao 1" << std::endl;
+		cen.estados.clear();
+		//seta aleatoriamente os estados de um cenario e ja verifica se ele eh repetido:
+		cen.estados = isCenarioRepetido(criaEstadosAleatorio(tamanhoCenario));
+		emoHandler->ofs <<"inicializaCenariosPrimeiraGeracao 2" << std::endl;
+		if ( cen.estados[0] == -1)  //o cenario criado eh repetido e todos os cenarios ja foram usados
+		{
+			//numero de cenarios possiveis < TAMANHO_GERACAO_INICIAL
+			emoHandler->ofs <<"inicializaCenariosPrimeiraGeracao 3" << std::endl;
+			return;
 		}
-		insereCenarioCodificador(cen.estados);
-
-		cen.engagement = -1; //inicializa engagement com -1 pois ainda nao foi avaliado
-		geracaoAtual.push_back(cen);
+		else //novo cenario ainda nao usado
+		{
+			emoHandler->ofs <<"inicializaCenariosPrimeiraGeracao 4" << std::endl;
+			insereCenarioCodificador(cen.estados); //cria codigo para novo cenario
+			cen.engagement = -1; //inicializa engagement com -1 pois ainda nao foi avaliado
+			geracaoAtual.push_back(cen); //insere novo cenario na geracaoAtual
+			contadorCenariosNaoAValiados++; //incrementa contador de cenarios nao avaliados
+			emoHandler->ofs <<"inicializaCenariosPrimeiraGeracao 5" << std::endl;
+		}
 	}
 }
 
@@ -269,6 +292,7 @@ void AlgGen::criaNovaGeracao(int qtdElementosReplicados)
 
 	struct CENARIO cen;
 	cen.engagement = -1;
+	contadorCenariosNaoAValiados = 0;
 	geracaoPassada = geracaoAtual;    
 	geracaoAtual.clear();						// geração atual é limpa
 
@@ -278,92 +302,73 @@ void AlgGen::criaNovaGeracao(int qtdElementosReplicados)
 	{
 		geracaoAtual.push_back(geracaoPassada[i]); // melhores elementos da geração passada passam a ser elementos da geração atual
 	}
-	contadorNumeroDeGeracoes++; // contador do número de gerações é incrementado
-
-	//variáveis utilizadas na manipulação de elementos do crossover
-	//TuplaCenario tuplaCenario; 
-	crossoverEstados tuplaCrossoverEstados;
-	//Estados estadosFilho1;
+	//contadorNumeroDeGeracoes++; // contador do número de gerações é incrementado
 	
 	//Cria elementos Para Crossover, Utiliza a função crossoverDeUmPonto com os dois primeiros elementos, e crossoverMascaraAleatoria com o primeiro e com o terceiro, desse modo criamos mais 3 filhos
-	
-	// cria estadosFilho1 com crossoverMascaraAleatoria
-	cen.estados = crossoverMascaraAleatoria(geracaoAtual[0].estados ,geracaoAtual[2].estados); /// BUG! certificar que existe geracaoAtual[x].estados Pq nao existe geracaoAtual[2].estados ???
 
-	while(isCenarioRepetido(cen.estados))
-	{	// Faz mutação até encontrar um estado não existente
-			cen.estados = mutacao(cen.estados);
-			if(isCenarioRepetido(cen.estados))
-			{
-				std::vector <int> cenarioNaoUsado = getCenarioNaoUsado(cen.estados.size());
-				if ( cenarioNaoUsado[0] == -1) //todos os cenarios foram usados
-				{
-					return; //do notihing
-				}
-				else
-				{
-					cen.estados = cenarioNaoUsado;
-				}
-			}
+	//cria cenario com crossoverMascaraAleatoria e ja verifica se ele eh repetido:
+	cen.estados.clear();
+	cen.estados = isCenarioRepetido( crossoverMascaraAleatoria(geracaoAtual[0].estados ,geracaoAtual[2].estados) ); /// BUG! certificar que existe geracaoAtual[x].estados
+
+	if ( cen.estados[0] == -1)  //o cenario criado eh repetido e todos os cenarios ja foram usados
+	{
+		//TODO:
+		// pega cenario de maior engagement e seta 
+		// novo treshold = maior engagement
+		return; // nao tem porque tentar novos cenarios
 	}
-	insereCenarioCodificador(cen.estados);
-
-	//cen.estados = estadosFilho1;
-	geracaoAtual.push_back(cen); //insere novo cenario (estadosFilho1 , -1) na geracaoAtual
-	contadorCrossoversNaoAvaliados++;		//incrementa o numeor de cenarios criados com crossover que ainda devem ser avaliados
-
+	else //novo cenario ainda nao usado
+	{
+		insereCenarioCodificador(cen.estados); //cria codigo para novo cenario
+		cen.engagement = -1; //inicializa engagement com -1 pois ainda nao foi avaliado
+		geracaoAtual.push_back(cen); //insere novo cenario na geracaoAtual
+		contadorCrossoversNaoAvaliados++;		//incrementa o numeor de cenarios criados com crossover que ainda devem ser avaliados
+		contadorCenariosNaoAValiados++;
+	}
+	
+	//variáveis utilizadas na manipulação de elementos do crossover
+	crossoverEstados tuplaCrossoverEstados;
 
 	//faz crossover com crossoverDeUmPonto e retorna dois filhos em tuplaCrossoverEstados
 	tuplaCrossoverEstados = crossoverDeUmPonto(geracaoAtual[0].estados ,geracaoAtual[1].estados); 
 
-	cen.estados = std::get<0>(tuplaCrossoverEstados);
-	
-	while(isCenarioRepetido(cen.estados))
-	{	// Faz mutação até encontrar um estado não existente
-			cen.estados = mutacao(cen.estados);
-
-			if(isCenarioRepetido(cen.estados))
-			{
-				std::vector <int> cenarioNaoUsado = getCenarioNaoUsado(cen.estados.size());
-				if ( cenarioNaoUsado[0] == -1) //todos os cenarios foram usados
-				{
-					return; //do notihing
-				}
-				else
-				{
-					cen.estados = cenarioNaoUsado;
-				}
-			}
+	//verifica se primeiro filho eh repetido:
+	cen.estados.clear();
+	cen.estados = isCenarioRepetido(std::get<0>(tuplaCrossoverEstados));
+	if ( cen.estados[0] == -1)  //o cenario criado eh repetido e todos os cenarios ja foram usados
+	{
+		//TODO:
+		// pega cenario de maior engagement e seta 
+		// novo treshold = maior engagement
+		return; // nao tem porque tentar novos cenarios
 	}
-
-	insereCenarioCodificador(cen.estados);
-	
-	geracaoAtual.push_back(cen);  // Insere crossover na geração atual
-	contadorCrossoversNaoAvaliados++;		//incrementa o numeor de cenarios criados com crossover que ainda devem ser avaliados
-
-	cen.estados = std::get<1>(tuplaCrossoverEstados);
-	
-	while(isCenarioRepetido(cen.estados))
-	{	// Faz mutação até encontrar um estado não existente
-			cen.estados = mutacao(cen.estados);
-			if(isCenarioRepetido(cen.estados))
-			{
-				std::vector <int> cenarioNaoUsado = getCenarioNaoUsado(cen.estados.size());
-
-				if ( cenarioNaoUsado[0] == -1) //todos os cenarios foram usados
-				{
-					return; //do notihing
-				}
-				else
-				{
-					cen.estados = cenarioNaoUsado;
-				}
-			}
+	else //novo cenario ainda nao usado
+	{
+		insereCenarioCodificador(cen.estados); //cria codigo para novo cenario
+		cen.engagement = -1; //inicializa engagement com -1 pois ainda nao foi avaliado
+		geracaoAtual.push_back(cen); //insere novo cenario na geracaoAtual
+		contadorCrossoversNaoAvaliados++;		//incrementa o numeor de cenarios criados com crossover que ainda devem ser avaliados
+		contadorCenariosNaoAValiados++;
 	}
-	insereCenarioCodificador(cen.estados);
-
-	geracaoAtual.push_back(cen);  // Insere crossover na geração atual
-	contadorCrossoversNaoAvaliados++;		//incrementa o numeor de cenarios criados com crossover que ainda devem ser avaliados
+	
+	//verifica se segundo filho eh repetido:
+	cen.estados.clear();
+	cen.estados = isCenarioRepetido(std::get<1>(tuplaCrossoverEstados));
+	if ( cen.estados[0] == -1)  //o cenario criado eh repetido e todos os cenarios ja foram usados
+	{
+		//TODO:
+		// pega cenario de maior engagement e seta 
+		// novo treshold = maior engagement
+		return; // nao tem porque tentar novos cenarios
+	}
+	else //novo cenario ainda nao usado
+	{
+		insereCenarioCodificador(cen.estados); //cria codigo para novo cenario
+		cen.engagement = -1; //inicializa engagement com -1 pois ainda nao foi avaliado
+		geracaoAtual.push_back(cen); //insere novo cenario na geracaoAtual
+		contadorCrossoversNaoAvaliados++;		//incrementa o numeor de cenarios criados com crossover que ainda devem ser avaliados
+		contadorCenariosNaoAValiados++;
+	}
 }
 
 /*
@@ -395,13 +400,18 @@ void AlgGen::verificaCondicoesDeParada()
 /*    condicaoParadaEngagement
       verifica condições de parada a cada chamada de Engagement
 */
-void AlgGen::condicaoParadaEngagement(float engagement){
+bool AlgGen::condicaoParadaEngagement(float engagement){
 	if (engagement >= treshold) //ENGAGEMENT_ALVO) 
 	{
 		// geracaoAtual.front() retorna o prieiro elemento do vector geração atual, ou seja, verifica se o mais apto satisfaz a condição de parada
 		emoHandler->ofs <<"Engagement Level alvo atingido, Maior engagement:" << engagement  << std::endl;
+		treshold = engagement;
 		// setar o cenario com maior engagement?
-		exit(0);
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 

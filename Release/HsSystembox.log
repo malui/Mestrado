@@ -1,9 +1,9 @@
-﻿Build started 11/9/2014 4:47:29 PM.
+﻿Build started 11/10/2014 6:37:15 AM.
      1>Project "C:\Users\Public\Documents\mestrado\dissertacao\Implementacao C\HsSystembox\HsSystembox.vcxproj" on node 2 (rebuild target(s)).
      1>_PrepareForClean:
          Deleting file "Release\HsSystembox.lastbuildstate".
        InitializeBuildStatus:
-         Touching "Release\HsSystembox.unsuccessfulbuild".
+         Creating "Release\HsSystembox.unsuccessfulbuild" because "AlwaysCreate" was specified.
        CustomBuild:
          Uic'ing hssystembox.ui...
          Moc'ing hstcppollcomm.h...
@@ -39,4 +39,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:19.15
+Time Elapsed 00:00:19.45

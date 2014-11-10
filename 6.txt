@@ -1,0 +1,69 @@
+Emotiv Composer start up successed. Ready to receive Emotiv signals.controle: ack = 0
+affectivEngagementBoredomVector: -6.97301e+009 
+num sinais aproveitados: 1
+Vetor entrada antes daMediaHarmonicaPonderada: -6.97301e+009 
+Vetor entrada MediaHarmonicaPonderada: -6.97301e+009 
+MediaHarmonicaPonderada divisao por zero, retornando valor zero
+controleFluxo = 0
+dentro de  SET_CENARIOS_INICIAIS 1
+dentro de  SET_CENARIOS_INICIAIS 2
+dentro de  SET_CENARIOS_INICIAIS 3
+dentro de  inicializaCenariosPrimeiraGeracao 1
+dentro de  inicializaCenariosPrimeiraGeracao 2
+dentro de  inicializaCenariosPrimeiraGeracao 4
+dentro de  inicializaCenariosPrimeiraGeracao 1
+dentro de  inicializaCenariosPrimeiraGeracao 2
+dentro de  inicializaCenariosPrimeiraGeracao 4
+dentro de  inicializaCenariosPrimeiraGeracao 1
+dentro de  inicializaCenariosPrimeiraGeracao 2
+dentro de  inicializaCenariosPrimeiraGeracao 4
+dentro de  SET_CENARIOS_INICIAIS 4
+1 0 1 -1
+1 1 1 -1
+0 0 0 -1
+SetCenario:Eviado para HS cenario:0 0 0 
+Cenario: 0 0 0 
+acknoledge: ack = 1
+acknoledge: ack = 2
+acknoledge: ack = 3
+acknoledge: ack = 4
+acknoledge: ack = 5
+setting ack to:  = 0
+controle: ack = 0
+Vetor entrada antes daMediaHarmonicaPonderada: 
+Vetor entrada MediaHarmonicaPonderada: 
+MediaHarmonicaPonderada divisao por zero, retornando valor zero
+controleFluxo = 1
+Engagement_level:  0
+SetCenario:Eviado para HS cenario:1 1 1 
+Cenario: 1 1 1 
+acknoledge: ack = 1
+acknoledge: ack = 2
+acknoledge: ack = 3
+acknoledge: ack = 4
+acknoledge: ack = 5
+setting ack to:  = 0
+controle: ack = 0
+Vetor entrada antes daMediaHarmonicaPonderada: 
+Vetor entrada MediaHarmonicaPonderada: 
+MediaHarmonicaPonderada divisao por zero, retornando valor zero
+controleFluxo = 1
+Engagement_level:  0
+SetCenario:Eviado para HS cenario:1 0 1 
+Cenario: 1 0 1 
+acknoledge: ack = 1
+acknoledge: ack = 2
+acknoledge: ack = 3
+acknoledge: ack = 4
+acknoledge: ack = 5
+setting ack to:  = 0
+controle: ack = 0
+Vetor entrada antes daMediaHarmonicaPonderada: 
+Vetor entrada MediaHarmonicaPonderada: 
+MediaHarmonicaPonderada divisao por zero, retornando valor zero
+controleFluxo = 1
+Engagement_level:  0
+Todos Cenarios Iniciais Avaliados
+Cenarios Elite:1 0 1 
+ Elite possui Engagement_level:  0
+Criando geração de numero:  1

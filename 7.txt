@@ -1,0 +1,13 @@
+Emotiv Composer start up successed. Ready to receive Emotiv signals.controle: ack = 0
+affectivEngagementBoredomVector: -6.97301e+009 
+num sinais aproveitados: 1
+Vetor entrada antes daMediaHarmonicaPonderada: -6.97301e+009 
+Vetor entrada MediaHarmonicaPonderada: -6.97301e+009 
+MediaHarmonicaPonderada divisao por zero, retornando valor zero
+controleFluxo = 0
+controle 1
+inicializaCenariosPrimeiraGeracao 1
+inicializaCenariosPrimeiraGeracao 2
+inicializaCenariosPrimeiraGeracao 4
+inicializaCenariosPrimeiraGeracao 5
+inicializaCenariosPrimeiraGeracao 1

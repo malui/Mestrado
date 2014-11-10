@@ -51,6 +51,7 @@ public:
 	VectorCenarios geracaoPassada;
 	int contadorPrimeiraGeracao;		// armazena o numero de cenario na primeira geração, é usado para controlar a avaliação dos cenarios
 	int contadorCrossoversNaoAvaliados; // armazena o numero de cenarios que sairam do crossover e ainda não foram avaliados
+	int contadorCenariosNaoAValiados;
 	int contadorNumeroDeGeracoes;		// Controla o numero de gerações
 	std::vector<int> codCenariosExistentes;
 	// funcoes:
@@ -66,8 +67,8 @@ public:
 
 	void criaNovaGeracao(int qtdElementosReplicados);
 	void verificaCondicoesDeParada();				
-	void condicaoParadaEngagement(float engagement); 
-	bool isCenarioRepetido(Estados estado);
+	bool condicaoParadaEngagement(float engagement); 
+	AlgGen::Estados AlgGen::isCenarioRepetido(std::vector<int> cenario);
 	int codificaCenario(Estados estado);
 	void insereCenarioCodificador(Estados estado);
 	AlgGen::Estados decodificaCenario(int codificacao, int tamanhoCenario);
