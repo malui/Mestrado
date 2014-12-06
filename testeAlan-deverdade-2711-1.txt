@@ -1,0 +1,629 @@
+Emotiv Engine start up succeed. Ready to receive Emotiv signals.controle: ack = 0
+affectivEngagementBoredomVector: -6.97301e+009 
+num sinais aproveitados: 1
+Vetor entrada antes daMediaHarmonicaPonderada: -6.97301e+009 
+Vetor entrada MediaHarmonicaPonderada: -6.97301e+009 
+MediaHarmonicaPonderada divisao por zero, retornando valor zero
+controleFluxo = 0
+controle 1
+inicializaCenariosPrimeiraGeracao 1
+isCenarioRepetido 4
+inicializaCenariosPrimeiraGeracao 2
+inicializaCenariosPrimeiraGeracao 4
+inicializaCenariosPrimeiraGeracao 5
+inicializaCenariosPrimeiraGeracao 1
+isCenarioRepetido 1
+isCenarioRepetido 2
+inicializaCenariosPrimeiraGeracao 2
+inicializaCenariosPrimeiraGeracao 4
+inicializaCenariosPrimeiraGeracao 5
+inicializaCenariosPrimeiraGeracao 1
+isCenarioRepetido 1
+isCenarioRepetido 2
+isCenarioRepetido 3
+inicializaCenariosPrimeiraGeracao 2
+inicializaCenariosPrimeiraGeracao 4
+inicializaCenariosPrimeiraGeracao 5
+controle 2
+Geracao Pais: 0 1 0 0 0 0 0 0 -1
+0 1 0 0 1 0 0 0 -1
+0 0 0 0 0 0 0 0 -1
+
+algGen->geracaoAtual.size(): 3
+algGen->contadorCenariosNaoAValiados: 3
+SetCenario:Eviado para HS cenario:0 1 0 0 0 0 0 0 
+acknoledge: ack = 1
+affectivEngagementBoredomVector: 0 
+num sinais aproveitados: 2
+acknoledge: ack = 2
+affectivEngagementBoredomVector: 0 0.636988 
+num sinais aproveitados: 3
+acknoledge: ack = 3
+affectivEngagementBoredomVector: 0 0.636988 0.636988 
+num sinais aproveitados: 4
+acknoledge: ack = 4
+affectivEngagementBoredomVector: 0 0.636988 0.636988 0.636988 
+num sinais aproveitados: 5
+acknoledge: ack = 5
+affectivEngagementBoredomVector: 0 0.636988 0.636988 0.636988 0.636988 
+num sinais aproveitados: 6
+acknoledge: ack = 6
+affectivEngagementBoredomVector: 0 0.636988 0.636988 0.636988 0.636988 0.636988 
+num sinais aproveitados: 7
+acknoledge: ack = 7
+affectivEngagementBoredomVector: 0 0.636988 0.636988 0.636988 0.636988 0.636988 0.716499 
+num sinais aproveitados: 8
+acknoledge: ack = 8
+affectivEngagementBoredomVector: 0 0.636988 0.636988 0.636988 0.636988 0.636988 0.716499 0.716499 
+num sinais aproveitados: 9
+acknoledge: ack = 9
+affectivEngagementBoredomVector: 0 0.636988 0.636988 0.636988 0.636988 0.636988 0.716499 0.716499 0.716499 
+num sinais aproveitados: 10
+acknoledge: ack = 10
+affectivEngagementBoredomVector: 0 0.636988 0.636988 0.636988 0.636988 0.636988 0.716499 0.716499 0.716499 0.716499 
+num sinais aproveitados: 11
+acknoledge: ack = 11
+affectivEngagementBoredomVector: 0 0.636988 0.636988 0.636988 0.636988 0.636988 0.716499 0.716499 0.716499 0.716499 0.716499 
+num sinais aproveitados: 12
+acknoledge: ack = 12
+affectivEngagementBoredomVector: 0 0.636988 0.636988 0.636988 0.636988 0.636988 0.716499 0.716499 0.716499 0.716499 0.716499 0.743886 
+num sinais aproveitados: 13
+setting ack to:  = 0
+controle: ack = 0
+affectivEngagementBoredomVector: 0 0.636988 0.636988 0.636988 0.636988 0.636988 0.716499 0.716499 0.716499 0.716499 0.716499 0.743886 0.743886 
+num sinais aproveitados: 1
+Vetor entrada antes daMediaHarmonicaPonderada: 0 0.636988 0.636988 0.636988 0.636988 0.636988 0.716499 0.716499 0.716499 0.716499 0.716499 0.743886 0.743886 
+Vetor entrada MediaHarmonicaPonderada: 0 0.636988 0.636988 0.636988 0.636988 0.636988 0.716499 0.716499 0.716499 0.716499 0.716499 0.743886 0.743886 
+MediaHarmonicaPonderada: 0.7072
+controleFluxo = 1
+controle 11
+controle 12
+controle 15
+algGen->geracaoAtual.size(): 3
+algGen->contadorCenariosNaoAValiados: 2
+SetCenario:Eviado para HS cenario:0 1 0 0 1 0 0 0 
+acknoledge: ack = 1
+affectivEngagementBoredomVector: 0.743886 
+num sinais aproveitados: 2
+acknoledge: ack = 2
+affectivEngagementBoredomVector: 0.743886 0.743886 
+num sinais aproveitados: 3
+acknoledge: ack = 3
+affectivEngagementBoredomVector: 0.743886 0.743886 0.743886 
+num sinais aproveitados: 4
+acknoledge: ack = 4
+affectivEngagementBoredomVector: 0.743886 0.743886 0.743886 0.724362 
+num sinais aproveitados: 5
+acknoledge: ack = 5
+affectivEngagementBoredomVector: 0.743886 0.743886 0.743886 0.724362 0.724362 
+num sinais aproveitados: 6
+acknoledge: ack = 6
+affectivEngagementBoredomVector: 0.743886 0.743886 0.743886 0.724362 0.724362 0.724362 
+num sinais aproveitados: 7
+acknoledge: ack = 7
+affectivEngagementBoredomVector: 0.743886 0.743886 0.743886 0.724362 0.724362 0.724362 0.724362 
+num sinais aproveitados: 8
+acknoledge: ack = 8
+affectivEngagementBoredomVector: 0.743886 0.743886 0.743886 0.724362 0.724362 0.724362 0.724362 0.70679 
+num sinais aproveitados: 9
+acknoledge: ack = 9
+affectivEngagementBoredomVector: 0.743886 0.743886 0.743886 0.724362 0.724362 0.724362 0.724362 0.70679 0.70679 
+num sinais aproveitados: 10
+acknoledge: ack = 10
+affectivEngagementBoredomVector: 0.743886 0.743886 0.743886 0.724362 0.724362 0.724362 0.724362 0.70679 0.70679 0.690975 
+num sinais aproveitados: 11
+acknoledge: ack = 11
+affectivEngagementBoredomVector: 0.743886 0.743886 0.743886 0.724362 0.724362 0.724362 0.724362 0.70679 0.70679 0.690975 0.690975 
+num sinais aproveitados: 12
+acknoledge: ack = 12
+affectivEngagementBoredomVector: 0.743886 0.743886 0.743886 0.724362 0.724362 0.724362 0.724362 0.70679 0.70679 0.690975 0.690975 0.690975 
+num sinais aproveitados: 13
+setting ack to:  = 0
+controle: ack = 0
+affectivEngagementBoredomVector: 0.743886 0.743886 0.743886 0.724362 0.724362 0.724362 0.724362 0.70679 0.70679 0.690975 0.690975 0.690975 0.676742 
+num sinais aproveitados: 1
+Vetor entrada antes daMediaHarmonicaPonderada: 0.743886 0.743886 0.743886 0.724362 0.724362 0.724362 0.724362 0.70679 0.70679 0.690975 0.690975 0.690975 0.676742 
+Vetor entrada MediaHarmonicaPonderada: 0.743886 0.743886 0.743886 0.724362 0.724362 0.724362 0.724362 0.70679 0.70679 0.690975 0.690975 0.690975 0.676742 
+MediaHarmonicaPonderada: 0.701098
+controleFluxo = 1
+controle 11
+controle 12
+controle 15
+algGen->geracaoAtual.size(): 3
+algGen->contadorCenariosNaoAValiados: 1
+SetCenario:Eviado para HS cenario:0 0 0 0 0 0 0 0 
+acknoledge: ack = 1
+affectivEngagementBoredomVector: 0.676742 
+num sinais aproveitados: 2
+acknoledge: ack = 2
+affectivEngagementBoredomVector: 0.676742 0.676742 
+num sinais aproveitados: 3
+acknoledge: ack = 3
+affectivEngagementBoredomVector: 0.676742 0.676742 0.676742 
+num sinais aproveitados: 4
+acknoledge: ack = 4
+affectivEngagementBoredomVector: 0.676742 0.676742 0.676742 0.676742 
+num sinais aproveitados: 5
+acknoledge: ack = 5
+affectivEngagementBoredomVector: 0.676742 0.676742 0.676742 0.676742 0.663932 
+num sinais aproveitados: 6
+acknoledge: ack = 6
+affectivEngagementBoredomVector: 0.676742 0.676742 0.676742 0.676742 0.663932 0.663932 
+num sinais aproveitados: 7
+acknoledge: ack = 7
+affectivEngagementBoredomVector: 0.676742 0.676742 0.676742 0.676742 0.663932 0.663932 0.663932 
+num sinais aproveitados: 8
+acknoledge: ack = 8
+affectivEngagementBoredomVector: 0.676742 0.676742 0.676742 0.676742 0.663932 0.663932 0.663932 0.663932 
+num sinais aproveitados: 9
+acknoledge: ack = 9
+affectivEngagementBoredomVector: 0.676742 0.676742 0.676742 0.676742 0.663932 0.663932 0.663932 0.663932 0.663932 
+num sinais aproveitados: 10
+acknoledge: ack = 10
+affectivEngagementBoredomVector: 0.676742 0.676742 0.676742 0.676742 0.663932 0.663932 0.663932 0.663932 0.663932 0.663932 
+num sinais aproveitados: 11
+acknoledge: ack = 11
+affectivEngagementBoredomVector: 0.676742 0.676742 0.676742 0.676742 0.663932 0.663932 0.663932 0.663932 0.663932 0.663932 0.663932 
+num sinais aproveitados: 12
+acknoledge: ack = 12
+affectivEngagementBoredomVector: 0.676742 0.676742 0.676742 0.676742 0.663932 0.663932 0.663932 0.663932 0.663932 0.663932 0.663932 0.656618 
+num sinais aproveitados: 13
+setting ack to:  = 0
+controle: ack = 0
+affectivEngagementBoredomVector: 0.676742 0.676742 0.676742 0.676742 0.663932 0.663932 0.663932 0.663932 0.663932 0.663932 0.663932 0.656618 0.656618 
+num sinais aproveitados: 1
+Vetor entrada antes daMediaHarmonicaPonderada: 0.676742 0.676742 0.676742 0.676742 0.663932 0.663932 0.663932 0.663932 0.663932 0.663932 0.663932 0.656618 0.656618 
+Vetor entrada MediaHarmonicaPonderada: 0.676742 0.676742 0.676742 0.676742 0.663932 0.663932 0.663932 0.663932 0.663932 0.663932 0.663932 0.656618 0.656618 
+MediaHarmonicaPonderada: 0.66272
+controleFluxo = 1
+controle 11
+controle 12
+Todos os Cenarios da 1 geracao foram avaliados
+Cenarios Elite:0 1 0 0 0 0 0 0 
+ Elite possui Engagement_level:  0.7072
+controle 3
+isCenarioRepetido 1
+isCenarioRepetido 2
+isCenarioRepetido 1
+isCenarioRepetido 2
+isCenarioRepetido 4
+Geracao numero1: 0 1 0 0 0 0 0 0 0.7072
+0 1 0 0 1 0 0 0 0.701098
+0 0 0 0 0 0 0 0 0.66272
+0 0 0 0 0 0 0 1 -1
+0 1 0 0 0 0 0 1 -1
+0 0 1 0 0 1 0 0 -1
+
+controle 4
+controle 7
+SetCenario:Eviado para HS cenario:0 0 0 0 0 0 0 1 
+controle 8
+Cenario: 0 0 0 0 0 0 0 1 algGen->geracaoAtual.size()6
+algGen->contadorCenariosNaoAValiados3
+
+controle 9
+controle 10
+acknoledge: ack = 1
+affectivEngagementBoredomVector: 0.64616 
+num sinais aproveitados: 2
+acknoledge: ack = 2
+affectivEngagementBoredomVector: 0.64616 0.64616 
+num sinais aproveitados: 3
+acknoledge: ack = 3
+affectivEngagementBoredomVector: 0.64616 0.64616 0.64616 
+num sinais aproveitados: 4
+acknoledge: ack = 4
+affectivEngagementBoredomVector: 0.64616 0.64616 0.64616 0.64616 
+num sinais aproveitados: 5
+acknoledge: ack = 5
+affectivEngagementBoredomVector: 0.64616 0.64616 0.64616 0.64616 0.636747 
+num sinais aproveitados: 6
+acknoledge: ack = 6
+affectivEngagementBoredomVector: 0.64616 0.64616 0.64616 0.64616 0.636747 0.636747 
+num sinais aproveitados: 7
+acknoledge: ack = 7
+affectivEngagementBoredomVector: 0.64616 0.64616 0.64616 0.64616 0.636747 0.636747 0.636747 
+num sinais aproveitados: 8
+acknoledge: ack = 8
+affectivEngagementBoredomVector: 0.64616 0.64616 0.64616 0.64616 0.636747 0.636747 0.636747 0.636747 
+num sinais aproveitados: 9
+acknoledge: ack = 9
+affectivEngagementBoredomVector: 0.64616 0.64616 0.64616 0.64616 0.636747 0.636747 0.636747 0.636747 0.636747 
+num sinais aproveitados: 10
+acknoledge: ack = 10
+affectivEngagementBoredomVector: 0.64616 0.64616 0.64616 0.64616 0.636747 0.636747 0.636747 0.636747 0.636747 0.636747 
+num sinais aproveitados: 11
+acknoledge: ack = 11
+affectivEngagementBoredomVector: 0.64616 0.64616 0.64616 0.64616 0.636747 0.636747 0.636747 0.636747 0.636747 0.636747 0.62819 
+num sinais aproveitados: 12
+acknoledge: ack = 12
+affectivEngagementBoredomVector: 0.64616 0.64616 0.64616 0.64616 0.636747 0.636747 0.636747 0.636747 0.636747 0.636747 0.62819 0.62819 
+num sinais aproveitados: 13
+setting ack to:  = 0
+controle: ack = 0
+affectivEngagementBoredomVector: 0.64616 0.64616 0.64616 0.64616 0.636747 0.636747 0.636747 0.636747 0.636747 0.636747 0.62819 0.62819 0.620498 
+num sinais aproveitados: 1
+Vetor entrada antes daMediaHarmonicaPonderada: 0.64616 0.64616 0.64616 0.64616 0.636747 0.636747 0.636747 0.636747 0.636747 0.636747 0.62819 0.62819 0.620498 
+Vetor entrada MediaHarmonicaPonderada: 0.64616 0.64616 0.64616 0.64616 0.636747 0.636747 0.636747 0.636747 0.636747 0.636747 0.62819 0.62819 0.620498 
+MediaHarmonicaPonderada: 0.632587
+controleFluxo = 1
+controle 11
+controle 12
+controle 15
+algGen->geracaoAtual.size(): 6
+algGen->contadorCenariosNaoAValiados: 2
+SetCenario:Eviado para HS cenario:0 1 0 0 0 0 0 1 
+acknoledge: ack = 1
+affectivEngagementBoredomVector: 0.613572 
+num sinais aproveitados: 2
+acknoledge: ack = 2
+affectivEngagementBoredomVector: 0.613572 0.607343 
+num sinais aproveitados: 3
+acknoledge: ack = 3
+affectivEngagementBoredomVector: 0.613572 0.607343 0.607343 
+num sinais aproveitados: 4
+acknoledge: ack = 4
+affectivEngagementBoredomVector: 0.613572 0.607343 0.607343 0.607343 
+num sinais aproveitados: 5
+acknoledge: ack = 5
+affectivEngagementBoredomVector: 0.613572 0.607343 0.607343 0.607343 0.607343 
+num sinais aproveitados: 6
+acknoledge: ack = 6
+affectivEngagementBoredomVector: 0.613572 0.607343 0.607343 0.607343 0.607343 0.601749 
+num sinais aproveitados: 7
+acknoledge: ack = 7
+affectivEngagementBoredomVector: 0.613572 0.607343 0.607343 0.607343 0.607343 0.601749 0.601749 
+num sinais aproveitados: 8
+acknoledge: ack = 8
+affectivEngagementBoredomVector: 0.613572 0.607343 0.607343 0.607343 0.607343 0.601749 0.601749 0.598479 
+num sinais aproveitados: 9
+acknoledge: ack = 9
+affectivEngagementBoredomVector: 0.613572 0.607343 0.607343 0.607343 0.607343 0.601749 0.601749 0.598479 0.598479 
+num sinais aproveitados: 10
+acknoledge: ack = 10
+affectivEngagementBoredomVector: 0.613572 0.607343 0.607343 0.607343 0.607343 0.601749 0.601749 0.598479 0.598479 0.598479 
+num sinais aproveitados: 11
+acknoledge: ack = 11
+affectivEngagementBoredomVector: 0.613572 0.607343 0.607343 0.607343 0.607343 0.601749 0.601749 0.598479 0.598479 0.598479 0.595599 
+num sinais aproveitados: 12
+acknoledge: ack = 12
+affectivEngagementBoredomVector: 0.613572 0.607343 0.607343 0.607343 0.607343 0.601749 0.601749 0.598479 0.598479 0.598479 0.595599 0.595599 
+num sinais aproveitados: 13
+setting ack to:  = 0
+controle: ack = 0
+affectivEngagementBoredomVector: 0.613572 0.607343 0.607343 0.607343 0.607343 0.601749 0.601749 0.598479 0.598479 0.598479 0.595599 0.595599 0.595599 
+num sinais aproveitados: 1
+Vetor entrada antes daMediaHarmonicaPonderada: 0.613572 0.607343 0.607343 0.607343 0.607343 0.601749 0.601749 0.598479 0.598479 0.598479 0.595599 0.595599 0.595599 
+Vetor entrada MediaHarmonicaPonderada: 0.613572 0.607343 0.607343 0.607343 0.607343 0.601749 0.601749 0.598479 0.598479 0.598479 0.595599 0.595599 0.595599 
+MediaHarmonicaPonderada: 0.598833
+controleFluxo = 1
+controle 11
+controle 12
+controle 15
+algGen->geracaoAtual.size(): 6
+algGen->contadorCenariosNaoAValiados: 1
+SetCenario:Eviado para HS cenario:0 0 1 0 0 1 0 0 
+acknoledge: ack = 1
+affectivEngagementBoredomVector: 0.595599 
+num sinais aproveitados: 2
+acknoledge: ack = 2
+affectivEngagementBoredomVector: 0.595599 0.595599 
+num sinais aproveitados: 3
+acknoledge: ack = 3
+affectivEngagementBoredomVector: 0.595599 0.595599 0.595599 
+num sinais aproveitados: 4
+acknoledge: ack = 4
+affectivEngagementBoredomVector: 0.595599 0.595599 0.595599 0.592964 
+num sinais aproveitados: 5
+acknoledge: ack = 5
+affectivEngagementBoredomVector: 0.595599 0.595599 0.595599 0.592964 0.592964 
+num sinais aproveitados: 6
+acknoledge: ack = 6
+affectivEngagementBoredomVector: 0.595599 0.595599 0.595599 0.592964 0.592964 0.592964 
+num sinais aproveitados: 7
+acknoledge: ack = 7
+affectivEngagementBoredomVector: 0.595599 0.595599 0.595599 0.592964 0.592964 0.592964 0.592964 
+num sinais aproveitados: 8
+acknoledge: ack = 8
+affectivEngagementBoredomVector: 0.595599 0.595599 0.595599 0.592964 0.592964 0.592964 0.592964 0.592964 
+num sinais aproveitados: 9
+acknoledge: ack = 9
+affectivEngagementBoredomVector: 0.595599 0.595599 0.595599 0.592964 0.592964 0.592964 0.592964 0.592964 0.590594 
+num sinais aproveitados: 10
+acknoledge: ack = 10
+affectivEngagementBoredomVector: 0.595599 0.595599 0.595599 0.592964 0.592964 0.592964 0.592964 0.592964 0.590594 0.590594 
+num sinais aproveitados: 11
+acknoledge: ack = 11
+affectivEngagementBoredomVector: 0.595599 0.595599 0.595599 0.592964 0.592964 0.592964 0.592964 0.592964 0.590594 0.590594 0.590594 
+num sinais aproveitados: 12
+acknoledge: ack = 12
+affectivEngagementBoredomVector: 0.595599 0.595599 0.595599 0.592964 0.592964 0.592964 0.592964 0.592964 0.590594 0.590594 0.590594 0.590594 
+num sinais aproveitados: 13
+setting ack to:  = 0
+controle: ack = 0
+affectivEngagementBoredomVector: 0.595599 0.595599 0.595599 0.592964 0.592964 0.592964 0.592964 0.592964 0.590594 0.590594 0.590594 0.590594 0.586719 
+num sinais aproveitados: 1
+Vetor entrada antes daMediaHarmonicaPonderada: 0.595599 0.595599 0.595599 0.592964 0.592964 0.592964 0.592964 0.592964 0.590594 0.590594 0.590594 0.590594 0.586719 
+Vetor entrada MediaHarmonicaPonderada: 0.595599 0.595599 0.595599 0.592964 0.592964 0.592964 0.592964 0.592964 0.590594 0.590594 0.590594 0.590594 0.586719 
+MediaHarmonicaPonderada: 0.590942
+controleFluxo = 1
+controle 11
+controle 12
+Todos os Cenarios da 2 geracao foram avaliados
+Cenarios Elite:0 1 0 0 0 0 0 0 
+ Elite possui Engagement_level:  0.7072
+controle 3
+isCenarioRepetido 1
+isCenarioRepetido 2
+isCenarioRepetido 3
+isCenarioRepetido 1
+isCenarioRepetido 2
+isCenarioRepetido 1
+isCenarioRepetido 2
+Geracao numero2: 0 1 0 0 0 0 0 0 0.7072
+0 1 0 0 1 0 0 0 0.701098
+0 0 0 0 0 0 0 0 0.66272
+1 0 0 0 0 0 0 0 -1
+0 0 0 0 1 0 0 0 -1
+1 1 0 0 0 0 0 0 -1
+
+controle 4
+controle 7
+SetCenario:Eviado para HS cenario:1 0 0 0 0 0 0 0 
+controle 8
+Cenario: 1 0 0 0 0 0 0 0 algGen->geracaoAtual.size()6
+algGen->contadorCenariosNaoAValiados3
+
+controle 9
+controle 10
+acknoledge: ack = 1
+affectivEngagementBoredomVector: 0.586719 
+num sinais aproveitados: 2
+acknoledge: ack = 2
+affectivEngagementBoredomVector: 0.586719 0.586719 
+num sinais aproveitados: 3
+acknoledge: ack = 3
+affectivEngagementBoredomVector: 0.586719 0.586719 0.583229 
+num sinais aproveitados: 4
+acknoledge: ack = 4
+affectivEngagementBoredomVector: 0.586719 0.586719 0.583229 0.583229 
+num sinais aproveitados: 5
+acknoledge: ack = 5
+affectivEngagementBoredomVector: 0.586719 0.586719 0.583229 0.583229 0.583229 
+num sinais aproveitados: 6
+acknoledge: ack = 6
+affectivEngagementBoredomVector: 0.586719 0.586719 0.583229 0.583229 0.583229 0.580113 
+num sinais aproveitados: 7
+acknoledge: ack = 7
+affectivEngagementBoredomVector: 0.586719 0.586719 0.583229 0.583229 0.583229 0.580113 0.580113 
+num sinais aproveitados: 8
+acknoledge: ack = 8
+affectivEngagementBoredomVector: 0.586719 0.586719 0.583229 0.583229 0.583229 0.580113 0.580113 0.580113 
+num sinais aproveitados: 9
+acknoledge: ack = 9
+affectivEngagementBoredomVector: 0.586719 0.586719 0.583229 0.583229 0.583229 0.580113 0.580113 0.580113 0.580113 
+num sinais aproveitados: 10
+acknoledge: ack = 10
+affectivEngagementBoredomVector: 0.586719 0.586719 0.583229 0.583229 0.583229 0.580113 0.580113 0.580113 0.580113 0.577294 
+num sinais aproveitados: 11
+acknoledge: ack = 11
+affectivEngagementBoredomVector: 0.586719 0.586719 0.583229 0.583229 0.583229 0.580113 0.580113 0.580113 0.580113 0.577294 0.574761 
+num sinais aproveitados: 12
+acknoledge: ack = 12
+affectivEngagementBoredomVector: 0.586719 0.586719 0.583229 0.583229 0.583229 0.580113 0.580113 0.580113 0.580113 0.577294 0.574761 0.574761 
+num sinais aproveitados: 13
+setting ack to:  = 0
+controle: ack = 0
+affectivEngagementBoredomVector: 0.586719 0.586719 0.583229 0.583229 0.583229 0.580113 0.580113 0.580113 0.580113 0.577294 0.574761 0.574761 0.572482 
+num sinais aproveitados: 1
+Vetor entrada antes daMediaHarmonicaPonderada: 0.586719 0.586719 0.583229 0.583229 0.583229 0.580113 0.580113 0.580113 0.580113 0.577294 0.574761 0.574761 0.572482 
+Vetor entrada MediaHarmonicaPonderada: 0.586719 0.586719 0.583229 0.583229 0.583229 0.580113 0.580113 0.580113 0.580113 0.577294 0.574761 0.574761 0.572482 
+MediaHarmonicaPonderada: 0.577595
+controleFluxo = 1
+controle 11
+controle 12
+controle 15
+algGen->geracaoAtual.size(): 6
+algGen->contadorCenariosNaoAValiados: 2
+SetCenario:Eviado para HS cenario:0 0 0 0 1 0 0 0 
+acknoledge: ack = 1
+affectivEngagementBoredomVector: 0.572482 
+num sinais aproveitados: 2
+acknoledge: ack = 2
+affectivEngagementBoredomVector: 0.572482 0.572482 
+num sinais aproveitados: 3
+acknoledge: ack = 3
+affectivEngagementBoredomVector: 0.572482 0.572482 0.572482 
+num sinais aproveitados: 4
+acknoledge: ack = 4
+affectivEngagementBoredomVector: 0.572482 0.572482 0.572482 0.570434 
+num sinais aproveitados: 5
+acknoledge: ack = 5
+affectivEngagementBoredomVector: 0.572482 0.572482 0.572482 0.570434 0.570434 
+num sinais aproveitados: 6
+acknoledge: ack = 6
+affectivEngagementBoredomVector: 0.572482 0.572482 0.572482 0.570434 0.570434 0.568588 
+num sinais aproveitados: 7
+acknoledge: ack = 7
+affectivEngagementBoredomVector: 0.572482 0.572482 0.572482 0.570434 0.570434 0.568588 0.568588 
+num sinais aproveitados: 8
+acknoledge: ack = 8
+affectivEngagementBoredomVector: 0.572482 0.572482 0.572482 0.570434 0.570434 0.568588 0.568588 0.568588 
+num sinais aproveitados: 9
+acknoledge: ack = 9
+affectivEngagementBoredomVector: 0.572482 0.572482 0.572482 0.570434 0.570434 0.568588 0.568588 0.568588 0.580498 
+num sinais aproveitados: 10
+acknoledge: ack = 10
+affectivEngagementBoredomVector: 0.572482 0.572482 0.572482 0.570434 0.570434 0.568588 0.568588 0.568588 0.580498 0.580498 
+num sinais aproveitados: 11
+acknoledge: ack = 11
+affectivEngagementBoredomVector: 0.572482 0.572482 0.572482 0.570434 0.570434 0.568588 0.568588 0.568588 0.580498 0.580498 0.605444 
+num sinais aproveitados: 12
+acknoledge: ack = 12
+affectivEngagementBoredomVector: 0.572482 0.572482 0.572482 0.570434 0.570434 0.568588 0.568588 0.568588 0.580498 0.580498 0.605444 0.633607 
+num sinais aproveitados: 13
+setting ack to:  = 0
+controle: ack = 0
+affectivEngagementBoredomVector: 0.572482 0.572482 0.572482 0.570434 0.570434 0.568588 0.568588 0.568588 0.580498 0.580498 0.605444 0.633607 0.658907 
+num sinais aproveitados: 1
+Vetor entrada antes daMediaHarmonicaPonderada: 0.572482 0.572482 0.572482 0.570434 0.570434 0.568588 0.568588 0.568588 0.580498 0.580498 0.605444 0.633607 0.658907 
+Vetor entrada MediaHarmonicaPonderada: 0.572482 0.572482 0.572482 0.570434 0.570434 0.568588 0.568588 0.568588 0.580498 0.580498 0.605444 0.633607 0.658907 
+MediaHarmonicaPonderada: 0.5975
+controleFluxo = 1
+controle 11
+controle 12
+controle 15
+algGen->geracaoAtual.size(): 6
+algGen->contadorCenariosNaoAValiados: 1
+SetCenario:Eviado para HS cenario:1 1 0 0 0 0 0 0 
+acknoledge: ack = 1
+affectivEngagementBoredomVector: 0.685943 
+num sinais aproveitados: 2
+acknoledge: ack = 2
+affectivEngagementBoredomVector: 0.685943 0.685943 
+num sinais aproveitados: 3
+acknoledge: ack = 3
+affectivEngagementBoredomVector: 0.685943 0.685943 0.713013 
+num sinais aproveitados: 4
+acknoledge: ack = 4
+affectivEngagementBoredomVector: 0.685943 0.685943 0.713013 0.713013 
+num sinais aproveitados: 5
+acknoledge: ack = 5
+affectivEngagementBoredomVector: 0.685943 0.685943 0.713013 0.713013 0.736477 
+num sinais aproveitados: 6
+acknoledge: ack = 6
+affectivEngagementBoredomVector: 0.685943 0.685943 0.713013 0.713013 0.736477 0.736477 
+num sinais aproveitados: 7
+acknoledge: ack = 7
+affectivEngagementBoredomVector: 0.685943 0.685943 0.713013 0.713013 0.736477 0.736477 0.736477 
+num sinais aproveitados: 8
+acknoledge: ack = 8
+affectivEngagementBoredomVector: 0.685943 0.685943 0.713013 0.713013 0.736477 0.736477 0.736477 0.736477 
+num sinais aproveitados: 9
+acknoledge: ack = 9
+affectivEngagementBoredomVector: 0.685943 0.685943 0.713013 0.713013 0.736477 0.736477 0.736477 0.736477 0.752589 
+num sinais aproveitados: 10
+acknoledge: ack = 10
+affectivEngagementBoredomVector: 0.685943 0.685943 0.713013 0.713013 0.736477 0.736477 0.736477 0.736477 0.752589 0.752589 
+num sinais aproveitados: 11
+acknoledge: ack = 11
+affectivEngagementBoredomVector: 0.685943 0.685943 0.713013 0.713013 0.736477 0.736477 0.736477 0.736477 0.752589 0.752589 0.761881 
+num sinais aproveitados: 12
+acknoledge: ack = 12
+affectivEngagementBoredomVector: 0.685943 0.685943 0.713013 0.713013 0.736477 0.736477 0.736477 0.736477 0.752589 0.752589 0.761881 0.770121 
+num sinais aproveitados: 13
+setting ack to:  = 0
+controle: ack = 0
+affectivEngagementBoredomVector: 0.685943 0.685943 0.713013 0.713013 0.736477 0.736477 0.736477 0.736477 0.752589 0.752589 0.761881 0.770121 0.770121 
+num sinais aproveitados: 1
+Vetor entrada antes daMediaHarmonicaPonderada: 0.685943 0.685943 0.713013 0.713013 0.736477 0.736477 0.736477 0.736477 0.752589 0.752589 0.761881 0.770121 0.770121 
+Vetor entrada MediaHarmonicaPonderada: 0.685943 0.685943 0.713013 0.713013 0.736477 0.736477 0.736477 0.736477 0.752589 0.752589 0.761881 0.770121 0.770121 
+MediaHarmonicaPonderada: 0.750564
+controleFluxo = 1
+controle 11
+controle 12
+Todos os Cenarios da 3 geracao foram avaliados
+Cenarios Elite:1 1 0 0 0 0 0 0 
+ Elite possui Engagement_level:  0.750564
+controle 3
+isCenarioRepetido 1
+isCenarioRepetido 2
+isCenarioRepetido 1
+isCenarioRepetido 2
+isCenarioRepetido 4
+Geracao numero3: 1 1 0 0 0 0 0 0 0.750564
+0 1 0 0 0 0 0 0 0.7072
+0 1 0 0 1 0 0 0 0.701098
+0 1 0 1 0 0 0 0 -1
+1 1 0 1 0 0 0 0 -1
+0 0 0 0 0 0 1 0 -1
+
+controle 4
+controle 7
+SetCenario:Eviado para HS cenario:0 1 0 1 0 0 0 0 
+controle 8
+Cenario: 0 1 0 1 0 0 0 0 algGen->geracaoAtual.size()6
+algGen->contadorCenariosNaoAValiados3
+
+controle 9
+controle 10
+acknoledge: ack = 1
+affectivEngagementBoredomVector: 0.773935 
+num sinais aproveitados: 2
+acknoledge: ack = 2
+affectivEngagementBoredomVector: 0.773935 0.773935 
+num sinais aproveitados: 3
+acknoledge: ack = 3
+affectivEngagementBoredomVector: 0.773935 0.773935 0.773935 
+num sinais aproveitados: 4
+acknoledge: ack = 4
+affectivEngagementBoredomVector: 0.773935 0.773935 0.773935 0.773935 
+num sinais aproveitados: 5
+acknoledge: ack = 5
+affectivEngagementBoredomVector: 0.773935 0.773935 0.773935 0.773935 0.776019 
+num sinais aproveitados: 6
+acknoledge: ack = 6
+affectivEngagementBoredomVector: 0.773935 0.773935 0.773935 0.773935 0.776019 0.776019 
+num sinais aproveitados: 7
+acknoledge: ack = 7
+affectivEngagementBoredomVector: 0.773935 0.773935 0.773935 0.773935 0.776019 0.776019 0.776019 
+num sinais aproveitados: 8
+acknoledge: ack = 8
+affectivEngagementBoredomVector: 0.773935 0.773935 0.773935 0.773935 0.776019 0.776019 0.776019 0.778232 
+num sinais aproveitados: 9
+acknoledge: ack = 9
+affectivEngagementBoredomVector: 0.773935 0.773935 0.773935 0.773935 0.776019 0.776019 0.776019 0.778232 0.778232 
+num sinais aproveitados: 10
+acknoledge: ack = 10
+affectivEngagementBoredomVector: 0.773935 0.773935 0.773935 0.773935 0.776019 0.776019 0.776019 0.778232 0.778232 0.767368 
+num sinais aproveitados: 11
+acknoledge: ack = 11
+affectivEngagementBoredomVector: 0.773935 0.773935 0.773935 0.773935 0.776019 0.776019 0.776019 0.778232 0.778232 0.767368 0.767368 
+num sinais aproveitados: 12
+acknoledge: ack = 12
+affectivEngagementBoredomVector: 0.773935 0.773935 0.773935 0.773935 0.776019 0.776019 0.776019 0.778232 0.778232 0.767368 0.767368 0.767368 
+num sinais aproveitados: 13
+setting ack to:  = 0
+controle: ack = 0
+affectivEngagementBoredomVector: 0.773935 0.773935 0.773935 0.773935 0.776019 0.776019 0.776019 0.778232 0.778232 0.767368 0.767368 0.767368 0.767368 
+num sinais aproveitados: 1
+Vetor entrada antes daMediaHarmonicaPonderada: 0.773935 0.773935 0.773935 0.773935 0.776019 0.776019 0.776019 0.778232 0.778232 0.767368 0.767368 0.767368 0.767368 
+Vetor entrada MediaHarmonicaPonderada: 0.773935 0.773935 0.773935 0.773935 0.776019 0.776019 0.776019 0.778232 0.778232 0.767368 0.767368 0.767368 0.767368 
+MediaHarmonicaPonderada: 0.771597
+controleFluxo = 1
+controle 11
+controle 12
+controle 15
+algGen->geracaoAtual.size(): 6
+algGen->contadorCenariosNaoAValiados: 2
+SetCenario:Eviado para HS cenario:1 1 0 1 0 0 0 0 
+acknoledge: ack = 1
+affectivEngagementBoredomVector: 0.75093 
+num sinais aproveitados: 2
+acknoledge: ack = 2
+affectivEngagementBoredomVector: 0.75093 0.75093 
+num sinais aproveitados: 3
+acknoledge: ack = 3
+affectivEngagementBoredomVector: 0.75093 0.75093 0.75093 
+num sinais aproveitados: 4
+acknoledge: ack = 4
+affectivEngagementBoredomVector: 0.75093 0.75093 0.75093 0.75093 
+num sinais aproveitados: 5
+acknoledge: ack = 5
+affectivEngagementBoredomVector: 0.75093 0.75093 0.75093 0.75093 0.747697 
+num sinais aproveitados: 6
+acknoledge: ack = 6
+affectivEngagementBoredomVector: 0.75093 0.75093 0.75093 0.75093 0.747697 0.747697 
+num sinais aproveitados: 7
+acknoledge: ack = 7
+affectivEngagementBoredomVector: 0.75093 0.75093 0.75093 0.75093 0.747697 0.747697 0.752681 
+num sinais aproveitados: 8
+acknoledge: ack = 8
+affectivEngagementBoredomVector: 0.75093 0.75093 0.75093 0.75093 0.747697 0.747697 0.752681 0.752681 
+num sinais aproveitados: 9
+acknoledge: ack = 9
+affectivEngagementBoredomVector: 0.75093 0.75093 0.75093 0.75093 0.747697 0.747697 0.752681 0.752681 0.752681 
+num sinais aproveitados: 10
+acknoledge: ack = 10
+affectivEngagementBoredomVector: 0.75093 0.75093 0.75093 0.75093 0.747697 0.747697 0.752681 0.752681 0.752681 0.752681 
+num sinais aproveitados: 11

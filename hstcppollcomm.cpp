@@ -48,7 +48,7 @@ QObject(parent)
 	connect(&tcpSocket, SIGNAL(readyRead()), this, SLOT(tcpOnRead()));
 	// timer signals
 	connect(&pollTimer, SIGNAL(timeout()), this, SLOT(pollProcess()));
-	pollTimer.start(2000);
+	pollTimer.start(9000);
 }
 
 bool HsTcpPollComm::tcpConnect(QString host, int port)
@@ -150,7 +150,7 @@ void HsTcpPollComm::pollProcess(void)
 					algGen->emoHandler->ofs <<"num sinais aproveitados: " << cont_sinal << std::endl;
 				}
 				ack++; 
-				if (ack >= 2) {
+				if (ack >= 12) {
 					algGen->emoHandler->ofs << "acknoledge: ack = " << ack<< std::endl;
 					const float eng_temp = algGen->emoHandler->emoAffectivEngagementBoredom();
 					if (eng_temp != -1)
@@ -252,7 +252,25 @@ int HsTcpPollComm::setCenario(std::vector<int> units, std::vector<int> values)
 	{
 		for (int i=0; i<units.size(); i++)
 		{
-			strSet.append(QString("5S%1*%2*").arg(units[i]).arg(values[i]));
+			if (units[i] == 6636) //Sala preta: midia (TVs + som)
+			{
+				if (values[i] == 0)
+				{
+					strSet.append(QString("5S%1*%2*").arg(6636).arg(93)); //desliga
+				}
+				else
+				{
+					strSet.append(QString("5S%1*%2*").arg(6636).arg(94)); //liga
+				}
+			}
+			else if (units[i] == 65605 & values[i] == 1) //HS Sala preta: ar condicionado
+			{
+				strSet.append(QString("5S%1*%2*").arg(65605).arg(161)); //23 grausC
+			}
+			else //unit padrao
+			{
+				strSet.append(QString("5S%1*%2*").arg(units[i]).arg(values[i]));
+			}
 		}
 
 		tcpSocket.write(strSet.toLatin1());
@@ -389,7 +407,7 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 {							
 	// todas variaveis utilizadas em mais de um dos CASES devem ser definidas antes do switch
 	     
-	int unitsInicializador[] = {118,119,120};//{1187, 1188, 1191, 2058, 2061, 2062, 1415};
+	int unitsInicializador[] = {65605, 6636, 1186, 1183, 1184, 5409, 1189, 1751};//ac, midia, lampquadro, lamp centro mesa, //{118,119,120};//{1187, 1188, 1191, 2058, 2061, 2062, 1415};
 	std::vector<int> units(unitsInicializador,&unitsInicializador[sizeof(unitsInicializador)/sizeof(unitsInicializador[0])]);
 
 	algGen->emoHandler->ofs <<"controleFluxo = "<< controleFluxo << std::endl;
@@ -556,141 +574,7 @@ void HsTcpPollComm::controle()      // a variavel controle fluxo deve ser setada
 			}
 		}
 		break;
-		/*
-	case SET_CENARIOS_INICIAIS:
-		algGen->treshold = 0.9;
 
-		//Inicializa com 0 em todas as posições o codificador de cenarios existentes com um numero de posições igual a 2^(tamanhoCenario) 
-		algGen->codCenariosExistentes.resize( pow( double(2),double(units.size()) ), 0 );
-
-		//Cria TAMANHO_GERACAO_INICIAL cenarios iniciais com valores aleatórios
-		algGen->inicializaCenariosPrimeiraGeracao(units.size());
-
-		algGen->printPopulacao(algGen->geracaoAtual);
-
-		//contadorPrimeiraGeracao Armazena tamanho da população inicial para que se possa fazer o controle de uso posteriormente
-		algGen->contadorPrimeiraGeracao = algGen->geracaoAtual.size() - 1; //pois vector inicia em 0
-		algGen->contadorCrossoversNaoAvaliados=0;
-		algGen->contadorNumeroDeGeracoes=1;
-
-		setCenario(units, algGen->geracaoAtual[algGen->contadorPrimeiraGeracao].estados);			// seta um dos cenarios iniciais
-		algGen->emoHandler->ofs <<"Cenario: ";
-		algGen->printCenario(algGen->geracaoAtual[algGen->contadorPrimeiraGeracao].estados);
-		algGen->emoHandler->ofs << std::endl;
-
-		controleFluxo = AVALIA_CENARIOS_INICIAIS;
-		break;
-	case AVALIA_CENARIOS_INICIAIS:
-		// retorna ultima tupla que foi usada na setCenario para avalia-la
-		//tuplaCenario = geracaoAtual[contadorPrimeiraGeracao];
-		algGen->geracaoAtual[algGen->contadorPrimeiraGeracao].engagement =  algGen->emoHandler->affectivEngagementBoredom;	
-		std::cout <<"Engagement_level:  " << algGen->geracaoAtual[algGen->contadorPrimeiraGeracao].engagement << std::endl;
-		algGen->emoHandler->ofs <<"Engagement_level:  " << algGen->geracaoAtual[algGen->contadorPrimeiraGeracao].engagement << std::endl;
-
-		algGen->condicaoParadaEngagement(algGen->geracaoAtual[algGen->contadorPrimeiraGeracao].engagement);
-		algGen->contadorPrimeiraGeracao--;		// decrementamos contadorPrimeiraGeracao para na proxima iteração pegarmos o próximo cenario inicial que ainda não foi avaliado
-		
-		if(algGen->contadorPrimeiraGeracao>=0){
-			//Ainda há cenarios iniciais a serem avaliados
-			//Setamos o próximo cenario a ser avaliado para não perder tempo esperando a proxima chamada da controle()
-			//tuplaCenario = geracaoAtual[contadorPrimeiraGeracao];	// retorna uma tupla que concem um dos cenarios inicias 
-			setCenario(units, algGen->geracaoAtual[algGen->contadorPrimeiraGeracao].estados);			// seta um dos cenarios iniciais
-			algGen->emoHandler->ofs <<"Cenario: ";
-			algGen->printCenario(algGen->geracaoAtual[algGen->contadorPrimeiraGeracao].estados);
-			algGen->emoHandler->ofs << std::endl;
-
-			controleFluxo = AVALIA_CENARIOS_INICIAIS;
-		}
-		else{
-			//Não há mais cenarios iniciais a serem avaliados
-			sort(algGen->geracaoAtual.begin(),algGen->geracaoAtual.end(),[](const AlgGen::CENARIO& a,const AlgGen::CENARIO& b) -> bool{return a.engagement > b.engagement;});
-			//sort(geracaoAtual.begin(),geracaoAtual.end());
-
-			algGen->emoHandler->ofs <<"Todos Cenarios Iniciais Avaliados"<<std::endl;
-			algGen->emoHandler->ofs <<"Cenarios Elite:";
-			algGen->printCenario((algGen->geracaoAtual.front()).estados);
-			algGen->emoHandler->ofs <<  std::endl;
-			algGen->emoHandler->ofs <<" Elite possui Engagement_level:  " << (algGen->geracaoAtual.front()).engagement << std::endl;
-
-			//Para otimizar o tempo de execução, e não experar até a próxima chamada da função controle() já executamos o código abaixo para setar um cenario
-			//Alem de criar uma nova geração, cria 3 elementos utilizando os dois tipos de crossover,e mutação
-			 // o ELEMENTOS_REPLICADOS_PROXIMA_GERACAO igual a 4 representa o número de elementos que será replicado da geração atual, para a proxima geração, TRANSFORMAR EM CONSTANTE!!
-			std::cout <<"Criando geração de numero:  " << algGen->contadorNumeroDeGeracoes << std::endl;
-			algGen->emoHandler->ofs<<"Criando geração de numero:  " << algGen->contadorNumeroDeGeracoes << std::endl;
-			algGen->criaNovaGeracao(ELEMENTOS_REPLICADOS_PROXIMA_GERACAO);
-
-			if (algGen->contadorCrossoversNaoAvaliados == 0) // nao ha mais cenarios a serem avaliados da nova geracao (vinda do crossover)
-			{
-				// seta cenario de maior engagement
-				setCenario(units, algGen->geracaoAtual[0].estados);
-				// seta treshold como maior engagement
-				algGen->treshold = algGen->geracaoAtual[0].engagement;
-				// avalia se treshold baixa
-				controleFluxo = AVALIA_CENARIOS;
-			}
-			else
-			{
-				// seta um dos cenarios do crossover
-				setCenario(units, algGen->geracaoAtual[algGen->geracaoAtual.size() - algGen->contadorCrossoversNaoAvaliados].estados);	
-				
-				algGen->emoHandler->ofs <<"Cenario: ";
-				algGen->printCenario(algGen->geracaoAtual[algGen->geracaoAtual.size()-algGen->contadorCrossoversNaoAvaliados].estados);
-				algGen->emoHandler->ofs << std::endl;
-
-				controleFluxo = AVALIA_CENARIOS;
-			}
-		}
-		break;
-
-	case AVALIA_CENARIOS:
-		if (algGen->contadorCrossoversNaoAvaliados != 0)
-		{
-			// avalia engagement do ultimo cenario da geracaoAtual:
-			algGen->geracaoAtual[algGen->geracaoAtual.size()-algGen->contadorCrossoversNaoAvaliados].engagement =  algGen->emoHandler->affectivEngagementBoredom;
-			std::cout <<"Engagement_level:  " << algGen->geracaoAtual[algGen->geracaoAtual.size()-algGen->contadorCrossoversNaoAvaliados].engagement << std::endl;
-			algGen->emoHandler->ofs <<"Engagement_level:  " << algGen->geracaoAtual[algGen->geracaoAtual.size()-algGen->contadorCrossoversNaoAvaliados].engagement << std::endl;
-		
-			algGen->condicaoParadaEngagement(algGen->geracaoAtual[algGen->geracaoAtual.size()-algGen->contadorCrossoversNaoAvaliados].engagement);
-			algGen->contadorCrossoversNaoAvaliados--;	
-
-			controleFluxo = AVALIA_CENARIOS;
-		}
-		else
-		{
-			//Toda Geração avaliada
-			// Deixa a geracaoAtual por ordem de maior engagement:
-			sort(algGen->geracaoAtual.begin(),algGen->geracaoAtual.end(),[](const AlgGen::CENARIO& a,const AlgGen::CENARIO& b) -> bool{return a.engagement > b.engagement;});
-
-			algGen->emoHandler->ofs <<"Todos Cenarios do Crossover Avaliados"<<std::endl;
-			algGen->emoHandler->ofs <<"Cenarios Elite:";
-			algGen->printCenario(algGen->geracaoAtual.front().estados);
-			algGen->emoHandler->ofs <<  std::endl;
-			algGen->emoHandler->ofs <<" Elite possui Engagement_level:  " << algGen->geracaoAtual.front().engagement << std::endl;
-
-			algGen->verificaCondicoesDeParada();
-
-			/// BUG: e se nao houver mais cenarios possiveis??????
-			 
-			// cria nova geração
-			//Cria elementos Para Crossover, Utiliza a função crossoverDeUmPonto com os dois primeiros elementos, e crossoverMascaraAleatoria com o primeiro e com o terceiro, desse modo criamos mais 3 filhos
-			// Insere crossover na geração atual
-			// o ELEMENTOS_REPLICADOS_PROXIMA_GERACAO igual a 4 representa o número de elementos que será replicado da geração atual, para a proxima geração
-			std::cout <<"Criando geração de numero:  " << algGen->contadorNumeroDeGeracoes << std::endl;
-			algGen->emoHandler->ofs<<"Criando geração de numero:  " << algGen->contadorNumeroDeGeracoes << std::endl;
-			algGen->criaNovaGeracao(ELEMENTOS_REPLICADOS_PROXIMA_GERACAO); 
-				
-			// retorna uma tupla que contem um cenario crossover não avaliado
-			//tuplaCenario = geracaoAtual[geracaoAtual.size()-contadorCrossoversNaoAvaliados];	
-			setCenario(units, algGen->geracaoAtual[algGen->geracaoAtual.size()-algGen->contadorCrossoversNaoAvaliados].estados);			// seta um dos cenarios do crossover
-			algGen->emoHandler->ofs <<"Cenario: ";
-			algGen->printCenario(algGen->geracaoAtual[algGen->geracaoAtual.size()-algGen->contadorCrossoversNaoAvaliados].estados);
-			algGen->emoHandler->ofs << std::endl;
-
-			controleFluxo = AVALIA_CENARIOS;
-			
-		}
-		break;
-		*/
 	default: std::cout << "controleFluxo desconhecido: "<< controleFluxo << std::endl;
 		break;
 

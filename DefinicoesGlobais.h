@@ -1,7 +1,7 @@
 #pragma once
 
-#define KIT
-//#define HS
+//#define KIT
+#define HS
 
 #ifndef DEFINICOESGLOBAIS_H_INCLUDED
 #define DEFINICOESGLOBAIS_H_INCLUDED
@@ -25,8 +25,8 @@ extern int* ESTADOS[];
 #ifdef HS
 //enum EQUIPAMENTOS_ID {SOM, LAMPADA1, LAMPADA2, LAMPADA3, AC};
 enum EQUIPAMENTOS_ID {LampDicroicas, LampDicroicasCentro, LampFluorescentes, Janela, Cortina1, Cortina2};  //sala HS
-const int EQUIPAMENTOS_TAMANHO = 6;
-const int EQUIPAMENTO_UNITS[] = {1187, 1188, 1191, 2058, 2061, 2062}; //sala HS
+const int EQUIPAMENTOS_TAMANHO = 7;//6;
+const int EQUIPAMENTO_UNITS[] = {65605, 6636, 1186, 1183, 1184, 5421, 1189};//{1187, 1188, 1191, 2058, 2061, 2062}; //sala HS
 
 //lista estados possiveis dos equipamentos:
 //extern int SOM_ESTADOS[]; // colocar musicas
